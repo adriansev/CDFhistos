@@ -36,6 +36,7 @@ AliAnalysisTaskCDFhistos::AliAnalysisTaskCDFhistos ( ) :
     fFillAOD       (kFALSE),
     fFromAod       (kFALSE),
     fDeltaAOD      (kFALSE),
+    fESD           (NULL),
     fAOD           (NULL),
     fAODin         (NULL),
     fAODout        (NULL),
@@ -101,6 +102,7 @@ AliAnalysisTaskCDFhistos::AliAnalysisTaskCDFhistos ( const char *name) :
     fFillAOD       (kFALSE),
     fFromAod       (kFALSE),
     fDeltaAOD      (kFALSE),
+    fESD           (NULL),
     fAOD           (NULL),
     fAODin         (NULL),
     fAODout        (NULL),
@@ -175,106 +177,83 @@ if ( AliAnalysisTaskSE::fDebug > 1 ) AliInfo("AnalysisTaskCDFhistos::CreateOutPu
 void AliAnalysisTaskCDFhistos::UserExec ( Option_t */*option*/ )
 {
 // Execute analysis for current event
-  if ( fDebug > 1 ) { printf("\n CDFhistos:: ConnectInputData() \n"); }
+if ( fDebug > 1 ) { printf("\n CDFhistos:: ConnectInputData() \n"); }
 
-  if (!fInputEvent) { printf("ERROR: Input event not available\n"); return; }
+//---------------------
+//    enable aod writing for all tasks
+//---------------------
 
-  //---------------------
-  //    enable aod writing for all tasks
-  //---------------------
+// only need this once but !!! ACLIC does NOT like "static"
+AliAODHandler* aodH_out = dynamic_cast<AliAODHandler*>(AliAnalysisManager::GetAnalysisManager()->GetOutputEventHandler());
+aodH_out->SetFillAODforRun ( kTRUE );
+aodH_out->SetFillExtension ( kTRUE );
+aodH_out->SetFillAOD       ( kTRUE );
 
-  // only need this once
-//   static AliAODHandler *aodH = dynamic_cast<AliAODHandler*>(AliAnalysisManager::GetAnalysisManager()->GetOutputEventHandler());
-//ACLIC does NOT like "static"
-  AliAODHandler *aodH_out = dynamic_cast<AliAODHandler*>(AliAnalysisManager::GetAnalysisManager()->GetOutputEventHandler());
-  aodH_out->SetFillAODforRun ( kTRUE );
-  aodH_out->SetFillExtension ( kTRUE );
-  aodH_out->SetFillAOD       ( kTRUE );
-
-  // Since AODs can either be connected to the InputEventHandler
-  // or to the OutputEventHandler ( the AOD is created by a previus task in the train )
-  // we need to get the pointer to the AODEvent correctly. Delta AODs are also accepted.
-  // TObject* handler = AliAnalysisManager::GetAnalysisManager()->GetInputEventHandler();
-
-/*
-
-  AliAODInputHandler* aodH_in  = dynamic_cast<AliAODInputHandler*>( AliAnalysisManager::GetAnalysisManager()->GetInputEventHandler()  );
-  AliAODHandler*      aodH_out = dynamic_cast<AliAODHandler*>     ( AliAnalysisManager::GetAnalysisManager()->GetOutputEventHandler() );
-
-  if( aodH_in && aodH_in->InheritsFrom("AliAODInputHandler") )
-    { // input AOD
-    fAOD = aodH_in->GetEvent();
-      if (fDebug > 1) AliInfo(" ==== Tracks and Jets from AliAODInputHandler");
-    }
-  else if( aodH_out && aodH_out->InheritsFrom("AliAODHandler") )
-    { // output AOD
-    fAODExtension = ( aodH_out ? aodH_out->GetExtension(fNonStdFile.Data()) : 0 );
-    fAOD = aodH_out->GetAOD();
-      if (fDebug > 1) AliInfo(" ==== Tracks and Jets from AliAODHandler");
-    }
-  else
-    {  // no AOD
-    AliFatal("I can't get any AOD Event Handler"); return;
-    }
-
-//   if ( fAOD && ( fDebug >1 ) ) { cout << "AOD : " << fAOD->GetName() << endl ; fAOD->Print(); }
-
-  if ( fNonStdBranch.Length() != 0 )
-    {
-    cout << "CDF histos :: Branch : " << fNonStdBranch.Data() << endl;
-
-    if ( fAOD && !fJets )          { fJets = dynamic_cast<TClonesArray*> ( fAOD->FindListObject (fNonStdBranch.Data()) ); }
-
-    if ( fAODExtension && !fJets ) { fJets = dynamic_cast<TClonesArray*> ( fAODExtension->GetAOD()->FindListObject(fNonStdBranch.Data())); }
-
-    }
-  else
-    { fJets = fAOD->GetJets(); }
-
-*/
+// general pointers to data
+fAODin  = dynamic_cast<AliAODEvent*>(InputEvent());
+fAODout = dynamic_cast<AliAODEvent*>(AODEvent());
 
 
-//   fAODin = dynamic_cast<AliAODEvent*>(InputEvent());
-//   fAODin = dynamic_cast<AliAODEvent*>(AODEvent());
-//   fAOD = fAODin;
+fESD = dynamic_cast<AliESDEvent*>(InputEvent());
+if (!fESD)
+  {
+  AliError("ESD not available");
+  fAODin = dynamic_cast<AliAODEvent*>(InputEvent());
+  }
 
-  fAOD = AODEvent();
+fAODout = dynamic_cast<AliAODEvent*>(AODEvent());
 
-  if( !fAOD ){  if (fDebug > 1 ) printf("%s:%d AODEvent not found in the Output",(char*)__FILE__,__LINE__); return; }
+if( !fESD )
+  { fAOD = fAODin;  }
+else
+  { fAOD = fAODout; }
 
-  if(fNonStdFile.Length()!=0)
-    {
-    // case that we have an AOD extension we can fetch the jets from the extended output
-    AliAODHandler* aodH = dynamic_cast<AliAODHandler*>(AliAnalysisManager::GetAnalysisManager()->GetOutputEventHandler());
-    fAODExtension = aodH ? aodH->GetExtension(fNonStdFile.Data()) : 0;
-    if ( !fAODExtension ) { if(fDebug>1) Printf("AODExtension found for %s",fNonStdFile.Data()); }
-    }
+if( !fAOD ){  if (fDebug > 1 ) { printf("%s:%d AODEvent not found in the Output",(char*)__FILE__,__LINE__); } return; }
+
+if(fNonStdFile.Length()!=0)
+  {
+  // case that we have an AOD extension we can fetch the jets from the extended output
+  AliAODHandler* aodH = dynamic_cast<AliAODHandler*>(AliAnalysisManager::GetAnalysisManager()->GetOutputEventHandler());
+  fAODExtension = ( aodH ? aodH->GetExtension(fNonStdFile.Data()) : 0 );
+  if ( !fAODExtension ) { if(fDebug>1) Printf("AODExtension found for %s",fNonStdFile.Data()); }
+  }
+
+
+if ( fAOD && ( fDebug > 0 ) )
+  {
+  cout << "fAOD pointer : " << fAOD << endl;
+  cout << "AOD : " << fAOD->GetName() << endl ; fAOD->Print();
+  }
+
+if ( fAODExtension && ( fDebug > 0 ) )
+  {
+  cout << "fAODExtension pointer : " << fAODExtension << endl;
+  cout << "fAODExtension : " << fAODExtension->GetName() << endl ; fAODExtension->Print();
+  }
 
 // fetch jets
+if ( fNonStdBranch.Length() != 0 )
+  {
+  cout << "CDF histos :: Branch : " << fNonStdBranch.Data() << endl;
+  // !fJets evaluated first --> if NO_JETS then rest is evaluated
+  if ( !fJets && fAODExtension ) { fJets = dynamic_cast<TClonesArray*> ( fAODExtension->GetAOD()->FindListObject(fNonStdBranch.Data())); }
+  if ( !fJets && fAOD )          { fJets = dynamic_cast<TClonesArray*> ( fAOD->FindListObject (fNonStdBranch.Data()) ); }
+  }
+else
+  { fJets = fAOD->GetJets(); }
 
-// fAODout only for ESD analysis - this task is AOD only
-// if ( fAODout && !fJets )       { fJets = dynamic_cast<TClonesArray*>(fAODout->FindListObject(fNonStdBranch.Data())); }
 
-// !fJets evaluated first --> if NO_JETS then rest is evaluated
-if ( !fJets && fAODExtension ) { fJets = dynamic_cast<TClonesArray*>(fAODExtension->GetAOD()->FindListObject(fNonStdBranch.Data())); }
-if ( !fJets && fAOD )          { fJets = dynamic_cast<TClonesArray*>(fAOD->FindListObject(fNonStdBranch.Data()));  }
-
-  cout << "fAOD pointer : " << fAOD << endl;
-  cout << "fAODExtension pointer : " << fAODExtension << endl;
+if ( fDebug > 0 )
+  {
   cout << "Jets pointer : "  << fJets << endl;
   cout << "fNonStdFile : "   << fNonStdFile << endl;
   cout << "fNonStdBranch : " << fNonStdBranch << endl;
-
-//   if ( fAOD && ( fDebug >1 ) ) { cout << "AOD : " << fAOD->GetName() << endl ; fAOD->Print(); }
+  fJets->Print();
+  }
 
   // protection against not finding jets
-//   if ( !fJets || fJets->IsEmpty() ) { cout << "Jets not found or empty in the AOD" << endl; return; }
-
   if ( !fJets )           { cout << "Jets pointer NULL" << endl; return; }
-  if ( fJets->IsEmpty() ) { fJets->Print(); cout << "Jets EMPTY" << endl; return; }
-
-
-//   fAODtracks = fAOD->GetTracks();
+  if ( fJets->IsEmpty() ) { cout << "Jets EMPTY" << endl; return; }
 
   fNPart = fAOD->GetNTracks();
   fNJets = fAOD->GetNJets();

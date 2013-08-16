@@ -132,10 +132,11 @@ private:
   Bool_t      fFromAod ;       // is the data taken from AOD (or ESD filter)
   Bool_t      fDeltaAOD;       // Read jets from delta AOD
 
-        AliAODEvent*             fAOD;             //! AOD Event
-        AliAODEvent*             fAODin;           //! AOD event
-        AliAODEvent*             fAODout;          //! AOD event
-        AliAODExtension*         fAODExtension;    //! where we take the jets from can be input or output AOD
+  AliESDEvent*             fESD;             //! ESD object
+  AliAODEvent*             fAOD;             //! AOD Event
+  AliAODEvent*             fAODin;           //! AOD event
+  AliAODEvent*             fAODout;          //! AOD event
+  AliAODExtension*         fAODExtension;    //! where we take the jets from can be input or output AOD
 
   TList*  fListOfHistos;          //  Output list of histograms
 
