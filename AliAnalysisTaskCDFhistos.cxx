@@ -25,7 +25,6 @@ ClassImp ( AliAnalysisTaskCDFhistos )
 //______________________________________________________________________________
 AliAnalysisTaskCDFhistos::AliAnalysisTaskCDFhistos ( ) :
     AliAnalysisTaskSE(),
-    fDebug            (0),
     fNonStdBranch     ( "" ),
     fNonStdFile       ( "" ),
     fDeltaAODBranch   ( "" ),
@@ -91,7 +90,6 @@ AliAnalysisTaskCDFhistos::AliAnalysisTaskCDFhistos ( ) :
 //______________________________________________________________________________
 AliAnalysisTaskCDFhistos::AliAnalysisTaskCDFhistos ( const char *name) :
     AliAnalysisTaskSE( name ),
-    fDebug            (0),
     fNonStdBranch     ( "" ),
     fNonStdFile       ( "" ),
     fDeltaAODBranch   ( "" ),
@@ -210,6 +208,15 @@ else
 
 if( !fAOD ){  if (fDebug > 1 ) { printf("%s:%d AODEvent not found in the Output",(char*)__FILE__,__LINE__); } return; }
 
+
+if ( fDebug > 0 )
+  {
+  cout << "--> CDF Histos :: places to look out for found jets" << endl;
+  cout << "fNonStdFile : "   << fNonStdFile << endl;
+  cout << "fNonStdBranch : " << fNonStdBranch << endl;
+  }
+
+
 if(fNonStdFile.Length()!=0)
   {
   // case that we have an AOD extension we can fetch the jets from the extended output
@@ -228,7 +235,8 @@ if ( fAOD && ( fDebug > 0 ) )
 if ( fAODExtension && ( fDebug > 0 ) )
   {
   cout << "fAODExtension pointer : " << fAODExtension << endl;
-  cout << "fAODExtension : " << fAODExtension->GetName() << endl ; fAODExtension->Print();
+  cout << "fAODExtension : " << fAODExtension->GetName() << endl;
+  fAODExtension->Print();
   }
 
 // fetch jets
@@ -236,24 +244,21 @@ if ( fNonStdBranch.Length() != 0 )
   {
   cout << "CDF histos :: Branch : " << fNonStdBranch.Data() << endl;
   // !fJets evaluated first --> if NO_JETS then rest is evaluated
-  if ( !fJets && fAODExtension ) { fJets = dynamic_cast<TClonesArray*> ( fAODExtension->GetAOD()->FindListObject(fNonStdBranch.Data())); }
-  if ( !fJets && fAOD )          { fJets = dynamic_cast<TClonesArray*> ( fAOD->FindListObject (fNonStdBranch.Data()) ); }
+  if ( fAODExtension && !fJets ) { fJets = dynamic_cast<TClonesArray*> ( fAODExtension->GetAOD()->FindListObject(fNonStdBranch.Data())); }
+  if ( fAOD          && !fJets ) { fJets = dynamic_cast<TClonesArray*> ( fAOD->FindListObject (fNonStdBranch.Data()) ); }
   }
 else
   { fJets = fAOD->GetJets(); }
 
+// protection against not finding jets
+if ( !fJets )           { cout << "Jets pointer NULL" << endl; return; }
+if ( fJets->IsEmpty() ) { cout << "Jets EMPTY" << endl; return; }
 
 if ( fDebug > 0 )
   {
   cout << "Jets pointer : "  << fJets << endl;
-  cout << "fNonStdFile : "   << fNonStdFile << endl;
-  cout << "fNonStdBranch : " << fNonStdBranch << endl;
   fJets->Print();
   }
-
-  // protection against not finding jets
-  if ( !fJets )           { cout << "Jets pointer NULL" << endl; return; }
-  if ( fJets->IsEmpty() ) { cout << "Jets EMPTY" << endl; return; }
 
   fNPart = fAOD->GetNTracks();
   fNJets = fAOD->GetNJets();
