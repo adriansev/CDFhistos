@@ -15,7 +15,7 @@ ClassImp ( AliAnalysisTaskEmcalJetCDF )
 
 //________________________________________________________________________
 AliAnalysisTaskEmcalJetCDF::AliAnalysisTaskEmcalJetCDF() :
-  AliAnalysisTaskEmcalJetDev ( "AliAnalysisTaskEmcalJetCDF", kTRUE ),
+  AliAnalysisTaskEmcalJet ( "AliAnalysisTaskEmcalJetCDF", kTRUE ),
   fDebug         (kFALSE),
   fContainerFull(0),
   fContainerCharged(1),
@@ -58,7 +58,7 @@ AliAnalysisTaskEmcalJetCDF::AliAnalysisTaskEmcalJetCDF() :
 
 //________________________________________________________________________
 AliAnalysisTaskEmcalJetCDF::AliAnalysisTaskEmcalJetCDF ( const char* name ) :
-  AliAnalysisTaskEmcalJetDev ( name, kTRUE ),
+  AliAnalysisTaskEmcalJet ( name, kTRUE ),
   fDebug         (kFALSE),
   fContainerFull(0),
   fContainerCharged(1),
@@ -144,10 +144,10 @@ if ( fDebug > 0 )
   const Int_t fNJets = GetNJets (idx_jet_container) ;
   const Int_t fNPart = fInputEvent->GetNumberOfTracks(); //fTracks->GetEntriesFast();
 
-  printf ( "fNJets = %i ; fNPart = %i \n", fNJets, fNPart ); fflush(stdout);
-  printf ( "CDFhistos::end of ConnectInputData() \n");       fflush(stdout);
-
   if ((fNJets == 0) || (fNPart == 0)) { return kFALSE; }
+
+  printf ( "fNJets = %i ; fNPart = %i \n", fNJets, fNPart );
+  printf ( "CDFhistos::end of ConnectInputData() \n");       fflush(stdout);
 
   for ( Int_t ij = 0; ij < fNJets; ij++ )
     {
@@ -179,34 +179,22 @@ if ( fDebug > 0 )
   // sort the list of AliEmcalJets
   fJets->Sort();
 
-  Double_t jet1_pt = -1; Int_t jet1_npart = -1;
-  AliEmcalJet* jet1 = NULL;
+  // Leading Jet 
+  AliEmcalJet* jet1 = cont->GetLeadingJet();
 
-  Bool_t leadJet = kFALSE;
-  for (Int_t i = 0; i < fNJets; i++)
-    {
-    AliEmcalJet* jet = static_cast<AliEmcalJet*>(fJets->At(i));
-    if (!jet) { AliError(Form("Could not receive jet %d", i)); continue; }
+  Double_t    jet1_pt    = jet1->Pt();
+  Int_t       jet1_npart = jet1->GetNumberOfTracks();
 
-    if (!AcceptJet(jet, idx_jet_container)) {continue;}
+  fH6->Fill( jet1_npart );           // Jet1 Charged Multiplicity Distribution ( ->Scale (events) )
+  fH7->Fill( jet1_pt, jet1_npart );  // N_{chg}(jet1) vs P_{T}(charged jet1)
 
-    if (!leadJet)
-      {
-      jet1 = jet; // first jet in the sorted list is jet1
-      jet1_pt = jet1->Pt();
-      jet1_npart = jet1->GetNumberOfTracks();
 
-      fH6->Fill( jet1_npart );           // Jet1 Charged Multiplicity Distribution ( ->Scale (events) )
-      fH7->Fill( jet1_pt, jet1_npart );  // N_{chg}(jet1) vs P_{T}(charged jet1)
-      leadJet = kTRUE;
-      break;
-      }
 //     fHistJetsPtArea[fCentBin]->Fill(jet->Pt(), jet->Area());
 //     fHistJetsPhiEta[fCentBin]->Fill(jet->Eta(), jet->Phi());
 //
 //     Float_t ptLeading = GetLeadingHadronPt(jet);
 //     fHistJetsPtLeadHad[fCentBin]->Fill(jet->Pt(), ptLeading);
-    }
+
 
   // "Transverse" Pt Distribution and computing of pt sum of event
 
@@ -332,7 +320,7 @@ void AliAnalysisTaskEmcalJetCDF::UserCreateOutputObjects()
   {
   // Create user output.
 
-  AliAnalysisTaskEmcalJetDev::UserCreateOutputObjects();
+  AliAnalysisTaskEmcalJet::UserCreateOutputObjects();
 
   //  Histograms
   fOutput->SetOwner(kTRUE);

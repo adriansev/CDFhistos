@@ -59,7 +59,7 @@
 #include "AliAODInputHandler.h"
 #include "AliAODJetEventBackground.h"
 #include "AliAODMCParticle.h"
-#include "AliAnalysisTaskEmcalJetDev.h"
+#include "AliAnalysisTaskEmcalJet.h"
 
 class TObjArray;
 class TRefArray;
@@ -83,7 +83,7 @@ class AliJetContainer;
 // class AliGenPythiaEventHeader;
 // class AliAODJetEventBackground;
 
-class AliAnalysisTaskEmcalJetCDF : public AliAnalysisTaskEmcalJetDev
+class AliAnalysisTaskEmcalJetCDF : public AliAnalysisTaskEmcalJet
   {
   public:
 
