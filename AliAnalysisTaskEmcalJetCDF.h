@@ -1,7 +1,5 @@
-#ifndef ALIANALYSISTASKEMCALJETSAMPLE_H
-#define ALIANALYSISTASKEMCALJETSAMPLE_H
-
-// $Id: AliAnalysisTaskEmcalJetSample.h 60393 2013-01-20 10:05:07Z loizides $
+#ifndef ALIANALYSISTASKEMCALJETCDF_H
+#define ALIANALYSISTASKEMCALJETCDF_H
 
 #include <cstdio>
 
@@ -35,7 +33,7 @@
 #include "AliAnalysisManager.h"
 #include "AliAnalysisHelperJetTasks.h"
 
-#include "AliJetHistos.h"
+
 #include "AliESD.h"
 #include "AliESDEvent.h"
 
@@ -64,6 +62,8 @@
 class TObjArray;
 class TRefArray;
 class TClonesArray;
+class TVector2;
+
 class TList;
 class TH1;
 class TH1D;
@@ -73,15 +73,10 @@ class TH2F;
 class TH2;
 class TProfile;
 class AliAnalysisUtils;
-class TVector2;
 class AliJetContainer;
 
-// class AliESDEvent;
-// class AliAODEvent;
-// class AliAODExtension;
-// class AliAODJet;
-// class AliGenPythiaEventHeader;
-// class AliAODJetEventBackground;
+class AliParticleContainer;
+class AliClusterContainer;
 
 class AliAnalysisTaskEmcalJetCDF : public AliAnalysisTaskEmcalJet
   {
@@ -94,8 +89,8 @@ class AliAnalysisTaskEmcalJetCDF : public AliAnalysisTaskEmcalJet
     void                        UserCreateOutputObjects();
     void                        Terminate ( Option_t* option );
 
-    Double_t                    Phi_mpi_pi (Double_t phi) { return TVector2::Phi_mpi_pi ( phi ); }
-    Double_t                    DeltaR (const AliVParticle* part1, const AliVParticle* part2 );
+    Double_t                    Phi_mpi_pi (Double_t phi) { return TVector2::Phi_mpi_pi(phi); }    // returns phi angle in the interval [-PI,PI)
+    Double_t                    DeltaR (const AliVParticle* part1, const AliVParticle* part2 );    // return dR dinstance in eta,phi plane between 2 AliVParticle derived objects // this could be added in EmcalJet?
 
     //Setters
     void SetDebug(Int_t d)                    { fDebug = d;}
@@ -104,60 +99,59 @@ class AliAnalysisTaskEmcalJetCDF : public AliAnalysisTaskEmcalJet
     void SetContainerFull(Int_t c)            { fContainerFull      = c;}
     void SetContainerCharged(Int_t c)         { fContainerCharged   = c;}
 
-    Double_t GetZ(const AliVParticle *trk, const AliEmcalJet *jet)       const;
-    Double_t GetZ(const Double_t trkPx, const Double_t trkPy, const Double_t trkPz, const Double_t jetPx, const Double_t jetPy, const Double_t jetPz) const;
+    Double_t GetZ(const AliVParticle *trk, const AliEmcalJet *jet)       const; // Get Z of constituent trk // could be added in EmcalJet?
+    Double_t GetZ(const Double_t trkPx, const Double_t trkPy, const Double_t trkPz, const Double_t jetPx, const Double_t jetPy, const Double_t jetPz) const; // Get Z of constituent trk
 
   protected:
     Bool_t                      FillHistograms()   ;
-    Bool_t                      FillHistograms_container (Int_t idx_jet_container);
+    Int_t                       FillHistograms_container (Int_t idx_jet_container);
 
-    Bool_t                      Run()              ;
+    Bool_t                      Run() ;
 
-    Bool_t                      fDebug;                 //  debug level
-
-    Int_t             fContainerFull;             //  number of container with full jets DET
-    Int_t             fContainerCharged;          //  number of container with charged jets DET
-    TString           fTriggerClass;          // trigger class to analyze EJ1 or EJ2
-
+    Bool_t                      fDebug;              //  debug level
+    Int_t                       fContainerFull;      //  number of container with full jets DET
+    Int_t                       fContainerCharged;   //  number of container with charged jets DET
+    TString                     fTriggerClass;       // trigger class to analyze EJ1 or EJ2
 
     // Histograms    ( are owned by fListOfHistos TList )
-    TH1F*       fH1; //!  Pt distribution of jets
-    TH1F*       fH2; //!  Eta distribution of jets
-    TH1F*       fH3; //!  Phi distribution of jets
-    TH1F*       fH4; //!  Multiplicity of jets // 1 unit of multiplicity /bin
-    TH1F*       fH5; //!  Distribution of jets in events
-    TH1F*       fH6; //!  Jet1 Charged Multiplicity Distribution (Fig 5)- MUST BE SCALED WITH ENTRIES ( ->Scale(fH6->GetEntries()) )
-    TProfile*   fH7; //!  N_{chg}(jet1) vs P_{T}(charged jet1) (Fig 4)
-    TH1F*       fH8; //!  Charge momentum distribution for leading jet (fragmentation function)(Fig 10-12)
-    TProfile*   fH9; //!  N_{chg} vs the Azimuthal Angle from Charged Jet1  (Fig 15,17,19)
-    TProfile*  fH10; //!  P_{T} sum vs the Azimuthal Angle from Charged Jet1 (Fig 16,18,20)
-    TH1F*      fH20; //!  Distribution of R in leading jet
+    TH1F*       fH1;           //!  Pt distribution of jets
+    TH1F*       fH2;           //!  Eta distribution of jets
+    TH1F*       fH3;           //!  Phi distribution of jets
+    TH1F*       fH4;           //!  Multiplicity of jets // 1 unit of multiplicity /bin
+    TH1F*       fH5;           //!  Distribution of jets in events
+    TH1F*       fH5acc;        //!  Distribution of accepted jets in events
+    TH1F*       fH6;           //!  Jet1 Multiplicity Distribution
+    TProfile*   fH7;           //!  N(jet1) vs P_{T}(jet1)
+    TH1F*       fH8;           //!  Momentum distribution for leading jet (fragmentation function)
+    TProfile*   fH9;           //!  N vs the Azimuthal Angle from Jet1
+    TProfile*  fH10;           //!  P_{T} sum vs the Azimuthal Angle from Jet1
+    TH1F*      fH20;           //!  Distribution of R in leading jet
 
-    TProfile*  fH21;           //!  N_{chg}(in the event - including jet1) vs P_{T}(charged jet1) (Fig 13)
-    TProfile*  fH21Toward;     //!  N_{chg}(in the event - including jet1) vs P_{T}(charged jet1) (Fig 21,23,24)
-    TProfile*  fH21Transverse; //!  N_{chg}(in the event - including jet1) vs P_{T}(charged jet1) (Fig 21,28,30,32,33,34)
-    TProfile*  fH21Away;       //!  N_{chg}(in the event - including jet1) vs P_{T}(charged jet1) (Fig 21,25,27)
+    TProfile*  fH21;           //!  N(in the event - including jet1) vs P_{T}(jet1)
+    TProfile*  fH21Toward;     //!  N(in the event - including jet1) vs P_{T}(jet1)
+    TProfile*  fH21Transverse; //!  N(in the event - including jet1) vs P_{T}(jet1)
+    TProfile*  fH21Away;       //!  N(in the event - including jet1) vs P_{T}(jet1)
 
-    TProfile*  fH22;           //!  PT_{sum}(in the event - including jet1) vs P_{T}(charged jet1) (Fig 22)
-    TProfile*  fH22Toward;     //!  PT_{sum}(in the event - including jet1) vs P_{T}(charged jet1) (Fig 22)
-    TProfile*  fH22Transverse; //!  PT_{sum}(in the event - including jet1) vs P_{T}(charged jet1) (Fig 22,29,31)
-    TProfile*  fH22Away;       //!  PT_{sum}(in the event - including jet1) vs P_{T}(charged jet1) (Fig 22,26)
+    TProfile*  fH22;           //!  PT_{sum}(in the event - including jet1) vs P_{T}(jet1)
+    TProfile*  fH22Toward;     //!  PT_{sum}(in the event - including jet1) vs P_{T}(jet1)
+    TProfile*  fH22Transverse; //!  PT_{sum}(in the event - including jet1) vs P_{T}(jet1)
+    TProfile*  fH22Away;       //!  PT_{sum}(in the event - including jet1) vs P_{T}(jet1)
 
-    TH1F*      fH23;           //!  TOTAL Pt Distribution of charged particles
-    TH1F*      fH23jet1;       //!  jet1 Pt Distribution of charged particles
-    TH1F*      fH23Toward;     //!  'Toward' Pt Distribution of charged particles
-    TH1F*      fH23Transverse; //!  'Transverse' Pt Distribution of charged particles  (Fig 37,38,39,40,41)
-    TH1F*      fH23Away;       //!  'Away' Pt Distribution of charged particles
+    TH1F*      fH23;           //!  Event Pt Distribution of particles
+    TH1F*      fH23jet1;       //!  Jet1 Pt Distribution of particles
+    TH1F*      fH23Toward;     //!  'Toward' Pt Distribution of particles
+    TH1F*      fH23Transverse; //!  'Transverse' Pt Distribution of particles
+    TH1F*      fH23Away;       //!  'Away' Pt Distribution of particles
 
-    TProfile*  fH24;           //!  Jet1 Size vs P_{T}(charged jet1) - 80% of particles  (Fig 6)
-    TProfile*  fH25;           //!  Jet1 Size vs P_{T}(charged jet1) - 80% of Pt  (Fig 6)
-    TProfile*  fH26;           //!  N_{chg} vs the Distance R from Charged Jet1 - 80% of particles   (Fig 8)
-    TProfile*  fH27;           //!  N_{chg} vs the Distance R from Charged Jet1 - 80% of Pt  (Fig 8)
-    TProfile*  fH28;           //!  PT_{sum} vs the Distance R from Charged Jet1 - 80% of particles   (Fig 9)
-    TProfile*  fH29;           //!  PT_{sum} vs the Distance R from Charged Jet1 - 80% of Pt  (Fig 9)
+    TProfile*  fH24;           //!  Jet1 Size vs P_{T}(jet1) - 80% of particles
+    TProfile*  fH25;           //!  Jet1 Size vs P_{T}(jet1) - 80% of Pt
+    TProfile*  fH26;           //!  N_{chg} vs the Distance R from Jet1 - 80% of particles
+    TProfile*  fH27;           //!  N_{chg} vs the Distance R from Jet1 - 80% of Pt
+    TProfile*  fH28;           //!  PT_{sum} vs the Distance R from Jet1 - 80% of particles
+    TProfile*  fH29;           //!  PT_{sum} vs the Distance R from Jet1 - 80% of Pt
 
   private:
-    AliAnalysisTaskEmcalJetCDF ( const AliAnalysisTaskEmcalJetCDF& );         // not implemented
+    AliAnalysisTaskEmcalJetCDF ( const AliAnalysisTaskEmcalJetCDF& );            // not implemented
     AliAnalysisTaskEmcalJetCDF& operator= ( const AliAnalysisTaskEmcalJetCDF& ); // not implemented
 
     ClassDef ( AliAnalysisTaskEmcalJetCDF, 1 ) // jet sample analysis task

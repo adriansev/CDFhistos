@@ -1,21 +1,10 @@
-// $Id: AliAnalysisTaskEmcalJetCDF.cxx 62732 2013-05-31 16:10:24Z loizides $
-//
-// Jet sample analysis task.
-//
-// Author: S.Aiola
 
 #include "AliAnalysisTaskEmcalJetCDF.h"
-
-Double_t const  kPI        = TMath::Pi();
-Double_t const  kTWOPI     = 2.*kPI;
-Double_t const  kPI_3      = kPI/3.;
-Double_t const  kPI_2      = kPI/2.;
 
 ClassImp ( AliAnalysisTaskEmcalJetCDF )
 
 //________________________________________________________________________
-AliAnalysisTaskEmcalJetCDF::AliAnalysisTaskEmcalJetCDF() :
-  AliAnalysisTaskEmcalJet ( "AliAnalysisTaskEmcalJetCDF", kTRUE ),
+AliAnalysisTaskEmcalJetCDF::AliAnalysisTaskEmcalJetCDF() : AliAnalysisTaskEmcalJet ( "AliAnalysisTaskEmcalJetCDF", kTRUE ),
   fDebug         (kFALSE),
   fContainerFull(0),
   fContainerCharged(1),
@@ -25,6 +14,7 @@ AliAnalysisTaskEmcalJetCDF::AliAnalysisTaskEmcalJetCDF() :
   fH3            (NULL),
   fH4            (NULL),
   fH5            (NULL),
+  fH5acc         (NULL),
   fH6            (NULL),
   fH7            (NULL),
   fH8            (NULL),
@@ -68,6 +58,7 @@ AliAnalysisTaskEmcalJetCDF::AliAnalysisTaskEmcalJetCDF ( const char* name ) :
   fH3            (NULL),
   fH4            (NULL),
   fH5            (NULL),
+  fH5acc         (NULL),
   fH6            (NULL),
   fH7            (NULL),
   fH8            (NULL),
@@ -115,40 +106,59 @@ Bool_t AliAnalysisTaskEmcalJetCDF::Run()
 
 //________________________________________________________________________
 Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
-{
-for (Int_t i = 0 ; i < fJetCollArray.GetEntries(); i++)
+{ // FillHistogram main function .. could parse all jet containers. At this moment only fisrt jet container is parsed
+Int_t result = -999; // return code
+Int_t jetContainers = fJetCollArray.GetEntries();
+
+jetContainers = 1; // process only first jet container
+
+for (Int_t i = 0 ; i < jetContainers; i++)
   {
-  Bool_t result = FillHistograms_container(i);
-  if (!result) { cout << "ERROR :: Fill histogram failed in container : " << i << endl; return kFALSE;}
+  result = FillHistograms_container(i);
   }
+
+  if ( result != 1  ) { cout << "ERROR :: Fill of histograms failed in container" << endl; }
+  if ( result == -1 ) { cout << "ERROR :: LEADING JET NOT FOUND" << endl; }
+  if ( result < 1   ) { cout << "ERROR :: Fill histograms failed" << endl; return kFALSE; }
 
 return kTRUE;
 }
 
 //________________________________________________________________________
-Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms_container (Int_t idx_jet_container)
+Int_t AliAnalysisTaskEmcalJetCDF::FillHistograms_container (Int_t idx_jet_container)
 { // Fill histograms.in container idx_jet_container
 AliJetContainer *cont = GetJetContainer (idx_jet_container);
-  if(!cont) { AliError(Form("%s:Container %d not found",GetName(),idx_jet_container)); return 0; }
+if(!cont) { AliError(Form("%s:Container %d not found",GetName(),idx_jet_container)); return 0; }
 
 fJets = cont->GetArray();
 
-
 // protection against not finding jets
-if ( !fJets )           { cout << "Jets pointer NULL" << endl; return kFALSE; }
-if ( fJets->IsEmpty() ) { cout << "Jets EMPTY" << endl; return kFALSE; }
+if ( !fJets )           { cout << "Jets pointer NULL" << endl; return 0; }
+if ( fJets->IsEmpty() ) { cout << "Jets EMPTY" << endl; return 0; }
 
-if ( fDebug > 0 )
-  { cout << "Jets pointer : "  << fJets << endl; fJets->Print(); }
+if ( fDebug > 0 ) { cout << "Jets pointer : "  << fJets << endl; fJets->Print(); }
 
-  const Int_t fNJets = GetNJets (idx_jet_container) ;
-  const Int_t fNPart = fInputEvent->GetNumberOfTracks(); //fTracks->GetEntriesFast();
+// sort the list of AliEmcalJets
+fJets->Sort();
 
-  if ((fNJets == 0) || (fNPart == 0)) { return kFALSE; }
+  const Int_t fNJets = GetNJets (idx_jet_container) ;    // Number of Jets found in event
+  const Int_t fNPart = fInputEvent->GetNumberOfTracks(); // Multiplicity in event  //  fTracks->GetEntriesFast(); // <<-- faster?
+  Bool_t leadJet = kFALSE;
+
+  // protection
+  if ((fNJets == 0) || (fNPart == 0)) { cout << "(fNJets || fNPart) == 0" << endl; return 0; }
 
   printf ( "fNJets = %i ; fNPart = %i \n", fNJets, fNPart );
   printf ( "CDFhistos::end of ConnectInputData() \n");       fflush(stdout);
 
+  // consts used in analysis
+  Double_t const kPI        = TMath::Pi();
+  Double_t const kTWOPI     = 2. * TMath::Pi();
+  Double_t const kPI_3      = TMath::Pi()/3.;
+  Double_t const kPI_2      = TMath::Pi()/2.;
+
+  Int_t fNJets_accepted = 0; // number of jets with accepted cuts
+  // Global Histograms; only filled with accepted jets
   for ( Int_t ij = 0; ij < fNJets; ij++ )
     {
     AliEmcalJet* jet = static_cast<AliEmcalJet*> ( fJets->At ( ij ) );
@@ -160,58 +170,44 @@ if ( fDebug > 0 )
     fH2->Fill ( jet->Eta() ); // Eta distribution of jets
     fH3->Fill ( jet->Phi() ); // Phi distribution of jets
     fH4->Fill ( jet->GetNumberOfTracks() );  // Multiplicity of jets // 1 unit of multiplicity /bin
-
-    //   Float_t ptLeading = GetLeadingHadronPt ( jet );
-    //   fHistJetsPtLeadHad[fCentBin]->Fill ( jet->Pt(), ptLeading );
-
-    //   if ( fRho )
-    //     {
-    //     Float_t corrPt = jet->Pt() - fRhoVal * jet->Area();
-    //     fHistJetsCorrPtArea[fCentBin]->Fill ( corrPt, jet->Area() );
-    //     }
+    fNJets_accepted++; // multiplicity of accepted jets
     }
 
-  // Distribution of jets in events
+  // Distribution of jets in events; all jets (no AcceptedJet condition); if needed fNJets_accepted could be used
   fH5->Fill ( fNJets );
 
   printf ("CDFhistos:: end of global jet histos \n"); fflush(stdout);
 
-  // sort the list of AliEmcalJets
-  fJets->Sort();
-
-  // Leading Jet 
-  AliEmcalJet* jet1 = cont->GetLeadingJet();
-
-  Double_t    jet1_pt    = jet1->Pt();
-  Int_t       jet1_npart = jet1->GetNumberOfTracks();
-
-  fH6->Fill( jet1_npart );           // Jet1 Charged Multiplicity Distribution ( ->Scale (events) )
-  fH7->Fill( jet1_pt, jet1_npart );  // N_{chg}(jet1) vs P_{T}(charged jet1)
-
-
-//     fHistJetsPtArea[fCentBin]->Fill(jet->Pt(), jet->Area());
-//     fHistJetsPhiEta[fCentBin]->Fill(jet->Eta(), jet->Phi());
-//
-//     Float_t ptLeading = GetLeadingHadronPt(jet);
-//     fHistJetsPtLeadHad[fCentBin]->Fill(jet->Pt(), ptLeading);
-
-
   // "Transverse" Pt Distribution and computing of pt sum of event
-
   Double_t event_pt = 0.;
   for (Int_t i = 0 ; i < fNPart ; i++ )
     {// parse particles in event
     AliVParticle* track = fInputEvent->GetTrack(i);
     if (track) { event_pt += track->Pt(); } // pt sum of event
     }
-
   if ( fDebug > 1 ) { printf ("Sum of all Pt in event : pt_sum_event = %g", event_pt) ; }
 
-  //___________________________________________________________________________
-  // Charge momentum distribution for leading jet
-  // and
-  // N_{chg} vs the Azimuthal Angle from Charged Jet1
+  // Leading Jet
+  Double_t    jet1_pt    = 0.;
+  Int_t       jet1_npart = 0;
 
+  AliEmcalJet* jet1 = cont->GetLeadingJet(); // internaly checked for AcceptedJet
+  if (!jet1) { cout << "LEADING JET NOT FOUND " << endl ; return -1; }
+  else
+   { leadJet = kTRUE; }
+
+  jet1->SortConstituents(); // Sort constituent by index (increasing). // TO BE DONE : SORT CONSTITUENT DECREASING BY PT; eventually in AliEmcalJet
+
+  jet1_pt    = jet1->Pt();
+  jet1_npart = jet1->GetNumberOfTracks();
+
+  fH6->Fill( jet1_npart );           // Jet1 Multiplicity Distribution ( ->Scale (events) )
+  fH7->Fill( jet1_pt, jet1_npart );  // N(jet1) vs P_{T}(jet1)
+
+  //___________________________________________________________________________
+  // Momentum distribution for leading jet (FF)
+  // and
+  // N vs the Azimuthal Angle from Jet1
 
   // parsing tracks of jet1 (leading jet)
   for( Int_t i = 0 ; i < jet1_npart ; i++ )
@@ -219,15 +215,15 @@ if ( fDebug > 0 )
     AliVParticle* track = jet1->TrackAt(i, fTracks); if(!track) {continue;}
     Double_t track_pt = track->Pt() ;
 
-    fH8->Fill ( track_pt / jet1_pt ) ; //  Charge momentum distribution for leading jet
+    fH8->Fill ( track_pt / jet1_pt ) ; //  Momentum distribution for leading jet (FF)
     fH23jet1->Fill ( track_pt ) ; // jet1 pt distribution
     //___________________________________________________________________________
     // Recomputing of radius of particles in leading jet
     fH20->Fill ( DeltaR(jet1, track) ); //  Distribution of R in leading jet
     }
 
-  fH21->Fill ( jet1_pt, fNPart   ); // N_{chg} (in the event - including jet1) vs P_{T}(charged jet1)
-  fH22->Fill ( jet1_pt, event_pt ); // PT_{sum}(in the event - including jet1) vs P_{T}(charged jet1)
+  fH21->Fill ( jet1_pt, fNPart   ); // N (in the event - including jet1) vs P_{T}(jet1)
+  fH22->Fill ( jet1_pt, event_pt ); // PT_{sum}(in the event - including jet1) vs P_{T}(jet1)
 
 //_______________________________________________________________________
 // Computing of radius that contain 80% of Leading Jet ( PT and multiplicity )
@@ -235,9 +231,7 @@ if ( fDebug > 0 )
 Int_t    counter_part = 0  ;
 Double_t counter_pt   = 0. ;
 
-// parsing tracks of jet1 (leading jet) in decreasing order of Pt
-jet1->SortConstituents(); // Sort constituent by index (increasing).
-
+// parsing tracks of jet1 (leading jet) in decreasing order of Pt // ?? is it Pt sorted? to be clarified
 for( Int_t i = 0 ; i < jet1_npart ; i++ )
   {
   AliVParticle* track = jet1->TrackAt(i, fTracks);
@@ -248,12 +242,12 @@ for( Int_t i = 0 ; i < jet1_npart ; i++ )
 
   if ( counter_part <= (Int_t)(0.8 * jet1_npart) )
     {// fill histograms for 80% of particles
-    fH24->Fill ( jet1_pt, dpart);         //  Jet1 Size vs P_{T}(charged jet1) - 80% of particles  (Fig 6)
+    fH24->Fill ( jet1_pt, dpart);         //  Jet1 Size vs P_{T}(jet1) - 80% of particles  (Fig 6)
     }
 
-    if ( counter_pt   <= 0.8 * jet1_pt   )
+    if ( counter_pt <= 0.8 * jet1_pt )
     {// fill histograms for 80% of particles
-    fH25->Fill ( jet1_pt, dpart);         //  Jet1 Size vs P_{T}(charged jet1) - 80% of Pt   (Fig 6)
+    fH25->Fill ( jet1_pt, dpart);         //  Jet1 Size vs P_{T}(jet1) - 80% of Pt   (Fig 6)
     }
   }
 
@@ -261,6 +255,8 @@ counter_part = 0 ; counter_pt = 0;
 for (Int_t i = 0 ; i < fNPart ; i++ )
   {// parse tracks in event
   AliVParticle* track = fInputEvent->GetTrack(i);
+  if (!track) { cout << "track not retrieved from fInputEvent" << endl; continue; }
+
 
   Double_t track_pt = track->Pt();
   Double_t dpart = DeltaR (jet1, track);
@@ -272,47 +268,48 @@ for (Int_t i = 0 ; i < fNPart ; i++ )
 
   if ( counter_part <= (Int_t)(0.8 * jet1_npart) )
     {// fill histograms for 80% of particles
-    fH26->Fill ( dpart, counter_part );   //  N_{chg} vs the Distance R from Charged Jet1 - 80% of particles (Fig 8)
-    fH28->Fill ( dpart, counter_pt   );   //  PT_{sum} vs the Distance R from Charged Jet1 - 80% of particles (Fig 9)
+    fH26->Fill ( dpart, counter_part );   //  N vs the Distance R from Jet1 - 80% of particles (Fig 8)
+    fH28->Fill ( dpart, counter_pt   );   //  PT_{sum} vs the Distance R from Jet1 - 80% of particles (Fig 9)
     }
 
   if ( counter_pt   <= 0.8 * jet1_pt   )
     {// fill histograms for 80% of particles
-    fH27->Fill ( dpart, counter_part );   //  N_{chg} vs the Distance R from Charged Jet1 - 80% of Pt (Fig 8)
-    fH29->Fill ( dpart, counter_pt   );   //  PT_{sum} vs the Distance R from Charged Jet1 - 80% of Pt  (Fig 9)
+    fH27->Fill ( dpart, counter_part );   //  N vs the Distance R from Jet1 - 80% of Pt (Fig 8)
+    fH29->Fill ( dpart, counter_pt   );   //  PT_{sum} vs the Distance R from Jet1 - 80% of Pt  (Fig 9)
     }
 
   // dphi distribution (total and per toward,away,transverse regions)
 
-  fH9 ->Fill ( TMath::RadToDeg() * dphi_part_jet1, fNPart )   ; //  N_{chg} vs the Azimuthal Angle from Charged Jet1 (Fig 15,17,19)
-  fH10->Fill ( TMath::RadToDeg() * dphi_part_jet1, event_pt ) ; //  P_{T} sum vs the Azimuthal Angle from Charged Jet1  (Fig 16,18,20)
+  fH9 ->Fill ( TMath::RadToDeg() * dphi_part_jet1, fNPart )   ; //  N vs the Azimuthal Angle from Jet1 (Fig 15,17,19)
+  fH10->Fill ( TMath::RadToDeg() * dphi_part_jet1, event_pt ) ; //  P_{T} sum vs the Azimuthal Angle from Jet1  (Fig 16,18,20)
 
   if ( dphi_part_jet1 < kPI_3 )
     {
-    fH21Toward->Fill ( jet1_pt, fNPart   ); // N_{chg} (in the event - including jet1) vs P_{T}(charged jet1)
-    fH22Toward->Fill ( jet1_pt, event_pt ); // PT_{sum}(in the event - including jet1) vs P_{T}(charged jet1)
-    fH23Toward->Fill ( track_pt );          // Pt Distribution of charged particles    (Fig 37-41)
+    fH21Toward->Fill ( jet1_pt, fNPart   ); // N (in the event - including jet1) vs P_{T}(jet1)
+    fH22Toward->Fill ( jet1_pt, event_pt ); // PT_{sum}(in the event - including jet1) vs P_{T}(jet1)
+    fH23Toward->Fill ( track_pt );          // Pt Distribution of particles    (Fig 37-41)
     }
   else
   if ( ( dphi_part_jet1 >= kPI_3 ) && ( dphi_part_jet1 < (2.* kPI_3) ) )
     {
-    fH21Transverse->Fill ( jet1_pt, fNPart   ); // N_{chg} (in the event - including jet1) vs P_{T}(charged jet1)
-    fH22Transverse->Fill ( jet1_pt, event_pt ); // PT_{sum}(in the event - including jet1) vs P_{T}(charged jet1)
-    fH23Transverse->Fill ( track_pt );          // Pt Distribution of charged particles  (Fig 37-41)
+    fH21Transverse->Fill ( jet1_pt, fNPart   ); // N (in the event - including jet1) vs P_{T}(jet1)
+    fH22Transverse->Fill ( jet1_pt, event_pt ); // PT_{sum}(in the event - including jet1) vs P_{T}(jet1)
+    fH23Transverse->Fill ( track_pt );          // Pt Distribution of particles  (Fig 37-41)
     }
   else
   if ( dphi_part_jet1 >= ( 2.* kPI_3 ) )
     {
-    fH21Away->Fill ( jet1_pt, fNPart   ); // N_{chg} (in the event - including jet1) vs P_{T}(charged jet1)
-    fH22Away->Fill ( jet1_pt, event_pt ); // PT_{sum}(in the event - including jet1) vs P_{T}(charged jet1)
-    fH23Away->Fill ( track_pt );          // Pt Distribution of charged particles  (Fig 37-41)
+    fH21Away->Fill ( jet1_pt, fNPart   ); // N (in the event - including jet1) vs P_{T}(jet1)
+    fH22Away->Fill ( jet1_pt, event_pt ); // PT_{sum}(in the event - including jet1) vs P_{T}(jet1)
+    fH23Away->Fill ( track_pt );          // Pt Distribution of particles  (Fig 37-41)
     }
-  fH23->Fill ( track_pt ); //  Pt Distribution of charged particles in event
+  fH23->Fill ( track_pt ); //  Pt Distribution of particles in event
   }
 
 // post data at every processing
 PostData ( 1, fOutput ); // Post data for ALL output slots > 0 here.
-return kTRUE;
+
+return 1;
 }
 
 //________________________________________________________________________
@@ -329,7 +326,7 @@ void AliAnalysisTaskEmcalJetCDF::UserCreateOutputObjects()
 
   fH1 = new TH1F ("histo1", "Pt distribution of jets", 400, 0, 400);  // 1GeV/bin
   fH1->SetStats(kTRUE);
-  fH1->GetXaxis()->SetTitle("P_{T} of jets");
+  fH1->GetXaxis()->SetTitle("$p_{T,jet}$ in GeV/$c$");
   fH1->GetYaxis()->SetTitle("Number of jets");
   fH1->GetXaxis()->SetTitleColor(1);
   fH1->SetMarkerStyle(kFullCircle);
@@ -367,39 +364,47 @@ void AliAnalysisTaskEmcalJetCDF::UserCreateOutputObjects()
   fH5->SetMarkerStyle(kFullCircle);
   fOutput->Add(fH5);
 
-  fH6 = new TH1F ("histo6", "Jet1 Charged Multiplicity Distribution", 100, 0,100);
+  fH5acc = new TH1F ("histo5acc", "Distribution of accepted jets in events", 20, 0, 20);
+  fH5acc->SetStats(kTRUE);
+  fH5acc->GetXaxis()->SetTitle("Number of jets");
+  fH5acc->GetYaxis()->SetTitle("Number of events");
+  fH5acc->GetXaxis()->SetTitleColor(1);
+  fH5acc->SetMarkerStyle(kFullCircle);
+  fOutput->Add(fH5acc);
+
+  fH6 = new TH1F ("histo6", "Jet1 Multiplicity Distribution", 100, 0,100);
   fH6->SetStats(kTRUE);
-  fH6->GetXaxis()->SetTitle("N_{chg}");
+  fH6->GetXaxis()->SetTitle("N^{jet1}");
   fH6->GetYaxis()->SetTitle("Number of jets");
   fH6->GetXaxis()->SetTitleColor(1);
   fH6->SetMarkerStyle(kFullCircle);
   fOutput->Add(fH6);
 
-  fH7 = new TProfile ("histo7","N_{chg}(jet1) vs P_{T}(charged jet1)", 400, 0. , 400. , 0., 400. ) ;
+  fH7 = new TProfile ("histo7","N(jet1) vs P_{T}(jet1)", 400, 0. , 400. , 0., 400. ) ;
   fH7->SetStats(kTRUE);
-  fH7->GetXaxis()->SetTitle("P_{T} (charged jet1) (GeV/c)");
-  fH7->GetYaxis()->SetTitle("<N_{chg}(jet1)> in 1 GeV/c bin");
+  fH7->GetXaxis()->SetTitle("P_{T} (jet1) (GeV/c)");
+  fH7->GetYaxis()->SetTitle("<N(jet1)> in 1 GeV/c bin");
   fH7->GetXaxis()->SetTitleColor(1);
   fH7->SetMarkerStyle(kFullCircle);
   fOutput->Add(fH7);
 
-  fH8 = new TH1F ("histo8", "Charge momentum distribution for jet1", 120, 0 , 1.2);
+  fH8 = new TH1F ("histo8", "Momentum distribution for jet1 (FF)", 120, 0 , 1.2);
   fH8->SetStats(kTRUE);
-  fH8->GetXaxis()->SetTitle("z = p/P(charged jet1)");
+  fH8->GetXaxis()->SetTitle("z = p/P(jet1)");
   fH8->GetYaxis()->SetTitle("F(Z) = dN/dz");
   fH8->GetXaxis()->SetTitleColor(1);
   fH8->SetMarkerStyle(kFullCircle);
   fOutput->Add(fH8);
 
-  fH9 = new TProfile ("histo9", "N_{chg} vs the Azimuthal Angle from Charged Jet1", 50 , 0. , 180. , 0 , 20 );
+  fH9 = new TProfile ("histo9", "N vs the Azimuthal Angle from Jet1", 50 , 0. , 180. , 0 , 20 );
   fH9->SetStats(kTRUE);
   fH9->GetXaxis()->SetTitle("#Delta#phi (degrees)");
-  fH9->GetYaxis()->SetTitle("<N_{chg}> in 3.6 degree bin");
+  fH9->GetYaxis()->SetTitle("<N> in 3.6 degree bin");
   fH9->GetXaxis()->SetTitleColor(1);
   fH9->SetMarkerStyle(kFullCircle);
   fOutput->Add(fH9);
 
-  fH10 = new TProfile ("histo10", "P_{T} sum vs the Azimuthal Angle from Charged Jet1", 50 , 0. , 180. , 0 , 100 );
+  fH10 = new TProfile ("histo10", "P_{T} sum vs the Azimuthal Angle from Jet1", 50 , 0. , 180. , 0 , 100 );
   fH10->SetStats(kTRUE);
   fH10->GetXaxis()->SetTitle("|#Delta#phi| (degrees)");
   fH10->GetYaxis()->SetTitle("<P_{T} sum> in 3.6 degree bin");
@@ -415,147 +420,145 @@ void AliAnalysisTaskEmcalJetCDF::UserCreateOutputObjects()
   fH20->SetMarkerStyle(kFullCircle);
   fOutput->Add(fH20);
 
-  fH21 = new TProfile ("histo21","N_{chg}(in the event - including jet1) vs P_{T}(charged jet1)", 200, 0., 200. , 0., 30. ) ;
+  fH21 = new TProfile ("histo21","N(in the event - including jet1) vs P_{T}(jet1)", 200, 0., 200. , 0., 30. ) ;
   fH21->SetStats(kTRUE);
-  fH21->GetXaxis()->SetTitle("P_{T} (charged jet1) (GeV/c)");
-  fH21->GetYaxis()->SetTitle("<N_{chg}(in the event - including jet1)> in 1 GeV/c bin");
+  fH21->GetXaxis()->SetTitle("P_{T} (jet1) (GeV/c)");
+  fH21->GetYaxis()->SetTitle("<N(in the event - including jet1)> in 1 GeV/c bin");
   fH21->GetXaxis()->SetTitleColor(1);
   fH21->SetMarkerStyle(kFullCircle);
   fOutput->Add(fH21);
 
-  fH21Toward = new TProfile ("histo21_toward","N_{chg}(in the event - including jet1) vs P_{T}(charged jet1)", 200, 0., 200. , 0., 12. ) ;
+  fH21Toward = new TProfile ("histo21_toward","N(in the event - including jet1) vs P_{T}(jet1)", 200, 0., 200. , 0., 12. ) ;
   fH21Toward->SetStats(kTRUE);
-  fH21Toward->GetXaxis()->SetTitle("P_{T} (charged jet1) (GeV/c)");
-  fH21Toward->GetYaxis()->SetTitle("<N_{chg}(in the event - including jet1)> in 1 GeV/c bin");
+  fH21Toward->GetXaxis()->SetTitle("P_{T} (jet1) (GeV/c)");
+  fH21Toward->GetYaxis()->SetTitle("<N(in the event - including jet1)> in 1 GeV/c bin");
   fH21Toward->GetXaxis()->SetTitleColor(1);
   fH21Toward->SetMarkerStyle(kFullCircle);
   fOutput->Add(fH21Toward);
 
-  fH21Transverse = new TProfile ("histo21_transverse","N_{chg}(in the event - including jet1) vs P_{T}(charged jet1)", 200, 0., 200. , 0., 12. ) ;
+  fH21Transverse = new TProfile ("histo21_transverse","N(in the event - including jet1) vs P_{T}(jet1)", 200, 0., 200. , 0., 12. ) ;
   fH21Transverse->SetStats(kTRUE);
-  fH21Transverse->GetXaxis()->SetTitle("P_{T} (charged jet1) (GeV/c)");
-  fH21Transverse->GetYaxis()->SetTitle("<N_{chg}(in the event - including jet1)> in 1 GeV/c bin");
+  fH21Transverse->GetXaxis()->SetTitle("P_{T} (jet1) (GeV/c)");
+  fH21Transverse->GetYaxis()->SetTitle("<N(in the event - including jet1)> in 1 GeV/c bin");
   fH21Transverse->GetXaxis()->SetTitleColor(1);
   fH21Transverse->SetMarkerStyle(kFullCircle);
   fOutput->Add(fH21Transverse);
 
-  fH21Away = new TProfile ("histo21_away","N_{chg}(in the event - including jet1) vs P_{T}(charged jet1)", 200, 0., 200. , 0., 12. ) ;
+  fH21Away = new TProfile ("histo21_away","N(in the event - including jet1) vs P_{T}(jet1)", 200, 0., 200. , 0., 12. ) ;
   fH21Away->SetStats(kTRUE);
-  fH21Away->GetXaxis()->SetTitle("P_{T} (charged jet1) (GeV/c)");
-  fH21Away->GetYaxis()->SetTitle("<N_{chg}(in the event - including jet1)> in 1 GeV/c bin");
+  fH21Away->GetXaxis()->SetTitle("P_{T} (jet1) (GeV/c)");
+  fH21Away->GetYaxis()->SetTitle("<N(in the event - including jet1)> in 1 GeV/c bin");
   fH21Away->GetXaxis()->SetTitleColor(1);
   fH21Away->SetMarkerStyle(kFullCircle);
   fOutput->Add(fH21Away);
 
-
   //__________________________________________________________________
-  fH22 = new TProfile ("histo22","PT_{sum}(in the event - including jet1) vs P_{T}(charged jet1)", 200, 0. , 200. , 0., 50. ) ;
+  fH22 = new TProfile ("histo22","PT_{sum}(in the event - including jet1) vs P_{T}(jet1)", 200, 0. , 200. , 0., 50. ) ;
   fH22->SetStats(kTRUE);
-  fH22->GetXaxis()->SetTitle("P_{T} (charged jet1) (GeV/c)");
+  fH22->GetXaxis()->SetTitle("P_{T} (jet1) (GeV/c)");
   fH22->GetYaxis()->SetTitle("<PT_{sum}(in the event - including jet1)> in 1 GeV/c bin");
   fH22->GetXaxis()->SetTitleColor(1);
   fH22->SetMarkerStyle(kFullCircle);
   fOutput->Add(fH22);
 
-  fH22Toward = new TProfile ("histo22_toward","PT_{sum}(in the event - including jet1) vs P_{T}(charged jet1)", 200, 0. , 200. , 0., 50. ) ;
+  fH22Toward = new TProfile ("histo22_toward","PT_{sum}(in the event - including jet1) vs P_{T}(jet1)", 200, 0. , 200. , 0., 50. ) ;
   fH22Toward->SetStats(kTRUE);
-  fH22Toward->GetXaxis()->SetTitle("P_{T} (charged jet1) (GeV/c)");
+  fH22Toward->GetXaxis()->SetTitle("P_{T} (jet1) (GeV/c)");
   fH22Toward->GetYaxis()->SetTitle("<PT_{sum}(in the event - including jet1)> in 1 GeV/c bin");
   fH22Toward->GetXaxis()->SetTitleColor(1);
   fH22Toward->SetMarkerStyle(kFullCircle);
   fOutput->Add(fH22Toward);
 
-  fH22Transverse = new TProfile ("histo22_transverse","PT_{sum}(in the event - including jet1) vs P_{T}(charged jet1)", 200, 0. , 200. , 0., 50. ) ;
+  fH22Transverse = new TProfile ("histo22_transverse","PT_{sum}(in the event - including jet1) vs P_{T}(jet1)", 200, 0. , 200. , 0., 50. ) ;
   fH22Transverse->SetStats(kTRUE);
-  fH22Transverse->GetXaxis()->SetTitle("P_{T} (charged jet1) (GeV/c)");
+  fH22Transverse->GetXaxis()->SetTitle("P_{T} (jet1) (GeV/c)");
   fH22Transverse->GetYaxis()->SetTitle("<PT_{sum}(in the event - including jet1)> in 1 GeV/c bin");
   fH22Transverse->GetXaxis()->SetTitleColor(1);
   fH22Transverse->SetMarkerStyle(kFullCircle);
   fOutput->Add(fH22Transverse);
 
-  fH22Away = new TProfile ("histo22_away","PT_{sum}(in the event - including jet1) vs P_{T}(charged jet1)", 200, 0. , 200. , 0., 50. ) ;
+  fH22Away = new TProfile ("histo22_away","PT_{sum}(in the event - including jet1) vs P_{T}(jet1)", 200, 0. , 200. , 0., 50. ) ;
   fH22Away->SetStats(kTRUE);
-  fH22Away->GetXaxis()->SetTitle("P_{T} (charged jet1) (GeV/c)");
+  fH22Away->GetXaxis()->SetTitle("P_{T} (jet1) (GeV/c)");
   fH22Away->GetYaxis()->SetTitle("<PT_{sum}(in the event - including jet1)> in 1 GeV/c bin");
   fH22Away->GetXaxis()->SetTitleColor(1);
   fH22Away->SetMarkerStyle(kFullCircle);
   fOutput->Add(fH22Away);
 
-
   //____________________________________________________________________________________
-  fH23 = new TH1F ("histo23","Pt Distribution of charged particles", 800, 0., 800.);
+  fH23 = new TH1F ("histo23","Pt Distribution of particles", 800, 0., 800.);
   fH23->SetStats(kTRUE);
-  fH23->GetXaxis()->SetTitle("P_{T} (charged) (GeV/c)");
-  fH23->GetYaxis()->SetTitle("dN_{chg}/dP_{T} (1/GeV/c)");
+  fH23->GetXaxis()->SetTitle("P_{T}  (GeV/c)");
+  fH23->GetYaxis()->SetTitle("dN/dP_{T} (1/GeV/c)");
   fH23->GetXaxis()->SetTitleColor(1);
   fH23->SetMarkerStyle(kFullCircle);
   fOutput->Add(fH23);
 
-  fH23jet1 = new TH1F ("histo23jet1","Pt Distribution of charged particles in jet1", 800, 0., 800.);
+  fH23jet1 = new TH1F ("histo23jet1","Pt Distribution of particles in jet1", 800, 0., 800.);
   fH23jet1->SetStats(kTRUE);
-  fH23jet1->GetXaxis()->SetTitle("P_{T} (charged) (jet1) (GeV/c)");
-  fH23jet1->GetYaxis()->SetTitle("dN_{chg}/dP_{T} (jet1) (1/GeV/c)");
+  fH23jet1->GetXaxis()->SetTitle("P_{T} (jet1) (GeV/c)");
+  fH23jet1->GetYaxis()->SetTitle("dN/dP_{T} (jet1) (1/GeV/c)");
   fH23jet1->GetXaxis()->SetTitleColor(1);
   fH23jet1->SetMarkerStyle(kFullCircle);
   fOutput->Add(fH23jet1);
 
-  fH23Toward = new TH1F ("histo23_toward","'Toward' Pt Distribution of charged particles", 800, 0., 800.);
+  fH23Toward = new TH1F ("histo23_toward","'Toward' Pt Distribution of particles", 800, 0., 800.);
   fH23Toward->SetStats(kTRUE);
-  fH23Toward->GetXaxis()->SetTitle("P_{T} (charged) (GeV/c)");
-  fH23Toward->GetYaxis()->SetTitle("dN_{chg}/dP_{T} (1/GeV/c)");
+  fH23Toward->GetXaxis()->SetTitle("P_{T} (GeV/c)");
+  fH23Toward->GetYaxis()->SetTitle("dN/dP_{T} (1/GeV/c)");
   fH23Toward->GetXaxis()->SetTitleColor(1);
   fH23Toward->SetMarkerStyle(kFullCircle);
   fOutput->Add(fH23Toward);
 
-  fH23Transverse = new TH1F ("histo23_transverse","'Transverse' Pt Distribution of charged particles", 800, 0., 800.);
+  fH23Transverse = new TH1F ("histo23_transverse","'Transverse' Pt Distribution of particles", 800, 0., 800.);
   fH23Transverse->SetStats(kTRUE);
-  fH23Transverse->GetXaxis()->SetTitle("P_{T} (charged) (GeV/c)");
-  fH23Transverse->GetYaxis()->SetTitle("dN_{chg}/dP_{T} (1/GeV/c)");
+  fH23Transverse->GetXaxis()->SetTitle("P_{T} (GeV/c)");
+  fH23Transverse->GetYaxis()->SetTitle("dN/dP_{T} (1/GeV/c)");
   fH23Transverse->GetXaxis()->SetTitleColor(1);
   fH23Transverse->SetMarkerStyle(kFullCircle);
   fOutput->Add(fH23Transverse);
 
-  fH23Away = new TH1F ("histo23_away","'Away' Pt Distribution of charged particles", 800, 0., 800.);
+  fH23Away = new TH1F ("histo23_away","'Away' Pt Distribution of particles", 800, 0., 800.);
   fH23Away->SetStats(kTRUE);
-  fH23Away->GetXaxis()->SetTitle("P_{T} (charged) (GeV/c)");
-  fH23Away->GetYaxis()->SetTitle("dN_{chg}/dP_{T} (1/GeV/c)");
+  fH23Away->GetXaxis()->SetTitle("P_{T} (GeV/c)");
+  fH23Away->GetYaxis()->SetTitle("dN/dP_{T} (1/GeV/c)");
   fH23Away->GetXaxis()->SetTitleColor(1);
   fH23Away->SetMarkerStyle(kFullCircle);
   fOutput->Add(fH23Away);
 
-  fH24 = new TProfile ("histo24","Jet1 Size vs P_{T}(charged jet1)", 200, 0., 200. , 0., 0.5) ;
+  fH24 = new TProfile ("histo24","Jet1 Size vs P_{T}(jet1)", 200, 0., 200. , 0., 0.5) ;
   fH24->SetStats(kTRUE);
-  fH24->GetXaxis()->SetTitle("P_{T} (charged jet1) (GeV/c)");
-  fH24->GetYaxis()->SetTitle("<R(chgjet1)> in 1 GeV/c bin");
+  fH24->GetXaxis()->SetTitle("P_{T} (jet1) (GeV/c)");
+  fH24->GetYaxis()->SetTitle("<R(jet1)> in 1 GeV/c bin");
   fH24->GetXaxis()->SetTitleColor(1);
   fH24->SetMarkerStyle(kFullCircle);
   fOutput->Add(fH24);
 
-  fH25 = new TProfile ("histo25","Jet1 Size vs P_{T}(charged jet1)", 200, 0., 200. , 0., 0.5) ;
+  fH25 = new TProfile ("histo25","Jet1 Size vs P_{T}(jet1)", 200, 0., 200. , 0., 0.5) ;
   fH25->SetStats(kTRUE);
-  fH25->GetXaxis()->SetTitle("P_{T} (charged jet1) (GeV/c)");
-  fH25->GetYaxis()->SetTitle("<R(chgjet1)> in 1 GeV/c bin");
+  fH25->GetXaxis()->SetTitle("P_{T} (jet1) (GeV/c)");
+  fH25->GetYaxis()->SetTitle("<R(jet1)> in 1 GeV/c bin");
   fH25->GetXaxis()->SetTitleColor(1);
   fH25->SetMarkerStyle(kFullCircle);
   fOutput->Add(fH25);
 
-  fH26 = new TProfile ("histo26", "N_{chg} vs the Distance R from Charged Jet1 - 80% of particles", 50, 0., 1., 0., 20.);
+  fH26 = new TProfile ("histo26", "N vs the Distance R from Jet1 - 80% of particles", 50, 0., 1., 0., 20.);
   fH26->SetStats(kTRUE);
   fH26->GetXaxis()->SetTitle("Distance R");
-  fH26->GetYaxis()->SetTitle("<N_{chg}> in 0.02 bin");
+  fH26->GetYaxis()->SetTitle("<N> in 0.02 bin");
   fH26->GetXaxis()->SetTitleColor(1);
   fH26->SetMarkerStyle(kFullCircle);
   fOutput->Add(fH26);
 
-  fH27 = new TProfile ("histo27", "N_{chg} vs the Distance R from Charged Jet1 - 80% of Pt", 50, 0., 1., 0., 20.);
+  fH27 = new TProfile ("histo27", "N vs the Distance R from Jet1 - 80% of Pt", 50, 0., 1., 0., 20.);
   fH27->SetStats(kTRUE);
   fH27->GetXaxis()->SetTitle("Distance R");
-  fH27->GetYaxis()->SetTitle("<N_{chg}> in 0.02 bin");
+  fH27->GetYaxis()->SetTitle("<N> in 0.02 bin");
   fH27->GetXaxis()->SetTitleColor(1);
   fH27->SetMarkerStyle(kFullCircle);
   fOutput->Add(fH27);
 
-  fH28 = new TProfile ("histo28", "PT_{sum} vs the Distance R from Charged Jet1 - 80% of particles", 50, 0., 1., 0., 10.);
+  fH28 = new TProfile ("histo28", "PT_{sum} vs the Distance R from Jet1 - 80% of particles", 50, 0., 1., 0., 10.);
   fH28->SetStats(kTRUE);
   fH28->GetXaxis()->SetTitle("Distance R");
   fH28->GetYaxis()->SetTitle("<PT_{sum} (GeV/c)> in 0.02 bin");
@@ -563,7 +566,7 @@ void AliAnalysisTaskEmcalJetCDF::UserCreateOutputObjects()
   fH28->SetMarkerStyle(kFullCircle);
   fOutput->Add(fH28);
 
-  fH29 = new TProfile ("histo29", "PT_{sum} vs the Distance R from Charged Jet1 - 80% of Pt", 50, 0., 1., 0., 10.);
+  fH29 = new TProfile ("histo29", "PT_{sum} vs the Distance R from Jet1 - 80% of Pt", 50, 0., 1., 0., 10.);
   fH29->SetStats(kTRUE);
   fH29->GetXaxis()->SetTitle("Distance R");
   fH29->GetYaxis()->SetTitle("<PT_{sum} (GeV/c)> in 0.02 bin");
@@ -587,8 +590,7 @@ void AliAnalysisTaskEmcalJetCDF::UserCreateOutputObjects()
 
 //________________________________________________________________________
 Double_t AliAnalysisTaskEmcalJetCDF::DeltaR(const AliVParticle* part1, const AliVParticle* part2 )
-{
-// Helper function to calculate the distance between two jets or a jet and particle
+{ // Helper function to calculate the distance between two jets or a jet and particle
   Double_t dPhi = part1->Phi() - part2->Phi();
   Double_t dEta = part1->Eta() - part2->Eta();
   dPhi = Phi_mpi_pi (dPhi);
@@ -607,12 +609,10 @@ Double_t AliAnalysisTaskEmcalJetCDF::GetZ(const Double_t trkPx, const Double_t t
 {// Get the z of a constituent inside of a jet
   Double_t pJetSq = jetPx*jetPx+jetPy*jetPy+jetPz*jetPz;
 
-  if(pJetSq>0.)
-    return (trkPx*jetPx+trkPy*jetPy+trkPz*jetPz)/pJetSq;
-  else {
-    AliWarning(Form("%s: strange, pjet*pjet seems to be zero pJetSq: %f",GetName(), pJetSq));
-    return 0;
-  }
+  if ( pJetSq == 0. ) { AliWarning(Form("%s: strange, pJetSq seems to be zero: %f",GetName(), pJetSq)); return 0; }
+  if ( pJetSq <  0. ) { AliWarning(Form("%s: FATAL, pJetSq seems to be BELOW zero!! IMPOSIBLE: %f",GetName(), pJetSq)); return 0; }
+
+  return (trkPx*jetPx+trkPy*jetPy+trkPz*jetPz)/pJetSq;
 }
 
 
