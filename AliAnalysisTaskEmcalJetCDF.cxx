@@ -5,10 +5,11 @@ ClassImp ( AliAnalysisTaskEmcalJetCDF )
 
 //________________________________________________________________________
 AliAnalysisTaskEmcalJetCDF::AliAnalysisTaskEmcalJetCDF() : AliAnalysisTaskEmcalJet ( "AliAnalysisTaskEmcalJetCDF", kTRUE ),
-  fDebug         (kFALSE),
   fContainerFull(0),
   fContainerCharged(1),
   fTriggerClass(""),
+  fJET1_track_idx(NULL),
+  fJET1_track_pt (NULL),
   fH1            (NULL),
   fH2            (NULL),
   fH3            (NULL),
@@ -49,10 +50,11 @@ AliAnalysisTaskEmcalJetCDF::AliAnalysisTaskEmcalJetCDF() : AliAnalysisTaskEmcalJ
 //________________________________________________________________________
 AliAnalysisTaskEmcalJetCDF::AliAnalysisTaskEmcalJetCDF ( const char* name ) :
   AliAnalysisTaskEmcalJet ( name, kTRUE ),
-  fDebug         (kFALSE),
   fContainerFull(0),
   fContainerCharged(1),
   fTriggerClass(""),
+  fJET1_track_idx(NULL),
+  fJET1_track_pt (NULL),
   fH1            (NULL),
   fH2            (NULL),
   fH3            (NULL),
@@ -161,7 +163,7 @@ fJets->Sort();
   // Global Histograms; only filled with accepted jets
   for ( Int_t ij = 0; ij < fNJets; ij++ )
     {
-    AliEmcalJet* jet = static_cast<AliEmcalJet*> ( fJets->At ( ij ) );
+    AliEmcalJet* jet = static_cast<AliEmcalJet*> ( fJets->At(ij) );
 
     if ( !jet ) { AliError ( Form ( "Could not receive jet %d", ij ) ); continue; }
     if ( !AcceptJet (jet, idx_jet_container) ) {continue;}
@@ -175,6 +177,7 @@ fJets->Sort();
 
   // Distribution of jets in events; all jets (no AcceptedJet condition); if needed fNJets_accepted could be used
   fH5->Fill ( fNJets );
+  fH5acc->Fill ( fNJets_accepted );
 
   printf ("CDFhistos:: end of global jet histos \n"); fflush(stdout);
 
@@ -192,9 +195,10 @@ fJets->Sort();
   Int_t       jet1_npart = 0;
 
   AliEmcalJet* jet1 = cont->GetLeadingJet(); // internaly checked for AcceptedJet
-  if (!jet1) { cout << "LEADING JET NOT FOUND " << endl ; return -1; }
+  if (!jet1)
+    { cout << "LEADING JET NOT FOUND " << endl ; return -1; }
   else
-   { leadJet = kTRUE; }
+    { leadJet = kTRUE; }
 
   jet1->SortConstituents(); // Sort constituent by index (increasing). // TO BE DONE : SORT CONSTITUENT DECREASING BY PT; eventually in AliEmcalJet
 
@@ -203,6 +207,23 @@ fJets->Sort();
 
   fH6->Fill( jet1_npart );           // Jet1 Multiplicity Distribution ( ->Scale (events) )
   fH7->Fill( jet1_pt, jet1_npart );  // N(jet1) vs P_{T}(jet1)
+
+
+  //___________________________________________
+  // Sorting by p_T jet1 constituents
+  //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  fJET1_track_idx = new Int_t    [ jet1_npart ] ;   // sorted array of jets pt
+  fJET1_track_pt  = new Double_t [ jet1_npart ] ;   // array of jets pts
+
+  // filing the jet1_track_idx array
+  for(  Int_t i = 0 ; i < jet1_npart ; i++ )
+    {
+    fJET1_track_idx [i] = -999 ;
+    fJET1_track_pt  [i] = jet1->TrackAt(i,fTracks)->Pt();
+    }
+
+  TMath::Sort ( jet1_npart, fJET1_track_pt, fJET1_track_idx ) ; // sorting pt of jets
+
 
   //___________________________________________________________________________
   // Momentum distribution for leading jet (FF)
@@ -618,7 +639,9 @@ Double_t AliAnalysisTaskEmcalJetCDF::GetZ(const Double_t trkPx, const Double_t t
 
 //________________________________________________________________________
 void AliAnalysisTaskEmcalJetCDF::Terminate ( Option_t* )
-  {
-  // Called once at the end of the analysis.
+  {  // Called once at the end of the analysis.
+  // Update pointers reading them from the output slot
+  fOutput = dynamic_cast<TList*> (GetOutputData(0));
   }
 // kate: indent-mode cstyle; indent-width 2; replace-tabs on;
+

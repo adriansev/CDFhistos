@@ -108,10 +108,11 @@ class AliAnalysisTaskEmcalJetCDF : public AliAnalysisTaskEmcalJet
 
     Bool_t                      Run() ;
 
-    Bool_t                      fDebug;              //  debug level
     Int_t                       fContainerFull;      //  number of container with full jets DET
     Int_t                       fContainerCharged;   //  number of container with charged jets DET
     TString                     fTriggerClass;       // trigger class to analyze EJ1 or EJ2
+    Int_t*                      fJET1_track_idx;     //! pointer to array of indexes (sorting of jet tracks by pt)
+    Double_t*                   fJET1_track_pt;      //! pointer to array of pt (sorting of jet tracks by pt)
 
     // Histograms    ( are owned by fListOfHistos TList )
     TH1F*       fH1;           //!  Pt distribution of jets
