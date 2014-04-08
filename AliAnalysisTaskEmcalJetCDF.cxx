@@ -252,10 +252,11 @@ fJets->Sort();
 Int_t    counter_part = 0  ;
 Double_t counter_pt   = 0. ;
 
-// parsing tracks of jet1 (leading jet) in decreasing order of Pt // ?? is it Pt sorted? to be clarified
+// parsing tracks of jet1 (leading jet) in decreasing order of Pt //
 for( Int_t i = 0 ; i < jet1_npart ; i++ )
   {
-  AliVParticle* track = jet1->TrackAt(i, fTracks);
+  Int_t idx_sorted = fJET1_track_idx[i]; // replace the index order by the sorted array
+  AliVParticle* track = jet1->TrackAt(idx_sorted, fTracks);
   Double_t dpart = DeltaR (jet1, track);
 
   counter_part++;
