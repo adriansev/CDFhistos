@@ -392,7 +392,7 @@ void AliAnalysisTaskEmcalJetCDF::UserCreateOutputObjects()
 
     fH1 = new TH1F ( "histo1", "Pt distribution of jets", 400, 0, 400 ); // 1GeV/bin
     fH1->SetStats ( kTRUE );
-    fH1->GetXaxis()->SetTitle ( "$p_{T,jet}$ in GeV/$c$" );
+    fH1->GetXaxis()->SetTitle ( "p_{T,jet} in GeV/c" );
     fH1->GetYaxis()->SetTitle ( "Number of jets" );
     fH1->GetXaxis()->SetTitleColor ( 1 );
     fH1->SetMarkerStyle ( kFullCircle );
