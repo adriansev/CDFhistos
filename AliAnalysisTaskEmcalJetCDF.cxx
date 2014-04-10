@@ -5,8 +5,8 @@ ClassImp ( AliAnalysisTaskEmcalJetCDF )
 
 //________________________________________________________________________
 AliAnalysisTaskEmcalJetCDF::AliAnalysisTaskEmcalJetCDF() : AliAnalysisTaskEmcalJet ( "AliAnalysisTaskEmcalJetCDF", kTRUE ),
-    fContainerFull ( 0 ),
-    fContainerCharged ( 1 ),
+    fContainerFull ( 1 ),
+    fContainerCharged ( 0 ),
     fTriggerClass ( "" ),
     fJET1_track_idx ( NULL ),
     fJET1_track_pt ( NULL ),
@@ -42,7 +42,10 @@ AliAnalysisTaskEmcalJetCDF::AliAnalysisTaskEmcalJetCDF() : AliAnalysisTaskEmcalJ
     fH26 ( NULL ),
     fH27 ( NULL ),
     fH28 ( NULL ),
-    fH29 ( NULL )
+    fH29 ( NULL ),
+    fJetsCont( NULL ),
+    fTracksCont( NULL ),
+    fCaloClustersCont( NULL )
 
     {
     // Default constructor.
@@ -50,10 +53,9 @@ AliAnalysisTaskEmcalJetCDF::AliAnalysisTaskEmcalJetCDF() : AliAnalysisTaskEmcalJ
     }
 
 //________________________________________________________________________
-AliAnalysisTaskEmcalJetCDF::AliAnalysisTaskEmcalJetCDF ( const char* name ) :
-    AliAnalysisTaskEmcalJet ( name, kTRUE ),
-    fContainerFull ( 0 ),
-    fContainerCharged ( 1 ),
+AliAnalysisTaskEmcalJetCDF::AliAnalysisTaskEmcalJetCDF ( const char* name ) : AliAnalysisTaskEmcalJet ( name, kTRUE ),
+    fContainerFull ( 1 ),
+    fContainerCharged ( 0 ),
     fTriggerClass ( "" ),
     fJET1_track_idx ( NULL ),
     fJET1_track_pt ( NULL ),
@@ -89,7 +91,10 @@ AliAnalysisTaskEmcalJetCDF::AliAnalysisTaskEmcalJetCDF ( const char* name ) :
     fH26 ( NULL ),
     fH27 ( NULL ),
     fH28 ( NULL ),
-    fH29 ( NULL )
+    fH29 ( NULL ),
+    fJetsCont( NULL ),
+    fTracksCont( NULL ),
+    fCaloClustersCont( NULL )
 
     {
     // Standard constructor.

@@ -2,79 +2,66 @@
 #define ALIANALYSISTASKEMCALJETCDF_H
 
 #include <cstdio>
-
-#include <Riostream.h>
+#include <Rtypes.h>
 #include <TROOT.h>
 #include <TSystem.h>
-#include <TInterpreter.h>
-#include <TChain.h>
-#include <TFile.h>
-#include <TTree.h>
-#include <TList.h>
-#include <TMath.h>
 #include <TProfile.h>
 #include <TH1.h>
-#include <TH2.h>
 #include <TH1F.h>
-#include <TH2F.h>
 #include <TH1D.h>
-#include <TH2D.h>
-#include <TClonesArray.h>
-#include <TLorentzVector.h>
+#include <TProfile.h>
+#include <TMath.h>
 #include <TVector2.h>
 
 #include "AliLog.h"
-#include "AliStack.h"
-#include "AliRhoParameter.h"
-
-#include "AliAnalysisTask.h"
-#include "AliAnalysisTaskSE.h"
-#include "AliAnalysisTaskEmcalJet.h"
-#include "AliAnalysisManager.h"
-#include "AliAnalysisHelperJetTasks.h"
-
-
-#include "AliESD.h"
-#include "AliESDEvent.h"
-
-#include "AliVEvent.h"
-#include "AliMCEvent.h"
-#include "AliESDEvent.h"
-#include "AliESDInputHandler.h"
-
-#include "AliVCluster.h"
-#include "AliVTrack.h"
 #include "AliEmcalJet.h"
 #include "AliJetContainer.h"
 
-#include "AliInputEventHandler.h"
-#include "AliAODEvent.h"
-#include "AliAODHandler.h"
-#include "AliAODJet.h"
-#include "AliAODJetEventBackground.h"
-#include "AliAODExtension.h"
-#include "AliMCEventHandler.h"
-#include "AliAODInputHandler.h"
-#include "AliAODJetEventBackground.h"
-#include "AliAODMCParticle.h"
 #include "AliAnalysisTaskEmcalJet.h"
 
-class TObjArray;
-class TRefArray;
-class TClonesArray;
-class TVector2;
+// #include <Riostream.h>
+// #include <TInterpreter.h>
+// #include <TChain.h>
+// #include <TFile.h>
+// #include <TTree.h>
+// #include <TList.h>
+// #include <TH2.h>
+// #include <TH2F.h>
+// #include <TH1D.h>
+// #include <TH2D.h>
+// #include <TClonesArray.h>
+// #include <TLorentzVector.h>
+// #include "AliStack.h"
+// #include "AliRhoParameter.h"
+// #include "AliAnalysisTask.h"
+// #include "AliAnalysisTaskSE.h"
+// #include "AliAnalysisTaskEmcalJet.h"
+// #include "AliAnalysisManager.h"
+// #include "AliAnalysisHelperJetTasks.h"
+// #include "AliESD.h"
+// #include "AliESDEvent.h"
+// #include "AliVEvent.h"
+// #include "AliMCEvent.h"
+// #include "AliESDEvent.h"
+// #include "AliESDInputHandler.h"
+// #include "AliVCluster.h"
+// #include "AliVTrack.h"
+// #include "AliInputEventHandler.h"
+// #include "AliAODEvent.h"
+// #include "AliAODHandler.h"
+// #include "AliAODJet.h"
+// #include "AliAODJetEventBackground.h"
+// #include "AliAODExtension.h"
+// #include "AliMCEventHandler.h"
+// #include "AliAODInputHandler.h"
+// #include "AliAODJetEventBackground.h"
+// #include "AliAODMCParticle.h"
 
-class TList;
 class TH1;
-class TH1D;
-class TH1F;
-class TH2D;
-class TH2F;
 class TH2;
 class TProfile;
 class AliAnalysisUtils;
 class AliJetContainer;
-
 class AliParticleContainer;
 class AliClusterContainer;
 
@@ -150,6 +137,10 @@ class AliAnalysisTaskEmcalJetCDF : public AliAnalysisTaskEmcalJet
         TProfile*  fH27;           //!  N_{chg} vs the Distance R from Jet1 - 80% of Pt
         TProfile*  fH28;           //!  PT_{sum} vs the Distance R from Jet1 - 80% of particles
         TProfile*  fH29;           //!  PT_{sum} vs the Distance R from Jet1 - 80% of Pt
+
+        AliJetContainer*           fJetsCont;                   //!Jets
+        AliParticleContainer*      fTracksCont;                 //!Tracks
+        AliClusterContainer*       fCaloClustersCont;           //!Clusters
 
     private:
         AliAnalysisTaskEmcalJetCDF ( const AliAnalysisTaskEmcalJetCDF& );            // not implemented
