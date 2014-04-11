@@ -98,7 +98,7 @@ AliAnalysisTaskEmcalJetCDF::AliAnalysisTaskEmcalJetCDF ( const char* name ) : Al
 
     {
     // Standard constructor.
-    SetMakeGeneralHistograms ( kTRUE );
+    //SetMakeGeneralHistograms ( kTRUE );
     }
 
 //________________________________________________________________________
