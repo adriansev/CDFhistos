@@ -49,7 +49,7 @@ AliAnalysisTaskEmcalJetCDF::AliAnalysisTaskEmcalJetCDF() : AliAnalysisTaskEmcalJ
 
     {
     // Default constructor.
-    SetMakeGeneralHistograms ( kTRUE );
+    //SetMakeGeneralHistograms ( kTRUE );
     }
 
 //________________________________________________________________________
