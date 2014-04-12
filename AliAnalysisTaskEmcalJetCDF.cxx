@@ -199,6 +199,39 @@ Int_t AliAnalysisTaskEmcalJetCDF::FillHistograms_container ( Int_t idx_jet_conta
 
     printf ( "CDFhistos:: end of global jet histos \n" ); fflush ( stdout );
 
+//__________________________________________________________________
+// Leading Jet
+    AliEmcalJet* jet1 = cont->GetLeadingJet(); // internaly checked for AcceptedJet
+
+    if ( !jet1 )
+        { cout << "LEADING JET NOT FOUND " << endl ; return -1; }
+    else
+        { leadJet = kTRUE; }
+
+    jet1->SortConstituents(); // Sort constituent by index (increasing). // SORT CONSTITUENT DECREASING BY PT - DONE below; eventually in AliEmcalJet
+
+    Double_t jet1_pt    = jet1->Pt();
+    Int_t    jet1_npart = jet1->GetNumberOfTracks();
+
+    fH6->Fill ( jet1_npart );          // Jet1 Multiplicity Distribution ( ->Scale (1/events) )
+    fH7->Fill ( jet1_pt, jet1_npart ); // N(jet1) vs P_{T}(jet1)
+
+//___________________________________________
+// Sorting by p_T jet1 constituents
+//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    fJET1_track_idx = new Int_t    [ jet1_npart ] ;   // sorted array of jets pt
+    fJET1_track_pt  = new Double_t [ jet1_npart ] ;   // array of jets pts
+
+// filing the jet1_track_idx array
+    for ( Int_t i = 0 ; i < jet1_npart ; i++ )
+        {
+        fJET1_track_idx [i] = -999 ;
+        fJET1_track_pt  [i] = jet1->TrackAt ( i, fTracks )->Pt();
+        }
+
+    TMath::Sort ( jet1_npart, fJET1_track_pt, fJET1_track_idx ) ; // sorting pt of jets
+
+//__________________________________________________________________
 // "Transverse" Pt Distribution and computing of pt sum of event
 // AND sorting the EVENT tracks by pt
     Double_t event_pt = 0.;
@@ -221,43 +254,6 @@ Int_t AliAnalysisTaskEmcalJetCDF::FillHistograms_container ( Int_t idx_jet_conta
     if ( fDebug > 1 ) { printf ( "Sum of all Pt in event : pt_sum_event = %g", event_pt ) ; }
 
     TMath::Sort ( fNPart, fTrack_pt, fTrack_idx ) ; // sorting pt of tracks in EVENT
-
-//__________________________________________________________________
-// Leading Jet
-    Double_t    jet1_pt    = 0.;
-    Int_t       jet1_npart = 0;
-
-    AliEmcalJet* jet1 = cont->GetLeadingJet(); // internaly checked for AcceptedJet
-
-    if ( !jet1 )
-        { cout << "LEADING JET NOT FOUND " << endl ; return -1; }
-    else
-        { leadJet = kTRUE; }
-
-    jet1->SortConstituents(); // Sort constituent by index (increasing). // SORT CONSTITUENT DECREASING BY PT - DONE below; eventually in AliEmcalJet
-
-    jet1_pt    = jet1->Pt();
-    jet1_npart = jet1->GetNumberOfTracks();
-
-    fH6->Fill ( jet1_npart );          // Jet1 Multiplicity Distribution ( ->Scale (1/events) )
-    fH7->Fill ( jet1_pt, jet1_npart ); // N(jet1) vs P_{T}(jet1)
-
-
-//___________________________________________
-// Sorting by p_T jet1 constituents
-//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    fJET1_track_idx = new Int_t    [ jet1_npart ] ;   // sorted array of jets pt
-    fJET1_track_pt  = new Double_t [ jet1_npart ] ;   // array of jets pts
-
-// filing the jet1_track_idx array
-    for ( Int_t i = 0 ; i < jet1_npart ; i++ )
-        {
-        fJET1_track_idx [i] = -999 ;
-        fJET1_track_pt  [i] = jet1->TrackAt ( i, fTracks )->Pt();
-        }
-
-    TMath::Sort ( jet1_npart, fJET1_track_pt, fJET1_track_idx ) ; // sorting pt of jets
-
 
 //___________________________________________________________________________
 // Momentum distribution for leading jet (FF)
