@@ -76,13 +76,14 @@ class AliAnalysisTaskEmcalJetCDF : public AliAnalysisTaskEmcalJet
         void                        UserCreateOutputObjects();
         void                        Terminate ( Option_t* option );
 
+
         Double_t                    Phi_mpi_pi ( Double_t phi ) { return TVector2::Phi_mpi_pi ( phi ); } // returns phi angle in the interval [-PI,PI)
         Double_t                    DeltaR ( const AliVParticle* part1, const AliVParticle* part2 );   // return dR dinstance in eta,phi plane between 2 AliVParticle derived objects // this could be added in EmcalJet?
 
         //Setters
-        void SetTriggerClass ( const char* n )       { fTriggerClass = n; }
-        void SetContainerFull ( Int_t c )            { fContainerFull      = c;}
-        void SetContainerCharged ( Int_t c )         { fContainerCharged   = c;}
+        void SetTriggerClass           ( const char* n )    { fTriggerClass       = n; }
+        void SetContainerFull          ( Int_t c )          { fContainerFull      = c; }
+        void SetContainerCharged       ( Int_t c )          { fContainerCharged   = c; }
 
         Double_t GetZ ( const AliVParticle* trk, const AliEmcalJet* jet )       const; // Get Z of constituent trk // could be added in EmcalJet?
         Double_t GetZ ( const Double_t trkPx, const Double_t trkPy, const Double_t trkPz, const Double_t jetPx, const Double_t jetPy, const Double_t jetPz ) const; // Get Z of constituent trk
@@ -91,7 +92,9 @@ class AliAnalysisTaskEmcalJetCDF : public AliAnalysisTaskEmcalJet
         Bool_t                      FillHistograms()   ;
         Int_t                       FillHistograms_container ( Int_t idx_jet_container );
 
+        void                        ExecOnce();
         Bool_t                      Run() ;
+
 
         Int_t                       fContainerFull;      //  number of container with full jets DET
         Int_t                       fContainerCharged;   //  number of container with charged jets DET
