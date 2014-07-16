@@ -122,22 +122,22 @@ Bool_t AliAnalysisTaskEmcalJetCDF::Run()
 //________________________________________________________________________
 Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
     {
-    // FillHistogram main function .. could parse all jet containers. At this moment only fisrt jet container is parsed
+    fJetsCont  = GetJetContainer(0);
+    if (!fJetsCont) { cout << "ERROR :: Jet Container not found!!!" << endl; return kFALSE; }
+
+     //get particles and clusters connected to jets
+    fTracksCont       = fJetsCont->GetParticleContainer();   fTracksCont->SetClassName("AliVTrack");
+    fCaloClustersCont = fJetsCont->GetClusterContainer();    fCaloClustersCont->SetClassName("AliVCluster");
+
+    // FillHistogram main function
     Int_t result = -999; // return code
     Int_t jetContainers = fJetCollArray.GetEntries();
 
-    jetContainers = 1; // process only first jet container
+    result = FillHistograms_container (0);
 
-    for ( Int_t i = 0 ; i < jetContainers; i++ )
-        {
-        result = FillHistograms_container ( i );
-        }
-
-    if ( result != 1 ) { cout << "ERROR :: Fill of histograms failed in container" << endl; }
-
-    if ( result == -1 ) { cout << "ERROR :: LEADING JET NOT FOUND" << endl; }
-
-    if ( result < 1 ) { cout << "ERROR :: Fill histograms failed" << endl; return kFALSE; }
+    if ( result != 1 )  { cout << "ERROR :: Fill of histograms failed in container" << endl; return kFALSE; }
+    if ( result == -1 ) { cout << "ERROR :: LEADING JET NOT FOUND" << endl; return kFALSE; }
+    if ( result < 1 )   { cout << "ERROR :: Fill histograms failed" << endl; return kFALSE; }
 
     return kTRUE;
     }
@@ -156,12 +156,17 @@ Int_t AliAnalysisTaskEmcalJetCDF::FillHistograms_container ( Int_t idx_jet_conta
     if ( !fJets || fJets->IsEmpty() )  { cout << "Jets pointer NULL or jets empty" << endl; return 0; }
     if ( fDebug > 0 ) { cout << "Jets pointer : "  << fJets << endl; fJets->Print(); }
 
+//__________________________________________________________________
+// Leading Jet
+    AliEmcalJet* jet1 = cont->GetLeadingJet(); // internaly checked for AcceptedJet
+    if ( !jet1 ) { cout << "LEADING JET NOT FOUND " << endl ; return -1; }
+
+
 // sort the list of AliEmcalJets
     fJets->Sort();
 
     const Int_t fNJets = GetNJets ( idx_jet_container ) ;  // Number of Jets found in event
     const Int_t fNPart = fInputEvent->GetNumberOfTracks(); // Multiplicity in event  //  fTracks->GetEntriesFast(); // <<-- faster?
-    Bool_t leadJet = kFALSE;
 
 // protection
     if ( ( fNJets == 0 ) || ( fNPart == 0 ) ) { cout << "(fNJets || fNPart) == 0" << endl; return 0; }
@@ -201,14 +206,7 @@ Int_t AliAnalysisTaskEmcalJetCDF::FillHistograms_container ( Int_t idx_jet_conta
 
 //__________________________________________________________________
 // Leading Jet
-    AliEmcalJet* jet1 = cont->GetLeadingJet(); // internaly checked for AcceptedJet
-
-    if ( !jet1 )
-        { cout << "LEADING JET NOT FOUND " << endl ; return -1; }
-    else
-        { leadJet = kTRUE; }
-
-    jet1->SortConstituents(); // Sort constituent by index (increasing). // SORT CONSTITUENT DECREASING BY PT - DONE below; eventually in AliEmcalJet
+    std::vector< int > jet1_sorted_idx_vec = jet1->SortConstituentsPt(idx_jet_container);
 
     Double_t jet1_pt    = jet1->Pt();
     Int_t    jet1_npart = jet1->GetNumberOfTracks();
@@ -683,6 +681,15 @@ Double_t AliAnalysisTaskEmcalJetCDF::GetZ ( const Double_t trkPx, const Double_t
     return ( trkPx * jetPx + trkPy * jetPy + trkPz * jetPz ) / pJetSq;
     }
 
+//________________________________________________________________________
+void AliAnalysisTaskEmcalJetCDF::ExecOnce()
+    {
+    AliAnalysisTaskEmcalJet::ExecOnce();
+
+    if ( fJetsCont         && fJetsCont->GetArray()         == 0) { fJetsCont = 0; }
+    if ( fTracksCont       && fTracksCont->GetArray()       == 0) { fTracksCont = 0; }
+    if ( fCaloClustersCont && fCaloClustersCont->GetArray() == 0) { fCaloClustersCont = 0; }
+    }
 
 //________________________________________________________________________
 void AliAnalysisTaskEmcalJetCDF::Terminate ( Option_t* )
