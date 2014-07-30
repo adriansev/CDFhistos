@@ -16,6 +16,8 @@
 #include "AliLog.h"
 #include "AliEmcalJet.h"
 #include "AliJetContainer.h"
+#include "AliParticleContainer.h"
+#include "AliClusterContainer.h"
 
 #include "AliAnalysisTaskEmcalJet.h"
 
@@ -82,8 +84,8 @@ class AliAnalysisTaskEmcalJetCDF : public AliAnalysisTaskEmcalJet
 
         //Setters
         void SetTriggerClass           ( const char* n )    { fTriggerClass       = n; }
-        void SetContainerFull          ( Int_t c )          { fContainerFull      = c; }
-        void SetContainerCharged       ( Int_t c )          { fContainerCharged   = c; }
+//         void SetContainerFull          ( Int_t c )          { fContainerFull      = c; }
+//         void SetContainerCharged       ( Int_t c )          { fContainerCharged   = c; }
 
         Double_t GetZ ( const AliVParticle* trk, const AliEmcalJet* jet )       const; // Get Z of constituent trk // could be added in EmcalJet?
         Double_t GetZ ( const Double_t trkPx, const Double_t trkPy, const Double_t trkPz, const Double_t jetPx, const Double_t jetPy, const Double_t jetPz ) const; // Get Z of constituent trk
@@ -96,8 +98,8 @@ class AliAnalysisTaskEmcalJetCDF : public AliAnalysisTaskEmcalJet
         Bool_t                      Run() ;
 
 
-        Int_t                       fContainerFull;      //  number of container with full jets DET
-        Int_t                       fContainerCharged;   //  number of container with charged jets DET
+//         Int_t                       fContainerFull;      //  number of container with full jets DET
+//         Int_t                       fContainerCharged;   //  number of container with charged jets DET
         TString                     fTriggerClass;       // trigger class to analyze EJ1 or EJ2
         Int_t*                      fJET1_track_idx;     //! pointer to array of indexes (sorting of jet tracks by pt)
         Double_t*                   fJET1_track_pt;      //! pointer to array of pt (sorting of jet tracks by pt)
