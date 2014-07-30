@@ -1,12 +1,30 @@
+#include <TClonesArray.h>
+#include <TH1F.h>
+#include <TH2F.h>
+#include <TH3F.h>
+#include <TList.h>
+#include <TLorentzVector.h>
+
+#include "AliVCluster.h"
+#include "AliAODCaloCluster.h"
+#include "AliESDCaloCluster.h"
+#include "AliVTrack.h"
+#include "AliEmcalJet.h"
+#include "AliRhoParameter.h"
+#include "AliLog.h"
+#include "AliJetContainer.h"
+#include "AliParticleContainer.h"
+#include "AliClusterContainer.h"
+#include "AliPicoTrack.h"
 
 #include "AliAnalysisTaskEmcalJetCDF.h"
 
-ClassImp ( AliAnalysisTaskEmcalJetCDF )
+ClassImp (AliAnalysisTaskEmcalJetCDF)
 
 //________________________________________________________________________
 AliAnalysisTaskEmcalJetCDF::AliAnalysisTaskEmcalJetCDF() : AliAnalysisTaskEmcalJet ( "AliAnalysisTaskEmcalJetCDF", kTRUE ),
-    fContainerFull ( 1 ),
-    fContainerCharged ( 0 ),
+//     fContainerFull ( 1 ),
+//     fContainerCharged ( 0 ),
     fTriggerClass ( "" ),
     fJET1_track_idx ( NULL ),
     fJET1_track_pt ( NULL ),
@@ -54,8 +72,8 @@ AliAnalysisTaskEmcalJetCDF::AliAnalysisTaskEmcalJetCDF() : AliAnalysisTaskEmcalJ
 
 //________________________________________________________________________
 AliAnalysisTaskEmcalJetCDF::AliAnalysisTaskEmcalJetCDF ( const char* name ) : AliAnalysisTaskEmcalJet ( name, kTRUE ),
-    fContainerFull ( 1 ),
-    fContainerCharged ( 0 ),
+//     fContainerFull ( 1 ),
+//     fContainerCharged ( 0 ),
     fTriggerClass ( "" ),
     fJET1_track_idx ( NULL ),
     fJET1_track_pt ( NULL ),
@@ -111,12 +129,6 @@ AliAnalysisTaskEmcalJetCDF::~AliAnalysisTaskEmcalJetCDF()
     delete [] fJET1_track_pt ;
     }
 
-//________________________________________________________________________
-Bool_t AliAnalysisTaskEmcalJetCDF::Run()
-    {
-    // Run analysis code here, if needed. It will be executed before FillHistograms().
-    return kTRUE;  // If return kFALSE FillHistogram() will NOT be executed.
-    }
 
 
 //________________________________________________________________________
@@ -126,12 +138,15 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
     if (!fJetsCont) { cout << "ERROR :: Jet Container not found!!!" << endl; return kFALSE; }
 
      //get particles and clusters connected to jets
-    fTracksCont       = fJetsCont->GetParticleContainer();   fTracksCont->SetClassName("AliVTrack");
-    fCaloClustersCont = fJetsCont->GetClusterContainer();    fCaloClustersCont->SetClassName("AliVCluster");
+    fTracksCont       = fJetsCont->GetParticleContainer();
+    fCaloClustersCont = fJetsCont->GetClusterContainer();
+
+    fTracksCont->SetClassName("AliVTrack");
+    fCaloClustersCont->SetClassName("AliVCluster");
 
     // FillHistogram main function
     Int_t result = -999; // return code
-    Int_t jetContainers = fJetCollArray.GetEntries();
+//     Int_t jetContainers = fJetCollArray.GetEntries();
 
     result = FillHistograms_container (0);
 
@@ -175,10 +190,10 @@ Int_t AliAnalysisTaskEmcalJetCDF::FillHistograms_container ( Int_t idx_jet_conta
     printf ( "CDFhistos::end of ConnectInputData() \n" );       fflush ( stdout );
 
 // consts used in analysis
-    Double_t const kPI        = TMath::Pi();
-    Double_t const kTWOPI     = 2. * TMath::Pi();
+//     Double_t const kPI        = TMath::Pi();
+//     Double_t const kTWOPI     = 2. * TMath::Pi();
     Double_t const kPI_3      = TMath::Pi() / 3.;
-    Double_t const kPI_2      = TMath::Pi() / 2.;
+//     Double_t const kPI_2      = TMath::Pi() / 2.;
 
     Int_t fNJets_accepted = 0; // number of jets with accepted cuts
 
@@ -206,7 +221,7 @@ Int_t AliAnalysisTaskEmcalJetCDF::FillHistograms_container ( Int_t idx_jet_conta
 
 //__________________________________________________________________
 // Leading Jet
-    std::vector< int > jet1_sorted_idx_vec = jet1->SortConstituentsPt(idx_jet_container);
+//     std::vector< int > jet1_sorted_idx_vec = jet1->SortConstituentsPt(fTracksCont);
 
     Double_t jet1_pt    = jet1->Pt();
     Int_t    jet1_npart = jet1->GetNumberOfTracks();
@@ -679,6 +694,14 @@ Double_t AliAnalysisTaskEmcalJetCDF::GetZ ( const Double_t trkPx, const Double_t
     if ( pJetSq <  0. ) { AliWarning ( Form ( "%s: FATAL, pJetSq seems to be BELOW zero!! IMPOSIBLE: %f", GetName(), pJetSq ) ); return 0; }
 
     return ( trkPx * jetPx + trkPy * jetPy + trkPz * jetPz ) / pJetSq;
+    }
+
+
+//________________________________________________________________________
+Bool_t AliAnalysisTaskEmcalJetCDF::Run()
+    {
+    // Run analysis code here, if needed. It will be executed before FillHistograms().
+    return kTRUE;  // If return kFALSE FillHistogram() will NOT be executed.
     }
 
 //________________________________________________________________________
