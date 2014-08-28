@@ -5,7 +5,7 @@ AliAnalysisTaskEmcalJetCDF* AddTaskEmcalJetCDF(
   const char* nrho               = "Rho",
   Double_t    jetradius          = 0.2,
   Double_t    jetptcut           = 1,
-  Double_t    jetareacut         = 0.557,
+  Double_t    jetareacut         = 0.001,
   const char* type               = "EMCAL",
   Int_t       leadhadtype        = 0,                 // AliJetContainer :: Int_t fLeadingHadronType;  0 = charged, 1 = neutral, 2 = both
   const char* taskname           = "TaskEmcalJetCDF"
@@ -50,7 +50,7 @@ AliAnalysisTaskEmcalJetCDF* AddTaskEmcalJetCDF(
         jetCont->SetPercAreaCut(jetareacut);
         jetCont->SetJetPtCut(jetptcut);
         jetCont->SetLeadingHadronType(leadhadtype); // Int_t fLeadingHadronType;  0 = charged, 1 = neutral, 2 = both
-        jetCont->SetZLeadingCut(0.98,0.98);
+        jetCont->SetZLeadingCut(0.9999,0.9999);
         }
 
     //-------------------------------------------------------
@@ -70,8 +70,8 @@ AliAnalysisTaskEmcalJetCDF* AddTaskEmcalJetCDF(
 }
 
 AliAnalysisTaskEmcalJetCDF* AddTaskEmcalJetCDF ( AliEmcalJetTask* jetFinderTask,
-    Double_t     jetareacut   = 0.557,
-    const char*  type         = "EMCAL",
+    Double_t     jetareacut   = 0.001,
+    const char*  type         = "EMCAL",   // EMCAL, TPC
     Int_t        leadhadtype  = 0,         // AliJetContainer :: Int_t fLeadingHadronType;  0 = charged, 1 = neutral, 2 = both
     const char*  taskname     = "TaskEmcalJetCDF" )
 {
