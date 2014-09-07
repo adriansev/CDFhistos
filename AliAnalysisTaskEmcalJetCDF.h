@@ -39,8 +39,6 @@ class AliAnalysisTaskEmcalJetCDF : public AliAnalysisTaskEmcalJet
         void                        UserCreateOutputObjects();
         void                        Terminate ( Option_t* option );
 
-
-        Double_t                    Phi_mpi_pi ( Double_t phi ) { return TVector2::Phi_mpi_pi ( phi ); } // returns phi angle in the interval [-PI,PI)
         Double_t                    DeltaR ( const AliVParticle* part1, const AliVParticle* part2 );   // return dR dinstance in eta,phi plane between 2 AliVParticle derived objects
 
         //Setters
@@ -56,6 +54,7 @@ class AliAnalysisTaskEmcalJetCDF : public AliAnalysisTaskEmcalJet
         void                        ExecOnce();
         Bool_t                      Run() ;
         std::vector<Int_t>          SortTracksPt ( AliVEvent* event ) const;
+        std::vector<Int_t>          SortTracksPt ( AliParticleContainer* track_container ) const;
 
         TString                     fTriggerClass;       // trigger class to analyze EJ1 or EJ2
 
@@ -69,6 +68,7 @@ class AliAnalysisTaskEmcalJetCDF : public AliAnalysisTaskEmcalJet
         TH1D*       fH6;           //!  Jet1 Multiplicity Distribution
         TProfile*   fH7;           //!  N(jet1) vs P_{T}(jet1)
         TH1D*       fH8;           //!  Momentum distribution for leading jet (fragmentation function)
+        TH1D*       fH8xi;         //!  Xi distribution for leading jet (fragmentation function)
         TProfile*   fH9;           //!  N vs the Azimuthal Angle from Jet1
         TProfile*  fH10;           //!  P_{T} sum vs the Azimuthal Angle from Jet1
         TH1D*      fH20;           //!  Distribution of R in leading jet
@@ -96,6 +96,22 @@ class AliAnalysisTaskEmcalJetCDF : public AliAnalysisTaskEmcalJet
         TProfile*  fH28;           //!  PT_{sum} vs the Distance R from Jet1 - 80% of particles
         TProfile*  fH29;           //!  PT_{sum} vs the Distance R from Jet1 - 80% of Pt
 
+
+        TProfile*  fH40;           //!  total particles fNPart w.r.t PTmax (pt of leading particle from leading jet)
+        TProfile*  fH40toward;     //!  total particles fNPart w.r.t PTmax (pt of leading particle from leading jet)
+        TProfile*  fH40away;       //!  total particles fNPart w.r.t PTmax (pt of leading particle from leading jet)
+        TProfile*  fH40transmin;   //!  total particles fNPart w.r.t PTmax (pt of leading particle from leading jet)
+        TProfile*  fH40transmax;   //!  total particles fNPart w.r.t PTmax (pt of leading particle from leading jet)
+
+        TProfile*  fH41;           //!  PTsum w.r.t PTmax
+        TProfile*  fH41toward;     //!  PTsum w.r.t PTmax
+        TProfile*  fH41away;       //!  PTsum w.r.t PTmax
+        TProfile*  fH41transmin;   //!  PTsum w.r.t PTmax
+        TProfile*  fH41transmax;   //!  PTsum w.r.t PTmax
+
+
+
+
         AliJetContainer*           fJetsCont;                   //!Jets
         AliParticleContainer*      fTracksCont;                 //!Tracks
         AliClusterContainer*       fCaloClustersCont;           //!Clusters
@@ -113,4 +129,4 @@ class AliAnalysisTaskEmcalJetCDF : public AliAnalysisTaskEmcalJet
         ClassDef ( AliAnalysisTaskEmcalJetCDF, 1 ) // jet sample analysis task
     };
 #endif
-// kate: indent-mode cstyle; indent-width 4; replace-tabs on;
+// kate: indent-mode none; indent-width 4; replace-tabs on;
