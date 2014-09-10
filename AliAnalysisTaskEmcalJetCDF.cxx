@@ -169,15 +169,12 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
     fTracksCont->SetClassName("AliVTrack");
     fCaloClustersCont->SetClassName("AliVCluster");
 
-    const UInt_t fNJets          = fJetsCont->GetNJets() ;  // Number of Jets found in event - accepted cuts applied by JetContainer
-    const UInt_t fNJets_accepted = fNJets;
-
-    const UInt_t fNPart    = fInputEvent->GetNumberOfTracks();     // Multiplicity in event
-    const UInt_t fNaccPart = fTracksCont->GetNAcceptedParticles(); // Multiplicity in event - accepted tracks in tracks container
+    const UInt_t fNJets_accepted = fJetsCont->GetNJets() ;  // Number of Jets found in event - accepted cuts applied by JetContainer
+    const UInt_t fNaccPart       = fTracksCont->GetNAcceptedParticles(); // Multiplicity in event - accepted tracks in tracks container
 
 // protection
-    if ( ( fNJets < 1 ) || ( fNPart < 1 ) ) { std::cout << "(fNJets || fNPart) < 1" << std::endl; return kFALSE; }
-    if ( fDebug > 1 ) { printf ( "fNJets = %i ; fNPart = %i \n", fNJets, fNPart ); fflush ( stdout ); }
+    if ( ( fNJets_accepted < 1 ) || ( fNaccPart < 1 ) ) { std::cout << "accepted (fNJets || fNPart) < 1" << std::endl; return kFALSE; }
+    if ( fDebug > 1 ) { printf ( "fNJets = %i ; fNPart = %i \n", fNJets_accepted, fNaccPart ); fflush ( stdout ); }
 
 // consts used in analysis
 //     Double_t const kPI        = TMath::Pi();
@@ -185,7 +182,7 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
     Double_t const kPI_3      = TMath::Pi() / 3.;
     Double_t const k2PI_3     = 2 * kPI_3 ;
 
-    for ( Size_t i = 0 ; i < fNJets ; i++ )
+    for ( Size_t i = 0 ; i < fNJets_accepted ; i++ )
         {
         AliEmcalJet* jet = fJetsCont->GetAcceptJet(i); if (!jet) {continue;}
 
@@ -196,7 +193,7 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
         }
 
 // Distribution of jets in events;
-    fH5->Fill ( fNJets );                // all accepted jets
+    fH5->Fill ( fNJets_accepted );       // all accepted jets
     fH5acc->Fill ( fNJets_accepted );    // all accepted jets - legacy histo - identical to fH5
 
     PostData ( 1, fOutput ); // Post data for ALL output slots > 0 here.
@@ -235,14 +232,7 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
 
 
 //__________________________________________________________________
-// computing of pt sum of event
-//     Double_t event_pt = 0.;
-//     for ( UInt_t i = 0 ; i < fNPart ; i++ )
-//         { // parse particles in event
-//         AliVParticle* track = fInputEvent->GetTrack(i);
-//         if (track) {  event_pt += track->Pt(); } // pt sum of event
-//         }
-
+// computing of pt sum of event - acccepted tracks
     Double_t eventacc_pt = 0.;
     for ( UInt_t i = 0 ; i < fNaccPart ; i++ )
          {// replace the index order by the sorted array
@@ -291,7 +281,7 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
             }
         }
 
-    fH21->Fill ( jet1_pt, fNPart );   // N (in the event - including jet1) vs P_{T}(jet1)
+    fH21->Fill ( jet1_pt, fNaccPart );   // N (in the event - including jet1) vs P_{T}(jet1)
     fH22->Fill ( jet1_pt, eventacc_pt ); // PT_{sum}(in the event - including jet1) vs P_{T}(jet1)
 
     fH40->Fill (jet1_ptmax, fNaccPart);    // total particles fNPart w.r.t PTmax (pt of leading particle from leading jet)
