@@ -75,18 +75,21 @@ class AliAnalysisTaskEmcalJetCDF : public AliAnalysisTaskEmcalJet
 
         TProfile*  fH21;           //!  N(in the event - including jet1) vs P_{T}(jet1)
         TProfile*  fH21Toward;     //!  N(in the event - including jet1) vs P_{T}(jet1)
-        TProfile*  fH21Transverse; //!  N(in the event - including jet1) vs P_{T}(jet1)
+        TProfile*  fH21Transverse_min; //!  N(in the event - including jet1) vs P_{T}(jet1)
+        TProfile*  fH21Transverse_max; //!  N(in the event - including jet1) vs P_{T}(jet1)
         TProfile*  fH21Away;       //!  N(in the event - including jet1) vs P_{T}(jet1)
 
         TProfile*  fH22;           //!  PT_{sum}(in the event - including jet1) vs P_{T}(jet1)
         TProfile*  fH22Toward;     //!  PT_{sum}(in the event - including jet1) vs P_{T}(jet1)
-        TProfile*  fH22Transverse; //!  PT_{sum}(in the event - including jet1) vs P_{T}(jet1)
+        TProfile*  fH22Transverse_min; //!  PT_{sum}(in the event - including jet1) vs P_{T}(jet1)
+        TProfile*  fH22Transverse_max; //!  PT_{sum}(in the event - including jet1) vs P_{T}(jet1)
         TProfile*  fH22Away;       //!  PT_{sum}(in the event - including jet1) vs P_{T}(jet1)
 
         TH1D*      fH23;           //!  Event Pt Distribution of particles
         TH1D*      fH23jet1;       //!  Jet1 Pt Distribution of particles
         TH1D*      fH23Toward;     //!  'Toward' Pt Distribution of particles
-        TH1D*      fH23Transverse; //!  'Transverse' Pt Distribution of particles
+        TH1D*      fH23Transverse_min; //!  'Transverse' Pt Distribution of particles
+        TH1D*      fH23Transverse_max; //!  'Transverse' Pt Distribution of particles
         TH1D*      fH23Away;       //!  'Away' Pt Distribution of particles
 
         TProfile*  fH24;           //!  Jet1 Size vs P_{T}(jet1) - 80% of particles
@@ -95,7 +98,6 @@ class AliAnalysisTaskEmcalJetCDF : public AliAnalysisTaskEmcalJet
         TProfile*  fH27;           //!  N_{chg} vs the Distance R from Jet1 - 80% of Pt
         TProfile*  fH28;           //!  PT_{sum} vs the Distance R from Jet1 - 80% of particles
         TProfile*  fH29;           //!  PT_{sum} vs the Distance R from Jet1 - 80% of Pt
-
 
         TProfile*  fH40;           //!  total particles fNPart w.r.t PTmax (pt of leading particle from leading jet)
         TProfile*  fH40toward;     //!  total particles fNPart w.r.t PTmax (pt of leading particle from leading jet)
@@ -108,9 +110,6 @@ class AliAnalysisTaskEmcalJetCDF : public AliAnalysisTaskEmcalJet
         TProfile*  fH41away;       //!  PTsum w.r.t PTmax
         TProfile*  fH41transmin;   //!  PTsum w.r.t PTmax
         TProfile*  fH41transmax;   //!  PTsum w.r.t PTmax
-
-
-
 
         AliJetContainer*           fJetsCont;                   //!Jets
         AliParticleContainer*      fTracksCont;                 //!Tracks
