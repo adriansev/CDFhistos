@@ -42,11 +42,8 @@ class AliAnalysisTaskEmcalJetCDF : public AliAnalysisTaskEmcalJet
         Double_t                    DeltaR( const AliVParticle* part1, const AliVParticle* part2 );   // return dR dinstance in eta,phi plane between 2 AliVParticle derived objects
 
         // Setters
-        void                        SetJetMinPt( Double_t minpt)    { fJetMinPt = minpt; }
-
 
         // Getters
-        Double_t                    GetJetMinPt()                   {return fJetMinPt;}
 
     protected:
         Bool_t                      FillHistograms()   ;
@@ -109,8 +106,6 @@ class AliAnalysisTaskEmcalJetCDF : public AliAnalysisTaskEmcalJet
         TProfile*  fH41away;       //!  PTsum w.r.t PTmax
         TProfile*  fH41transmin;   //!  PTsum w.r.t PTmax
         TProfile*  fH41transmax;   //!  PTsum w.r.t PTmax
-
-        Double_t   fJetMinPt;      // jet min pt
 
         AliJetContainer*           fJetsCont;                   //!Jets
         AliParticleContainer*      fTracksCont;                 //!Tracks
