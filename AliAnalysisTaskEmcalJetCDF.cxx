@@ -82,6 +82,7 @@ AliAnalysisTaskEmcalJetCDF::AliAnalysisTaskEmcalJetCDF() : AliAnalysisTaskEmcalJ
     fH41away ( NULL ),
     fH41transmin ( NULL ),
     fH41transmax ( NULL ),
+    fJetMinPt (1.),
     fJetsCont( NULL ),
     fTracksCont( NULL ),
     fCaloClustersCont( NULL )
@@ -140,6 +141,7 @@ AliAnalysisTaskEmcalJetCDF::AliAnalysisTaskEmcalJetCDF ( const char* name ) : Al
     fH41away ( NULL ),
     fH41transmin ( NULL ),
     fH41transmax ( NULL ),
+    fJetMinPt (1.),
     fJetsCont( NULL ),
     fTracksCont( NULL ),
     fCaloClustersCont( NULL )
@@ -162,11 +164,14 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
     fJetsCont  = GetJetContainer(idx_jet_container);
     if (!fJetsCont) { std::cout << "ERROR :: Jet Container not found!!!" << std::endl; return kFALSE; }
 
+    // jet container cuts
+    fJetsCont->SetJetPtCut(fJetMinPt);
+
      //get particles and clusters connected to jets
     fTracksCont       = fJetsCont->GetParticleContainer();
-    fCaloClustersCont = fJetsCont->GetClusterContainer();
-
     fTracksCont->SetClassName("AliVTrack");
+
+    fCaloClustersCont = fJetsCont->GetClusterContainer();
     fCaloClustersCont->SetClassName("AliVCluster");
 
     const UInt_t fNJets_accepted = fJetsCont->GetNJets() ;  // Number of Jets found in event - accepted cuts applied by JetContainer
@@ -214,7 +219,6 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
 
     fH6->Fill ( jet1_npart );          // Jet1 Multiplicity Distribution ( ->Scale (1/events) )
     fH7->Fill ( jet1_pt, jet1_npart ); // N(jet1) vs P_{T}(jet1)
-
 
 //___________________________________________
 // jet1 : Sorting by p_T jet constituents
@@ -816,27 +820,6 @@ Double_t AliAnalysisTaskEmcalJetCDF::DeltaR ( const AliVParticle* part1, const A
 
     return TMath::Sqrt ( dPhi * dPhi + dEta * dEta );
     }
-
-//________________________________________________________________________
-Double_t AliAnalysisTaskEmcalJetCDF::GetZ ( const AliVParticle* trk, const AliEmcalJet* jet )          const
-    {
-    // Get Z of constituent trk
-    return GetZ ( trk->Px(), trk->Py(), trk->Pz(), jet->Px(), jet->Py(), jet->Pz() );
-    }
-
-//________________________________________________________________________
-Double_t AliAnalysisTaskEmcalJetCDF::GetZ ( const Double_t trkPx, const Double_t trkPy, const Double_t trkPz, const Double_t jetPx, const Double_t jetPy, const Double_t jetPz ) const
-    {
-    // Get the z of a constituent inside of a jet
-    Double_t pJetSq = jetPx * jetPx + jetPy * jetPy + jetPz * jetPz;
-
-    if ( pJetSq == 0. ) { AliWarning ( Form ( "%s: strange, pJetSq seems to be zero: %f", GetName(), pJetSq ) ); return 0; }
-
-    if ( pJetSq <  0. ) { AliWarning ( Form ( "%s: FATAL, pJetSq seems to be BELOW zero!! IMPOSIBLE: %f", GetName(), pJetSq ) ); return 0; }
-
-    return ( trkPx * jetPx + trkPy * jetPy + trkPz * jetPz ) / pJetSq;
-    }
-
 
 //__________________________________________________________________________________________________
 std::vector<Int_t> AliAnalysisTaskEmcalJetCDF::SortTracksPt( AliVEvent* event ) const
