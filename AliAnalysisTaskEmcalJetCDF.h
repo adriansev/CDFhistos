@@ -39,13 +39,14 @@ class AliAnalysisTaskEmcalJetCDF : public AliAnalysisTaskEmcalJet
         void                        UserCreateOutputObjects();
         void                        Terminate ( Option_t* option );
 
-        Double_t                    DeltaR ( const AliVParticle* part1, const AliVParticle* part2 );   // return dR dinstance in eta,phi plane between 2 AliVParticle derived objects
+        Double_t                    DeltaR( const AliVParticle* part1, const AliVParticle* part2 );   // return dR dinstance in eta,phi plane between 2 AliVParticle derived objects
 
-        //Setters
-        void SetTriggerClass           ( const char* n )    { fTriggerClass       = n; }
+        // Setters
+        void                        SetJetMinPt( Double_t minpt)    { fJetMinPt = minpt; }
 
-        Double_t GetZ ( const AliVParticle* trk, const AliEmcalJet* jet )       const; // Get Z of constituent trk // could be added in EmcalJet?
-        Double_t GetZ ( const Double_t trkPx, const Double_t trkPy, const Double_t trkPz, const Double_t jetPx, const Double_t jetPy, const Double_t jetPz ) const; // Get Z of constituent trk
+
+        // Getters
+        Double_t                    GetJetMinPt()                   {return fJetMinPt;}
 
     protected:
         Bool_t                      FillHistograms()   ;
@@ -55,8 +56,6 @@ class AliAnalysisTaskEmcalJetCDF : public AliAnalysisTaskEmcalJet
         Bool_t                      Run() ;
         std::vector<Int_t>          SortTracksPt ( AliVEvent* event ) const;
         std::vector<Int_t>          SortTracksPt ( AliParticleContainer* track_container ) const;
-
-        TString                     fTriggerClass;       // trigger class to analyze EJ1 or EJ2
 
         // Histograms    ( are owned by fListOfHistos TList )
         TH1D*       fH1;           //!  Pt distribution of jets
@@ -110,6 +109,8 @@ class AliAnalysisTaskEmcalJetCDF : public AliAnalysisTaskEmcalJet
         TProfile*  fH41away;       //!  PTsum w.r.t PTmax
         TProfile*  fH41transmin;   //!  PTsum w.r.t PTmax
         TProfile*  fH41transmax;   //!  PTsum w.r.t PTmax
+
+        Double_t   fJetMinPt;      // jet min pt
 
         AliJetContainer*           fJetsCont;                   //!Jets
         AliParticleContainer*      fTracksCont;                 //!Tracks
