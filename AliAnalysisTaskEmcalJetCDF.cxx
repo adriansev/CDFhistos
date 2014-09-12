@@ -34,9 +34,6 @@ ClassImp (AliAnalysisTaskEmcalJetCDF)
 
 //________________________________________________________________________
 AliAnalysisTaskEmcalJetCDF::AliAnalysisTaskEmcalJetCDF() : AliAnalysisTaskEmcalJet ( "AliAnalysisTaskEmcalJetCDF", kTRUE ),
-//     fContainerFull ( 1 ),
-//     fContainerCharged ( 0 ),
-    fTriggerClass ( "" ),
     fH1 ( NULL ),
     fH2 ( NULL ),
     fH3 ( NULL ),
@@ -82,7 +79,6 @@ AliAnalysisTaskEmcalJetCDF::AliAnalysisTaskEmcalJetCDF() : AliAnalysisTaskEmcalJ
     fH41away ( NULL ),
     fH41transmin ( NULL ),
     fH41transmax ( NULL ),
-    fJetMinPt (1.),
     fJetsCont( NULL ),
     fTracksCont( NULL ),
     fCaloClustersCont( NULL )
@@ -93,9 +89,6 @@ AliAnalysisTaskEmcalJetCDF::AliAnalysisTaskEmcalJetCDF() : AliAnalysisTaskEmcalJ
 
 //________________________________________________________________________
 AliAnalysisTaskEmcalJetCDF::AliAnalysisTaskEmcalJetCDF ( const char* name ) : AliAnalysisTaskEmcalJet ( name, kTRUE ),
-//     fContainerFull ( 1 ),
-//     fContainerCharged ( 0 ),
-    fTriggerClass ( "" ),
     fH1 ( NULL ),
     fH2 ( NULL ),
     fH3 ( NULL ),
@@ -141,7 +134,6 @@ AliAnalysisTaskEmcalJetCDF::AliAnalysisTaskEmcalJetCDF ( const char* name ) : Al
     fH41away ( NULL ),
     fH41transmin ( NULL ),
     fH41transmax ( NULL ),
-    fJetMinPt (1.),
     fJetsCont( NULL ),
     fTracksCont( NULL ),
     fCaloClustersCont( NULL )
@@ -163,9 +155,6 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
 
     fJetsCont  = GetJetContainer(idx_jet_container);
     if (!fJetsCont) { std::cout << "ERROR :: Jet Container not found!!!" << std::endl; return kFALSE; }
-
-    // jet container cuts
-    fJetsCont->SetJetPtCut(fJetMinPt);
 
      //get particles and clusters connected to jets
     fTracksCont       = fJetsCont->GetParticleContainer();
