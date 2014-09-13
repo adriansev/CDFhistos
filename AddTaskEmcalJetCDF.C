@@ -29,7 +29,8 @@ AliAnalysisTaskEmcalJetCDF* AddTaskEmcalJetCDF(
     TString stype (type);
 
     if (jetptcut < 1. ) { jetptcut = 1.; }
-    TString jetstr = "jpt" + (ULong_t)(jetptcut*1000);
+    TString jetstr = "jpt";
+    jetstr += (ULong_t)(jetptcut*1000);
 
     if ( !jets.IsNull() )  { name += "_" + jets; }
     name += "_" + jetstr;
