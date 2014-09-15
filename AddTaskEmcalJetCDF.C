@@ -6,8 +6,8 @@ AliAnalysisTaskEmcalJetCDF* AddTaskEmcalJetCDF(
   Double_t    jetradius          = 0.2,
   Double_t    jetptcut           = 1.,
   Double_t    jetareacut         = 0.001,
-  const char* type               = "TPC",
-  Int_t       leadhadtype        = 0,                 // AliJetContainer :: Int_t fLeadingHadronType;  0 = charged, 1 = neutral, 2 = both
+  const char* type               = "TPC",      // EMCAL, TPC
+  Int_t       leadhadtype        = 0,          // AliJetContainer :: Int_t fLeadingHadronType;  0 = charged, 1 = neutral, 2 = both
   const char* taskname           = "JetCDF"
 )
 {
@@ -37,7 +37,7 @@ AliAnalysisTaskEmcalJetCDF* AddTaskEmcalJetCDF(
     if ( !rho.IsNull()  )  { name += "_" + rho; }
     if ( !stype.IsNull() ) { name += "_" + stype; }
 
-    cout << "CDF Jet task name : " << name.Data() << endl;
+//     cout << "CDF Jet task name : " << name.Data() << endl;
 
     AliAnalysisTaskEmcalJetCDF* jetTask = new AliAnalysisTaskEmcalJetCDF(name);
 
@@ -78,7 +78,7 @@ AliAnalysisTaskEmcalJetCDF* AddTaskEmcalJetCDF(
 AliAnalysisTaskEmcalJetCDF* AddTaskEmcalJetCDF ( AliEmcalJetTask* jetFinderTask,
     Double_t     jetptcut     = 1.,
     Double_t     jetareacut   = 0.001,
-    const char*  type         = "TPC",   // EMCAL, TPC
+    const char*  type         = "TPC",     // EMCAL, TPC
     Int_t        leadhadtype  = 0,         // AliJetContainer :: Int_t fLeadingHadronType;  0 = charged, 1 = neutral, 2 = both
     const char*  taskname     = "JetCDF" )
 {
