@@ -90,10 +90,8 @@ class AliAnalysisTaskEmcalJetCDF : public AliAnalysisTaskEmcalJet
 
         TProfile*  fH24;           //!  Jet1 Size vs P_{T}(jet1) - 80% of particles
         TProfile*  fH25;           //!  Jet1 Size vs P_{T}(jet1) - 80% of Pt
-        TProfile*  fH26;           //!  N_{chg} vs the Distance R from Jet1 - 80% of particles
-        TProfile*  fH27;           //!  N_{chg} vs the Distance R from Jet1 - 80% of Pt
-        TProfile*  fH28;           //!  PT_{sum} vs the Distance R from Jet1 - 80% of particles
-        TProfile*  fH29;           //!  PT_{sum} vs the Distance R from Jet1 - 80% of Pt
+        TProfile*  fH26;           //!  N_{chg} vs the Distance R from Jet1
+        TProfile*  fH27;           //!  PT_{sum} vs the Distance R from Jet1
 
         TProfile*  fH40;           //!  total particles fNPart w.r.t PTmax (pt of leading particle from leading jet)
         TProfile*  fH40toward;     //!  total particles fNPart w.r.t PTmax (pt of leading particle from leading jet)
