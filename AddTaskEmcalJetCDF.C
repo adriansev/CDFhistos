@@ -13,7 +13,7 @@ AliAnalysisTaskEmcalJetCDF* AddTaskEmcalJetCDF(
 {
     // Get the pointer to the existing analysis manager via the static access method.
     //==============================================================================
-    AliAnalysisManager *mgr = AliAnalysisManager::GetAnalysisManager();
+    AliAnalysisManager* mgr = AliAnalysisManager::GetAnalysisManager();
     if (!mgr) { ::Error("AddTaskEmcalJetCDF", "No analysis manager to connect to.");  return NULL; }
 
     // Check the analysis type using the event handlers connected to the analysis manager.
