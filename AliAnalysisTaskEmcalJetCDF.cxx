@@ -25,7 +25,7 @@
 #include "AliPicoTrack.h"
 #include "AliVEvent.h"
 #include "AliVParticle.h"
-
+#include "AliLog.h"
 
 #include "AliAnalysisTaskEmcalJetCDF.h"
 using namespace std;
@@ -82,6 +82,7 @@ AliAnalysisTaskEmcalJetCDF::AliAnalysisTaskEmcalJetCDF() : AliAnalysisTaskEmcalJ
     fCaloClustersCont( NULL )
     {
     // Default constructor.
+    fDebug = AliLog::GetGlobalDebugLevel();
     //SetMakeGeneralHistograms ( kTRUE );
     }
 
@@ -135,6 +136,7 @@ AliAnalysisTaskEmcalJetCDF::AliAnalysisTaskEmcalJetCDF ( const char* name ) : Al
     fCaloClustersCont( NULL )
     {
     // Standard constructor.
+    fDebug = AliLog::GetGlobalDebugLevel();
     //SetMakeGeneralHistograms ( kTRUE );
     }
 
@@ -163,7 +165,11 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
     const UInt_t fNaccPart       = fTracksCont->GetNAcceptedParticles(); // Multiplicity in event - accepted tracks in tracks container
 
 // protection
-    if ( ( fNJets_accepted < 1 ) || ( fNaccPart < 1 ) ) { std::cout << "accepted (fNJets || fNPart) < 1" << std::endl; return kFALSE; }
+    if ( ( fNJets_accepted < 1 ) || ( fNaccPart < 1 ) )
+        {
+        if ( fDebug > 2 ) { std::cout << "accepted (fNJets || fNPart) < 1" << std::endl; }
+        return kFALSE;
+        }
     if ( fDebug > 1 ) { printf ( "fNJets = %i ; fNPart = %i \n", fNJets_accepted, fNaccPart ); fflush ( stdout ); }
 
 // consts used in analysis
@@ -187,12 +193,16 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
     fH5acc->Fill ( fNJets_accepted );    // all accepted jets - legacy histo - identical to fH5
 
     PostData ( 1, fOutput ); // Post data for ALL output slots > 0 here.
-    printf ( "CDFhistos:: end of global jet histos \n" ); fflush ( stdout );
+    if ( fDebug > 2 ) { printf ( "CDFhistos:: end of global jet histos \n" ); fflush ( stdout ); }
 
 //__________________________________________________________________
 // Leading Jet
     AliEmcalJet* jet1 = fJetsCont->GetLeadingJet(); // internaly checked for AcceptedJet
-    if ( !jet1 ) { std::cout << "LEADING JET NOT FOUND " << std::endl ; return kTRUE; }
+    if ( !jet1 )
+        {
+        if ( fDebug > 2 ) { std::cout << "LEADING JET NOT FOUND " << std::endl;}
+        return kTRUE;
+        }
 
     if ( fDebug > 1 ) { std::cout << "+++++++++++++++++>>>>>>>>> Leading jet found"  << std::endl; jet1->Print(); }
 
@@ -229,7 +239,7 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
          if (track) {  eventacc_pt += track->Pt(); } // pt sum of event
          }
 
-    if ( fDebug > 1 ) { printf ( "Sum of all Pt in event : pt_sum_event = %g", eventacc_pt ) ; }
+    if ( fDebug > 2 ) { printf ( "Sum of all Pt in event : pt_sum_event = %g", eventacc_pt ) ; }
 
 
 //_______________________________________________________________________
@@ -249,9 +259,9 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
         AliVParticle* track = jet1->TrackAt ( jet1_sorted_idx_vec.at(i), fTracksCont_array );
         Double_t dpart = jet1->DeltaR ( track ); //  DeltaR ( jet1, track );
 
-        fH8->Fill ( jet1->GetZ(track) ) ; //  Momentum distribution for leading jet (FF)
+        fH8->Fill ( jet1->GetZ(track) ) ;    //  Momentum distribution for leading jet (FF)
         fH8xi->Fill ( jet1->GetXi(track) ) ; //  Momentum distribution for leading jet (FF)
-        fH23jet1->Fill ( track->Pt() ) ; // jet1 pt distribution
+        fH23jet1->Fill ( track->Pt() ) ;     // jet1 pt distribution
         //___________________________________________________________________________
         // Recomputing of radius of particles in leading jet
         fH20->Fill ( jet1->DeltaR(track) ); //  Distribution of R in leading jet
