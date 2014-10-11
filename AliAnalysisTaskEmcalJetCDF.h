@@ -60,14 +60,20 @@ class AliAnalysisTaskEmcalJetCDF : public AliAnalysisTaskEmcalJet
         TH1D*       fH3;           //!  Phi distribution of jets
         TH1D*       fH4;           //!  Multiplicity of jets // 1 unit of multiplicity /bin
         TH1D*       fH5;           //!  Distribution of jets in events
-        TH1D*       fH5acc;        //!  Distribution of accepted jets in events
         TH1D*       fH6;           //!  Jet1 Multiplicity Distribution
         TProfile*   fH7;           //!  N(jet1) vs P_{T}(jet1)
         TH1D*       fH8;           //!  Momentum distribution for leading jet (fragmentation function)
         TH1D*       fH8xi;         //!  Xi distribution for leading jet (fragmentation function)
         TProfile*   fH9;           //!  N vs the Azimuthal Angle from Jet1
         TProfile*  fH10;           //!  P_{T} sum vs the Azimuthal Angle from Jet1
+
+        TProfile*  fH15;           //!  <p_{T}> track vs the Distance R from Jet1
+        TProfile*  fH15_n80;       //!  <p_{T}> track vs the Distance R from Jet1 - 80% of particles
+        TProfile*  fH15_pt80;      //!  <p_{T}> track vs the Distance R from Jet1 - 80% of Pt
+
         TH1D*      fH20;           //!  Distribution of R in leading jet
+        TH1D*      fH20_n80;       //!  Distribution of R in leading jet - 80% of particles
+        TH1D*      fH20_pt80;      //!  Distribution of R in leading jet - 80% of Pt
 
         TProfile*  fH21;           //!  N(in the event - including jet1) vs P_{T}(jet1)
         TProfile*  fH21Toward;     //!  N(in the event - including jet1) vs P_{T}(jet1)
@@ -90,8 +96,20 @@ class AliAnalysisTaskEmcalJetCDF : public AliAnalysisTaskEmcalJet
 
         TProfile*  fH24;           //!  Jet1 Size vs P_{T}(jet1) - 80% of particles
         TProfile*  fH25;           //!  Jet1 Size vs P_{T}(jet1) - 80% of Pt
+
         TProfile*  fH26;           //!  N_{chg} vs the Distance R from Jet1
+        TProfile*  fH26_n80;       //!  N_{chg} vs the Distance R from Jet1 - 80% of particles
+        TProfile*  fH26_pt80;      //!  N_{chg} vs the Distance R from Jet1 - 80% of Pt
+        TProfile*  fH26jet1;       //!  N_{chg}(jet1) vs the Distance R from Jet1
+        TProfile*  fH26jet1_n80;   //!  N_{chg}(jet1) vs the Distance R from Jet1 - 80% of particles
+        TProfile*  fH26jet1_pt80;  //!  N_{chg}(jet1) vs the Distance R from Jet1 - 80% of Pt
+
         TProfile*  fH27;           //!  PT_{sum} vs the Distance R from Jet1
+        TProfile*  fH27_n80;       //!  PT_{sum} vs the Distance R from Jet1 - 80% of particles
+        TProfile*  fH27_pt80;      //!  PT_{sum} vs the Distance R from Jet1 - 80% of Pt
+        TProfile*  fH27jet1;       //!  PT_{sum}(jet1) vs the Distance R from Jet1
+        TProfile*  fH27jet1_n80;   //!  PT_{sum}(jet1) vs the Distance R from Jet1 - 80% of particles
+        TProfile*  fH27jet1_pt80;  //!  PT_{sum}(jet1) vs the Distance R from Jet1 - 80% of Pt
 
         TProfile*  fH40;           //!  total particles fNPart w.r.t PTmax (pt of leading particle from leading jet)
         TProfile*  fH40toward;     //!  total particles fNPart w.r.t PTmax (pt of leading particle from leading jet)
@@ -105,9 +123,18 @@ class AliAnalysisTaskEmcalJetCDF : public AliAnalysisTaskEmcalJet
         TProfile*  fH41transmin;   //!  PTsum w.r.t PTmax
         TProfile*  fH41transmax;   //!  PTsum w.r.t PTmax
 
-        AliJetContainer*           fJetsCont;                   //!Jets
-        AliParticleContainer*      fTracksCont;                 //!Tracks
-        AliClusterContainer*       fCaloClustersCont;           //!Clusters
+        AliJetContainer*           fJetsCont;                   //! Jets
+        AliParticleContainer*      fTracksCont;                 //! Tracks
+        AliClusterContainer*       fCaloClustersCont;           //! Clusters
+        TClonesArray*              fTracksCont_array;           //! the array of tracks from the tracks container
+
+        AliEmcalJet*               jet1;                        //! Leading Jet
+        UInt_t                     fNJets_accepted;             //  Number of Jets found in event - accepted cuts applied by JetContainer
+        UInt_t                     fNaccPart;                   //  Multiplicity in event - accepted tracks in tracks container
+        Double_t                   eventacc_pt;                 //  Scalar sum of pt off all accepted tracks in events
+
+        std::vector<Int_t>         jet1_sorted_idx_vec;              // vector of sorted indexes of particles in leading jet
+        std::vector<Int_t>         event_acctracks_sorted_idx_vec;   // vector of sorted indexes of accepted tracks in the event
 
     private:
         struct sort_descend
