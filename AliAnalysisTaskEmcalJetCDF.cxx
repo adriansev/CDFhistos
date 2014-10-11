@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <vector>
 #include <algorithm>
 #include <utility>
@@ -8,6 +9,8 @@
 #include <TH1D.h>
 #include <TH2D.h>
 #include <TProfile.h>
+#include <TSeqCollection.h>
+#include <TCollection.h>
 #include <TList.h>
 #include <TLorentzVector.h>
 #include <TVector2.h>
@@ -39,14 +42,18 @@ AliAnalysisTaskEmcalJetCDF::AliAnalysisTaskEmcalJetCDF() : AliAnalysisTaskEmcalJ
     fH3 ( NULL ),
     fH4 ( NULL ),
     fH5 ( NULL ),
-    fH5acc ( NULL ),
     fH6 ( NULL ),
     fH7 ( NULL ),
     fH8 ( NULL ),
     fH8xi ( NULL ),
     fH9 ( NULL ),
     fH10 ( NULL ),
+    fH15 ( NULL ),
+    fH15_n80 ( NULL ),
+    fH15_pt80 ( NULL ),
     fH20 ( NULL ),
+    fH20_n80 ( NULL ),
+    fH20_pt80 ( NULL ),
     fH21 ( NULL ),
     fH21Toward ( NULL ),
     fH21Transverse_min ( NULL ),
@@ -66,7 +73,17 @@ AliAnalysisTaskEmcalJetCDF::AliAnalysisTaskEmcalJetCDF() : AliAnalysisTaskEmcalJ
     fH24 ( NULL ),
     fH25 ( NULL ),
     fH26 ( NULL ),
+    fH26_n80 ( NULL ),
+    fH26_pt80 ( NULL ),
+    fH26jet1 ( NULL ),
+    fH26jet1_n80 ( NULL ),
+    fH26jet1_pt80 ( NULL ),
     fH27 ( NULL ),
+    fH27_n80 ( NULL ),
+    fH27_pt80 ( NULL ),
+    fH27jet1 ( NULL ),
+    fH27jet1_n80 ( NULL ),
+    fH27jet1_pt80 ( NULL ),
     fH40 ( NULL ),
     fH40toward ( NULL ),
     fH40away ( NULL ),
@@ -79,7 +96,14 @@ AliAnalysisTaskEmcalJetCDF::AliAnalysisTaskEmcalJetCDF() : AliAnalysisTaskEmcalJ
     fH41transmax ( NULL ),
     fJetsCont( NULL ),
     fTracksCont( NULL ),
-    fCaloClustersCont( NULL )
+    fCaloClustersCont( NULL ),
+    fTracksCont_array ( NULL ),
+    jet1 ( NULL ),
+    fNJets_accepted ( 0 ),
+    fNaccPart ( 0 ),
+    eventacc_pt ( -99.99 ),
+    jet1_sorted_idx_vec (),
+    event_acctracks_sorted_idx_vec ()
     {
     // Default constructor.
     fDebug = AliLog::GetGlobalDebugLevel();
@@ -93,14 +117,18 @@ AliAnalysisTaskEmcalJetCDF::AliAnalysisTaskEmcalJetCDF ( const char* name ) : Al
     fH3 ( NULL ),
     fH4 ( NULL ),
     fH5 ( NULL ),
-    fH5acc ( NULL ),
     fH6 ( NULL ),
     fH7 ( NULL ),
     fH8 ( NULL ),
     fH8xi ( NULL ),
     fH9 ( NULL ),
     fH10 ( NULL ),
+    fH15 ( NULL ),
+    fH15_n80 ( NULL ),
+    fH15_pt80 ( NULL ),
     fH20 ( NULL ),
+    fH20_n80 ( NULL ),
+    fH20_pt80 ( NULL ),
     fH21 ( NULL ),
     fH21Toward ( NULL ),
     fH21Transverse_min ( NULL ),
@@ -120,7 +148,17 @@ AliAnalysisTaskEmcalJetCDF::AliAnalysisTaskEmcalJetCDF ( const char* name ) : Al
     fH24 ( NULL ),
     fH25 ( NULL ),
     fH26 ( NULL ),
+    fH26_n80 ( NULL ),
+    fH26_pt80 ( NULL ),
+    fH26jet1 ( NULL ),
+    fH26jet1_n80 ( NULL ),
+    fH26jet1_pt80 ( NULL ),
     fH27 ( NULL ),
+    fH27_n80 ( NULL ),
+    fH27_pt80 ( NULL ),
+    fH27jet1 ( NULL ),
+    fH27jet1_n80 ( NULL ),
+    fH27jet1_pt80 ( NULL ),
     fH40 ( NULL ),
     fH40toward ( NULL ),
     fH40away ( NULL ),
@@ -133,7 +171,14 @@ AliAnalysisTaskEmcalJetCDF::AliAnalysisTaskEmcalJetCDF ( const char* name ) : Al
     fH41transmax ( NULL ),
     fJetsCont( NULL ),
     fTracksCont( NULL ),
-    fCaloClustersCont( NULL )
+    fCaloClustersCont( NULL ),
+    fTracksCont_array ( NULL ),
+    jet1 ( NULL ),
+    fNJets_accepted ( 0 ),
+    fNaccPart ( 0 ),
+    eventacc_pt ( -99.99 ),
+    jet1_sorted_idx_vec (),
+    event_acctracks_sorted_idx_vec ()
     {
     // Standard constructor.
     fDebug = AliLog::GetGlobalDebugLevel();
@@ -147,7 +192,7 @@ AliAnalysisTaskEmcalJetCDF::~AliAnalysisTaskEmcalJetCDF()
     }
 
 //________________________________________________________________________
-Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
+Bool_t AliAnalysisTaskEmcalJetCDF::Run()
     {
     Int_t idx_jet_container = 0;
 
@@ -161,8 +206,8 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
     fCaloClustersCont = fJetsCont->GetClusterContainer();
     fCaloClustersCont->SetClassName("AliVCluster");
 
-    const UInt_t fNJets_accepted = fJetsCont->GetNJets() ;  // Number of Jets found in event - accepted cuts applied by JetContainer
-    const UInt_t fNaccPart       = fTracksCont->GetNAcceptedParticles(); // Multiplicity in event - accepted tracks in tracks container
+    fNJets_accepted = fJetsCont->GetNJets() ;  // Number of Jets found in event - accepted cuts applied by JetContainer
+    fNaccPart       = fTracksCont->GetNAcceptedParticles(); // Multiplicity in event - accepted tracks in tracks container
 
 // protection
     if ( ( fNJets_accepted < 1 ) || ( fNaccPart < 1 ) )
@@ -170,12 +215,52 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
         if ( fDebug > 2 ) { std::cout << "accepted (fNJets || fNPart) < 1" << std::endl; }
         return kFALSE;
         }
-    if ( fDebug > 1 ) { printf ( "fNJets = %i ; fNPart = %i \n", fNJets_accepted, fNaccPart ); fflush ( stdout ); }
+    if ( fDebug > 1 ) { std::cout << "fNJets = " << fNJets_accepted << " ; fNPart = " << fNaccPart << std::endl; }
+
+
+//__________________________________________________________________
+// Leading Jet
+    jet1 = fJetsCont->GetLeadingJet(); // internaly checked for AcceptedJet
+    if ( !jet1 )
+        {
+        if ( fDebug > 2 ) { std::cout << "LEADING JET NOT FOUND " << std::endl;}
+        return kFALSE;
+        }
+    if ( fDebug > 1 ) { std::cout << "+++++++++++++++++>>>>>>>>> Leading jet found"  << std::endl; jet1->Print(); }
+
+//___________________________________________
+// jet1 : Sorting by p_T jet constituents
+//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    fTracksCont_array = fTracksCont->GetArray();
+    jet1_sorted_idx_vec = jet1->SortConstituentsPt(fTracksCont_array);
+
+//__________________________________________________________________
+// sorting the EVENT _ACCEPTED_ tracks by pt
+    event_acctracks_sorted_idx_vec = SortTracksPt (fTracksCont) ;
+
+//__________________________________________________________________
+// computing of pt sum of event - acccepted tracks
+    eventacc_pt = 0.;
+    for ( UInt_t i = 0 ; i < fNaccPart ; i++ )
+         {// replace the index order by the sorted array
+         AliVParticle* track = fTracksCont->GetNextAcceptParticle ( event_acctracks_sorted_idx_vec.at(i) );
+         if (track) {  eventacc_pt += track->Pt(); } // pt sum of event
+         }
+
+    if ( fDebug > 2 ) { std::cout << "Sum of Pt in event pt_sum_event = " << eventacc_pt << std::endl; }
+
+    // Run analysis code here, if needed. It will be executed before FillHistograms().
+    return kTRUE;  // If return kFALSE FillHistogram() will NOT be executed.
+    }
+
+//________________________________________________________________________
+Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
+    {
 
 // consts used in analysis
 //     Double_t const kPI        = TMath::Pi();
 //     Double_t const kTWOPI     = 2. * TMath::Pi();
-    Double_t const kPI_3      = TMath::Pi() / 3.;
+    Double_t const kPI_3      = TMath::Pi()/3.;
     Double_t const k2PI_3     = 2 * kPI_3 ;
 
     for ( Size_t i = 0 ; i < fNJets_accepted ; i++ )
@@ -188,97 +273,18 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
         fH4->Fill ( jet->GetNumberOfTracks() );  // Multiplicity of jets // 1 unit of multiplicity /bin
         }
 
-// Distribution of jets in events;
-    fH5->Fill ( fNJets_accepted );       // all accepted jets
-    fH5acc->Fill ( fNJets_accepted );    // all accepted jets - legacy histo - identical to fH5
+    fH5->Fill ( fNJets_accepted );   // Distribution of jets in events;
 
-    PostData ( 1, fOutput ); // Post data for ALL output slots > 0 here.
-    if ( fDebug > 2 ) { printf ( "CDFhistos:: end of global jet histos \n" ); fflush ( stdout ); }
-
-//__________________________________________________________________
-// Leading Jet
-    AliEmcalJet* jet1 = fJetsCont->GetLeadingJet(); // internaly checked for AcceptedJet
-    if ( !jet1 )
-        {
-        if ( fDebug > 2 ) { std::cout << "LEADING JET NOT FOUND " << std::endl;}
-        return kTRUE;
-        }
-
-    if ( fDebug > 1 ) { std::cout << "+++++++++++++++++>>>>>>>>> Leading jet found"  << std::endl; jet1->Print(); }
+    if ( fDebug > 2 ) { Printf ( "CDFhistos:: end of global jet histos \n" ); }
 
     Double_t jet1_pt    = jet1->Pt();
     UInt_t   jet1_npart = jet1->GetNumberOfTracks();
 
     AliVParticle* jet1_trklead = jet1->GetLeadingTrack (fTracks);
-    Double_t      jet1_ptmax= jet1_trklead->Pt();
+    Double_t      jet1_ptmax = jet1_trklead->Pt();
 
     fH6->Fill ( jet1_npart );          // Jet1 Multiplicity Distribution ( ->Scale (1/events) )
     fH7->Fill ( jet1_pt, jet1_npart ); // N(jet1) vs P_{T}(jet1)
-
-//___________________________________________
-// jet1 : Sorting by p_T jet constituents
-//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    TClonesArray* fTracksCont_array = fTracksCont->GetArray();
-    std::vector< Int_t > jet1_sorted_idx_vec = jet1->SortConstituentsPt(fTracksCont_array);
-
-//__________________________________________________________________
-// sorting the EVENT tracks by pt
-//     std::vector< Int_t > event_tracks_sorted_idx_vec = SortTracksPt ( fInputEvent ) ;
-
-//__________________________________________________________________
-// sorting the EVENT _ACCEPTED_ tracks by pt
-    std::vector< Int_t > event_acctracks_sorted_idx_vec = SortTracksPt (fTracksCont) ;
-
-
-//__________________________________________________________________
-// computing of pt sum of event - acccepted tracks
-    Double_t eventacc_pt = 0.;
-    for ( UInt_t i = 0 ; i < fNaccPart ; i++ )
-         {// replace the index order by the sorted array
-         AliVParticle* track = fTracksCont->GetNextAcceptParticle ( event_acctracks_sorted_idx_vec.at(i) );
-         if (track) {  eventacc_pt += track->Pt(); } // pt sum of event
-         }
-
-    if ( fDebug > 2 ) { printf ( "Sum of all Pt in event : pt_sum_event = %g", eventacc_pt ) ; }
-
-
-//_______________________________________________________________________
-// Computing of radius that contain 80% of Leading Jet ( PT and multiplicity )
-//_______________________________________________________________________
-    Int_t    counter_part = 0  ;
-    Double_t counter_pt   = 0. ;
-
-//___________________________________________________________________________
-// Momentum distribution for leading jet (FF)
-// and
-// N vs the Azimuthal Angle from Jet1
-
-// parsing tracks of jet1 (leading jet) in decreasing order of Pt
-    for ( UInt_t i = 0 ; i < jet1_npart ; i++ )
-        {
-        AliVParticle* track = jet1->TrackAt ( jet1_sorted_idx_vec.at(i), fTracksCont_array );
-        Double_t dpart = jet1->DeltaR ( track ); //  DeltaR ( jet1, track );
-
-        fH8->Fill ( jet1->GetZ(track) ) ;    //  Momentum distribution for leading jet (FF)
-        fH8xi->Fill ( jet1->GetXi(track) ) ; //  Momentum distribution for leading jet (FF)
-        fH23jet1->Fill ( track->Pt() ) ;     // jet1 pt distribution
-        //___________________________________________________________________________
-        // Recomputing of radius of particles in leading jet
-        fH20->Fill ( jet1->DeltaR(track) ); //  Distribution of R in leading jet
-
-        counter_part++;
-        counter_pt += track->Pt();
-
-        if ( counter_part <= ( Int_t ) ( 0.8 * jet1_npart ) )
-            { // fill histograms for 80% of particles
-            fH24->Fill ( jet1_pt, dpart );        //  Jet1 Size vs P_{T}(jet1) - 80% of particles
-            }
-
-        if ( counter_pt <= 0.8 * jet1_pt )
-            { // fill histograms for 80% of particles
-            fH25->Fill ( jet1_pt, dpart );        //  Jet1 Size vs P_{T}(jet1) - 80% of Pt
-            }
-        }
 
     fH21->Fill ( jet1_pt, fNaccPart );   // N (in the event - including jet1) vs P_{T}(jet1)
     fH22->Fill ( jet1_pt, eventacc_pt ); // PT_{sum}(in the event - including jet1) vs P_{T}(jet1)
@@ -286,40 +292,99 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
     fH40->Fill (jet1_ptmax, fNaccPart);    // total particles fNPart w.r.t PTmax (pt of leading particle from leading jet)
     fH41->Fill (jet1_ptmax, eventacc_pt);  // PTsum w.r.t PTmax
 
+
+    Int_t    counter_part = 0  ; Double_t counter_pt   = 0. ;
+
+//___________________________________________________________________________
+// parsing tracks of jet1 (leading jet) in decreasing order of Pt
+    for ( Size_t i = 0 ; i < jet1_npart ; i++ )
+        {
+        AliVParticle* track = jet1->TrackAt ( jet1_sorted_idx_vec.at(i), fTracksCont_array );
+        Double_t dpart = jet1->DeltaR ( track ); //  DeltaR ( jet1, track );
+        Double_t track_pt = track->Pt() ;
+
+        fH8->Fill ( jet1->GetZ(track) ) ;    //  Momentum distribution for leading jet (FF)
+        fH8xi->Fill ( jet1->GetXi(track) ) ; //  Momentum distribution for leading jet (FF)
+        fH23jet1->Fill ( track->Pt() ) ;     // jet1 pt distribution
+
+        // Recomputing of radius of particles in leading jet
+        fH20->Fill ( dpart );            // Distribution of R in leading jet
+        fH15->Fill ( dpart, track_pt );  // average track pt at dR
+
+        fH26jet1->Fill ( dpart, counter_part );   //  N vs the Distance R from Jet1
+        fH27jet1->Fill ( dpart, counter_pt );     //  PT_{sum} vs the Distance R from Jet1
+
+        counter_part++;
+        counter_pt += track_pt;
+
+        if ( counter_part <= ( Int_t )(0.8 * jet1_npart) )
+            { // fill histograms for 80% of particles
+            fH15_n80->Fill ( dpart, track_pt );
+            fH24->Fill ( jet1_pt, dpart );        //  Jet1 Size vs P_{T}(jet1) - 80% of particles
+            fH20_n80->Fill ( dpart ); //  Distribution of R in leading jet
+            fH26jet1_n80->Fill ( dpart, counter_part );   //  N vs the Distance R from Jet1
+            fH27jet1_n80->Fill ( dpart, counter_pt );     //  PT_{sum} vs the Distance R from Jet1
+            }
+
+        if ( counter_pt <= (0.8 * jet1_pt) )
+            { // fill histograms for 80% of pt
+            fH15_pt80->Fill ( dpart, track_pt );
+            fH25->Fill ( jet1_pt, dpart );        //  Jet1 Size vs P_{T}(jet1) - 80% of Pt
+            fH20_pt80->Fill ( dpart ); //  Distribution of R in leading jet
+            fH26jet1_pt80->Fill ( dpart, counter_part );   //  N vs the Distance R from Jet1
+            fH27jet1_pt80->Fill ( dpart, counter_pt );     //  PT_{sum} vs the Distance R from Jet1
+            }
+        }
+
+
     // reset counter for new usage
     counter_part = 0 ; counter_pt = 0.;
 
 // parsing accepted tracks in EVENT in decreasing order of Pt //
-for ( UInt_t i = 0 ; i < fNaccPart ; i++ )
+for ( Size_t i = 0 ; i < fNaccPart ; i++ )
         {// replace the index order by the sorted array
         AliVParticle* track = fTracksCont->GetNextAcceptParticle ( event_acctracks_sorted_idx_vec.at(i) );
-
-        if ( !track ) { std::cout << "track not retrieved from fInputEvent" << std::endl; continue; }
+        if ( !track ) { std::cout << "track not retrieved from fTracksCont" << std::endl; continue; }
 
         // pt of the current track
         Double_t track_pt = track->Pt();
 
         // dphi between leading track (max pt track from leading jet) and current track
-        Double_t dphi_part = TVector2::Phi_mpi_pi ( track->Phi() - jet1_trklead->Phi() ) ; // restrict the delta phi to (-pi,pi) interval
+        Double_t dphi_part = TVector2::Phi_mpi_pi ( track->Phi() - jet1_trklead->Phi() ); // restrict the delta phi to (-pi,pi) interval
+        dphi_part = TMath::Abs(dphi_part); // and then to (0, pi)
 
         // dphi between leading jet and current track
-        Double_t dphi_part_jet1 = TVector2::Phi_mpi_pi ( track->Phi() - jet1->Phi() ) ; // restrict the delta phi to (-pi,pi) interval
+        Double_t dphi_part_jet1 = TVector2::Phi_mpi_pi ( track->Phi() - jet1->Phi() ); // restrict the delta phi to (-pi,pi) interval
+        dphi_part_jet1 = TMath::Abs(dphi_part_jet1); // and then to (0, pi)
 
         // dR of track from leading jet (jet1)
-        Double_t djet1part = jet1->DeltaR ( track );
+        Double_t dpart = jet1->DeltaR ( track );
 
         fH23->Fill ( track_pt ); //  Pt Distribution of particles in event
+
         fH9 ->Fill ( TMath::RadToDeg() * dphi_part_jet1, fNaccPart )   ; //  N vs the Azimuthal Angle from Jet1
         fH10->Fill ( TMath::RadToDeg() * dphi_part_jet1, eventacc_pt ) ; //  P_{T} sum vs the Azimuthal Angle from Jet1
 
-        fH26->Fill ( djet1part, counter_part );   //  N vs the Distance R from Jet1
-        fH27->Fill ( djet1part, counter_pt );     //  PT_{sum} vs the Distance R from Jet1
+        fH26->Fill ( dpart, counter_part );   //  N vs the Distance R from Jet1
+        fH27->Fill ( dpart, counter_pt );     //  PT_{sum} vs the Distance R from Jet1
 
         counter_part++;           // next particle
         counter_pt += track_pt;   // next particle pt
 
+        if ( counter_part <= ( Int_t )(0.8 * jet1_npart) )
+            { // fill histograms for 80% of particles
+            fH26_n80->Fill ( dpart, counter_part );   //  N vs the Distance R from Jet1
+            fH27_n80->Fill ( dpart, counter_pt );     //  PT_{sum} vs the Distance R from Jet1
+            }
+
+        if ( counter_pt <= (0.8 * jet1_pt) )
+            { // fill histograms for 80% of pt
+            fH26_pt80->Fill ( dpart, counter_part );   //  N vs the Distance R from Jet1
+            fH27_pt80->Fill ( dpart, counter_pt );     //  PT_{sum} vs the Distance R from Jet1
+            }
+
+
 // dphi track to jet1 distribution (total and per toward,away,transverse regions)
-//____________________________________________________________________________________
         if ( ( dphi_part_jet1 > (-1)*kPI_3 ) && ( dphi_part < kPI_3 ) )
             {
             fH21Toward->Fill ( jet1_pt, fNaccPart );   // N (in the event - including jet1) vs P_{T}(jet1)
@@ -350,7 +415,6 @@ for ( UInt_t i = 0 ; i < fNaccPart ; i++ )
 
 // NEW UE histos
 // dphi track to leading track distribution (total and per toward,away,transverse regions)
-//____________________________________________________________________________________
         if ( ( dphi_part > (-1)*kPI_3 ) && ( dphi_part < kPI_3 ) )
             {
             fH40toward->Fill (jet1_ptmax, fNaccPart);
@@ -391,7 +455,7 @@ void AliAnalysisTaskEmcalJetCDF::UserCreateOutputObjects()
     AliAnalysisTaskEmcalJet::UserCreateOutputObjects();
 
     //  Histograms
-    fOutput->SetOwner ( kTRUE );
+    fOutput->SetOwner(kTRUE);
 
     // Create the list of histograms. Only the list is owned.
 
@@ -440,20 +504,11 @@ void AliAnalysisTaskEmcalJetCDF::UserCreateOutputObjects()
     fH5->SetMarkerStyle ( kFullCircle );
     fOutput->Add ( fH5 );
 
-    Int_t h5acc_nbin = 100; Double_t h5acc_binwidth = 1; Double_t h5acc_low = 0; Double_t h5acc_high = h5acc_low + h5acc_binwidth * h5acc_nbin;
-    fH5acc = new TH1D ( "histo5acc", "Distribution of jets (accepted) in events", h5acc_nbin, h5acc_low, h5acc_high );
-    fH5acc->SetStats ( kTRUE );
-    fH5acc->GetXaxis()->SetTitle ( "N_{jets}" );
-    fH5acc->GetYaxis()->SetTitle ( "N_{events}" );
-    fH5acc->GetXaxis()->SetTitleColor ( 1 );
-    fH5acc->SetMarkerStyle ( kFullCircle );
-    fOutput->Add ( fH5acc );
-
     Int_t h6_nbin = 100; Double_t h6_binwidth = 1; Double_t h6_low = 0; Double_t h6_high = h6_low + h6_binwidth * h6_nbin;
     fH6 = new TH1D ( "histo6", "Jet1 Multiplicity Distribution", h6_nbin, h6_low, h6_high );
     fH6->SetStats ( kTRUE );
     fH6->GetXaxis()->SetTitle ( "N_{tracks}(jet1)" );
-    fH6->GetYaxis()->SetTitle ( "N_{jet1}" );
+    fH6->GetYaxis()->SetTitle ( "1/N(jet1)" );
     fH6->GetXaxis()->SetTitleColor ( 1 );
     fH6->SetMarkerStyle ( kFullCircle );
     fOutput->Add ( fH6 );
@@ -485,7 +540,7 @@ void AliAnalysisTaskEmcalJetCDF::UserCreateOutputObjects()
     fH8xi->SetMarkerStyle ( kFullCircle );
     fOutput->Add ( fH8xi );
 
-    Int_t h9_nbin = 100; Double_t h9_binwidth = 3.6; Double_t h9_xlow = -180. ; Double_t h9_xhigh = h9_xlow + h9_binwidth * h9_nbin;
+    Int_t h9_nbin = 50; Double_t h9_binwidth = 3.6; Double_t h9_xlow = 0. ; Double_t h9_xhigh = h9_xlow + h9_binwidth * h9_nbin;
     fH9 = new TProfile ( "histo9", "N vs the Azimuthal Angle from Jet1", h9_nbin , h9_xlow , h9_xhigh );
     fH9->SetStats ( kTRUE );
     fH9->GetXaxis()->SetTitle ( "#Delta#phi (degrees)" );
@@ -494,7 +549,7 @@ void AliAnalysisTaskEmcalJetCDF::UserCreateOutputObjects()
     fH9->SetMarkerStyle ( kFullCircle );
     fOutput->Add ( fH9 );
 
-    Int_t h10_nbin = 100; Double_t h10_binwidth = 3.6; Double_t h10_xlow = -180. ; Double_t h10_xhigh = h10_xlow + h10_binwidth * h10_nbin;
+    Int_t h10_nbin = 50; Double_t h10_binwidth = 3.6; Double_t h10_xlow = 0. ; Double_t h10_xhigh = h10_xlow + h10_binwidth * h10_nbin;
     fH10 = new TProfile ( "histo10", "P_{T} sum vs the Azimuthal Angle from Jet1", h10_nbin , h10_xlow , h10_xhigh );
     fH10->SetStats ( kTRUE );
     fH10->GetXaxis()->SetTitle ( "|#Delta#phi| (degrees)" );
@@ -503,13 +558,55 @@ void AliAnalysisTaskEmcalJetCDF::UserCreateOutputObjects()
     fH10->SetMarkerStyle ( kFullCircle );
     fOutput->Add ( fH10 );
 
-    fH20 = new TH1D ( "histo20", "Distribution of R in leading jet", 100, 0., 1. );
+    Int_t h15_nbin = 100; Double_t h15_binwidth = 0.01; Double_t h15_xlow = 0. ; Double_t h15_xhigh = h15_xlow + h15_binwidth * h15_nbin;
+    fH15 = new TProfile ( "histo15", "<p_{T}> track vs the Distance R from Jet1", h15_nbin , h15_xlow , h15_xhigh );
+    fH15->SetStats ( kTRUE );
+    fH15->GetXaxis()->SetTitle ( "R" );
+    fH15->GetYaxis()->SetTitle ( "<p_{T}> track" );
+    fH15->GetXaxis()->SetTitleColor ( 1 );
+    fH15->SetMarkerStyle ( kFullCircle );
+    fOutput->Add ( fH15 );
+
+    fH15_n80 = new TProfile ( "histo15_n80", "<p_{T}> track vs the Distance R from Jet1 - 80% of particles", h15_nbin , h15_xlow , h15_xhigh );
+    fH15_n80->SetStats ( kTRUE );
+    fH15_n80->GetXaxis()->SetTitle ( "R" );
+    fH15_n80->GetYaxis()->SetTitle ( "<p_{T}> track" );
+    fH15_n80->GetXaxis()->SetTitleColor ( 1 );
+    fH15_n80->SetMarkerStyle ( kFullCircle );
+    fOutput->Add ( fH15_n80 );
+
+    fH15_pt80 = new TProfile ( "histo15_pt80", "<p_{T}> track vs the Distance R from Jet1 - 80% of Pt", h15_nbin , h15_xlow , h15_xhigh );
+    fH15_pt80->SetStats ( kTRUE );
+    fH15_pt80->GetXaxis()->SetTitle ( "R" );
+    fH15_pt80->GetYaxis()->SetTitle ( "<p_{T}> track" );
+    fH15_pt80->GetXaxis()->SetTitleColor ( 1 );
+    fH15_pt80->SetMarkerStyle ( kFullCircle );
+    fOutput->Add ( fH15_pt80 );
+
+    Int_t h20_nbin = 100; Double_t h20_binwidth = 0.01; Double_t h20_low = 0.; Double_t h20_high = h20_low + h20_binwidth * h20_nbin;
+    fH20 = new TH1D ( "histo20", "Distribution of R in leading jet", h20_nbin, h20_low, h20_high );
     fH20->SetStats ( kTRUE );
     fH20->GetXaxis()->SetTitle ( "R" );
     fH20->GetYaxis()->SetTitle ( "dN/dR" );
     fH20->GetXaxis()->SetTitleColor ( 1 );
     fH20->SetMarkerStyle ( kFullCircle );
     fOutput->Add ( fH20 );
+
+    fH20_n80 = new TH1D ( "histo20_n80", "Distribution of R in leading jet - 80% of particles", h20_nbin, h20_low, h20_high );
+    fH20_n80->SetStats ( kTRUE );
+    fH20_n80->GetXaxis()->SetTitle ( "R" );
+    fH20_n80->GetYaxis()->SetTitle ( "dN/dR" );
+    fH20_n80->GetXaxis()->SetTitleColor ( 1 );
+    fH20_n80->SetMarkerStyle ( kFullCircle );
+    fOutput->Add ( fH20_n80 );
+
+    fH20_pt80 = new TH1D ( "histo20_pt80", "Distribution of R in leading jet - 80% of Pt", h20_nbin, h20_low, h20_high );
+    fH20_pt80->SetStats ( kTRUE );
+    fH20_pt80->GetXaxis()->SetTitle ( "R" );
+    fH20_pt80->GetYaxis()->SetTitle ( "dN/dR" );
+    fH20_pt80->GetXaxis()->SetTitleColor ( 1 );
+    fH20_pt80->SetMarkerStyle ( kFullCircle );
+    fOutput->Add ( fH20_pt80 );
 
     fH21 = new TProfile ( "histo21", "N(in the event - including jet1) vs P_{T}(jet1)", 200, 0., 200. ) ;
     fH21->SetStats ( kTRUE );
@@ -660,8 +757,9 @@ void AliAnalysisTaskEmcalJetCDF::UserCreateOutputObjects()
     fH25->SetMarkerStyle ( kFullCircle );
     fOutput->Add ( fH25 );
 
+    //____________________________________________________________________________________
     Int_t h26_nbin = 60; Double_t h26_binwidth = 0.02; Double_t h26_low = 0.; Double_t h26_high = h26_low + h26_binwidth * h26_nbin;
-    fH26 = new TProfile ( "histo26", "N vs the Distance R from Jet1", h26_nbin, h26_low, h26_high );
+    fH26 = new TProfile ( "histo26", "<N> vs the Distance R from Jet1", h26_nbin, h26_low, h26_high );
     fH26->SetStats ( kTRUE );
     fH26->GetXaxis()->SetTitle ( "Distance R" );
     fH26->GetYaxis()->SetTitle ( "<N> in 0.02 bin" );
@@ -669,6 +767,47 @@ void AliAnalysisTaskEmcalJetCDF::UserCreateOutputObjects()
     fH26->SetMarkerStyle ( kFullCircle );
     fOutput->Add ( fH26 );
 
+    fH26_n80 = new TProfile ( "histo26_n80", "<N> vs the Distance R from Jet1 - 80% of particles", h26_nbin, h26_low, h26_high );
+    fH26_n80->SetStats ( kTRUE );
+    fH26_n80->GetXaxis()->SetTitle ( "Distance R" );
+    fH26_n80->GetYaxis()->SetTitle ( "<N> in 0.02 bin" );
+    fH26_n80->GetXaxis()->SetTitleColor ( 1 );
+    fH26_n80->SetMarkerStyle ( kFullCircle );
+    fOutput->Add ( fH26_n80 );
+
+    fH26_pt80 = new TProfile ( "histo26_pt80", "<N> vs the Distance R from Jet1 - 80% of Pt", h26_nbin, h26_low, h26_high );
+    fH26_pt80->SetStats ( kTRUE );
+    fH26_pt80->GetXaxis()->SetTitle ( "Distance R" );
+    fH26_pt80->GetYaxis()->SetTitle ( "<N> in 0.02 bin" );
+    fH26_pt80->GetXaxis()->SetTitleColor ( 1 );
+    fH26_pt80->SetMarkerStyle ( kFullCircle );
+    fOutput->Add ( fH26_pt80 );
+
+    fH26jet1 = new TProfile ( "histo26jet1", "<N>(jet1) vs the Distance R from Jet1", h26_nbin, h26_low, h26_high );
+    fH26jet1->SetStats ( kTRUE );
+    fH26jet1->GetXaxis()->SetTitle ( "Distance R" );
+    fH26jet1->GetYaxis()->SetTitle ( "<N> in 0.02 bin" );
+    fH26jet1->GetXaxis()->SetTitleColor ( 1 );
+    fH26jet1->SetMarkerStyle ( kFullCircle );
+    fOutput->Add ( fH26jet1 );
+
+    fH26jet1_n80 = new TProfile ( "histo26jet1_n80", "<N>(jet1) vs the Distance R from Jet1 - 80% of particles", h26_nbin, h26_low, h26_high );
+    fH26jet1_n80->SetStats ( kTRUE );
+    fH26jet1_n80->GetXaxis()->SetTitle ( "Distance R" );
+    fH26jet1_n80->GetYaxis()->SetTitle ( "<N> in 0.02 bin" );
+    fH26jet1_n80->GetXaxis()->SetTitleColor ( 1 );
+    fH26jet1_n80->SetMarkerStyle ( kFullCircle );
+    fOutput->Add ( fH26jet1_n80 );
+
+    fH26jet1_pt80 = new TProfile ( "histo26jet1_pt80", "<N>(jet1) vs the Distance R from Jet1 - 80% of Pt", h26_nbin, h26_low, h26_high );
+    fH26jet1_pt80->SetStats ( kTRUE );
+    fH26jet1_pt80->GetXaxis()->SetTitle ( "Distance R" );
+    fH26jet1_pt80->GetYaxis()->SetTitle ( "<N> in 0.02 bin" );
+    fH26jet1_pt80->GetXaxis()->SetTitleColor ( 1 );
+    fH26jet1_pt80->SetMarkerStyle ( kFullCircle );
+    fOutput->Add ( fH26jet1_pt80 );
+
+    //____________________________________________________________________________________
     Int_t h27_nbin = 60; Double_t h27_binwidth = 0.02; Double_t h27_low = 0.; Double_t h27_high = h27_low + h27_binwidth * h27_nbin;
     fH27 = new TProfile ( "histo27", "PT_{sum} vs the Distance R from Jet1", h27_nbin, h27_low, h27_high );
     fH27->SetStats ( kTRUE );
@@ -678,6 +817,47 @@ void AliAnalysisTaskEmcalJetCDF::UserCreateOutputObjects()
     fH27->SetMarkerStyle ( kFullCircle );
     fOutput->Add ( fH27 );
 
+    fH27_n80 = new TProfile ( "histo27_n80", "PT_{sum} vs the Distance R from Jet1 - 80% of particles", h27_nbin, h27_low, h27_high );
+    fH27_n80->SetStats ( kTRUE );
+    fH27_n80->GetXaxis()->SetTitle ( "Distance R" );
+    fH27_n80->GetYaxis()->SetTitle ( "<PT_{sum}> (GeV/c) in 0.02 bin" );
+    fH27_n80->GetXaxis()->SetTitleColor ( 1 );
+    fH27_n80->SetMarkerStyle ( kFullCircle );
+    fOutput->Add ( fH27_n80 );
+
+    fH27_pt80 = new TProfile ( "histo27_pt80", "PT_{sum} vs the Distance R from Jet1 - 80% of Pt", h27_nbin, h27_low, h27_high );
+    fH27_pt80->SetStats ( kTRUE );
+    fH27_pt80->GetXaxis()->SetTitle ( "Distance R" );
+    fH27_pt80->GetYaxis()->SetTitle ( "<PT_{sum}> (GeV/c) in 0.02 bin" );
+    fH27_pt80->GetXaxis()->SetTitleColor ( 1 );
+    fH27_pt80->SetMarkerStyle ( kFullCircle );
+    fOutput->Add ( fH27_pt80 );
+
+    fH27jet1 = new TProfile ( "histo27jet1", "Jet1 p_{T} vs the Distance R from Jet1", h27_nbin, h27_low, h27_high );
+    fH27jet1->SetStats ( kTRUE );
+    fH27jet1->GetXaxis()->SetTitle ( "Distance R" );
+    fH27jet1->GetYaxis()->SetTitle ( "<PT_{sum}> (GeV/c) in 0.02 bin" );
+    fH27jet1->GetXaxis()->SetTitleColor ( 1 );
+    fH27jet1->SetMarkerStyle ( kFullCircle );
+    fOutput->Add ( fH27jet1 );
+
+    fH27jet1_n80 = new TProfile ( "histo27jet1_n80", "Jet1 p_{T} vs the Distance R from Jet1 - 80% of particles", h27_nbin, h27_low, h27_high );
+    fH27->SetStats ( kTRUE );
+    fH27->GetXaxis()->SetTitle ( "Distance R" );
+    fH27->GetYaxis()->SetTitle ( "<PT_{sum}> (GeV/c) in 0.02 bin" );
+    fH27->GetXaxis()->SetTitleColor ( 1 );
+    fH27->SetMarkerStyle ( kFullCircle );
+    fOutput->Add ( fH27jet1_n80 );
+
+    fH27jet1_pt80 = new TProfile ( "histo27jet1_pt80", "Jet1 p_{T} vs the Distance R from Jet1 - 80% of Pt", h27_nbin, h27_low, h27_high );
+    fH27->SetStats ( kTRUE );
+    fH27->GetXaxis()->SetTitle ( "Distance R" );
+    fH27->GetYaxis()->SetTitle ( "<PT_{sum}> (GeV/c) in 0.02 bin" );
+    fH27->GetXaxis()->SetTitleColor ( 1 );
+    fH27->SetMarkerStyle ( kFullCircle );
+    fOutput->Add ( fH27jet1_pt80 );
+
+    //____________________________________________________________________________________
     Int_t h40_nbin = 200; Double_t h40_binwidth = 1.; Double_t h40_low = 0.; Double_t h40_high = h40_low + h40_binwidth * h40_nbin;
     fH40 = new TProfile ( "histo40", "total particles fNPart w.r.t PTmax (pt of leading particle from jet1)", h40_nbin, h40_low, h40_high );
     fH40->SetStats ( kTRUE );
@@ -849,12 +1029,7 @@ std::vector<Int_t> AliAnalysisTaskEmcalJetCDF::SortTracksPt( AliParticleContaine
     return index_sorted_list;
 }
 
-//________________________________________________________________________
-Bool_t AliAnalysisTaskEmcalJetCDF::Run()
-    {
-    // Run analysis code here, if needed. It will be executed before FillHistograms().
-    return kTRUE;  // If return kFALSE FillHistogram() will NOT be executed.
-    }
+
 
 //________________________________________________________________________
 void AliAnalysisTaskEmcalJetCDF::ExecOnce()
