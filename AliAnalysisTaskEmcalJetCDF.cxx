@@ -351,19 +351,17 @@ for ( Size_t i = 0 ; i < fNaccPart ; i++ )
 
         // dphi between leading track (max pt track from leading jet) and current track
         Double_t dphi_part = TVector2::Phi_mpi_pi ( track->Phi() - jet1_trklead->Phi() ); // restrict the delta phi to (-pi,pi) interval
-        dphi_part = TMath::Abs(dphi_part); // and then to (0, pi)
 
         // dphi between leading jet and current track
         Double_t dphi_part_jet1 = TVector2::Phi_mpi_pi ( track->Phi() - jet1->Phi() ); // restrict the delta phi to (-pi,pi) interval
-        dphi_part_jet1 = TMath::Abs(dphi_part_jet1); // and then to (0, pi)
 
         // dR of track from leading jet (jet1)
         Double_t dpart = jet1->DeltaR ( track );
 
         fH23->Fill ( track_pt ); //  Pt Distribution of particles in event
 
-        fH9 ->Fill ( TMath::RadToDeg() * dphi_part_jet1, fNaccPart )   ; //  N vs the Azimuthal Angle from Jet1
-        fH10->Fill ( TMath::RadToDeg() * dphi_part_jet1, eventacc_pt ) ; //  P_{T} sum vs the Azimuthal Angle from Jet1
+        fH9 ->Fill ( TMath::RadToDeg() * TMath::Abs(dphi_part_jet1), fNaccPart )   ; //  N vs the Azimuthal Angle from Jet1
+        fH10->Fill ( TMath::RadToDeg() * TMath::Abs(dphi_part_jet1), eventacc_pt ) ; //  P_{T} sum vs the Azimuthal Angle from Jet1
 
         fH26->Fill ( dpart, counter_part );   //  N vs the Distance R from Jet1
         fH27->Fill ( dpart, counter_pt );     //  PT_{sum} vs the Distance R from Jet1
@@ -433,7 +431,7 @@ for ( Size_t i = 0 ; i < fNaccPart ; i++ )
             fH41transmax->Fill (jet1_ptmax, eventacc_pt);
             }
         else
-        if ( ( dphi_part_jet1 >= k2PI_3 ) || ( dphi_part_jet1 <= (-1)*k2PI_3 ) )
+        if ( ( dphi_part >= k2PI_3 ) || ( dphi_part <= (-1)*k2PI_3 ) )
             {
             fH40away->Fill (jet1_ptmax, fNaccPart);
             fH41away->Fill (jet1_ptmax, eventacc_pt);
