@@ -383,21 +383,21 @@ for ( Size_t i = 0 ; i < fNaccPart ; i++ )
 
 
 // dphi track to jet1 distribution (total and per toward,away,transverse regions)
-        if ( ( dphi_part_jet1 > (-1)*kPI_3 ) && ( dphi_part < kPI_3 ) )
+        if ( ( dphi_part_jet1 > (-1)*kPI_3 ) && ( dphi_part_jet1 < kPI_3 ) )
             {
             fH21Toward->Fill ( jet1_pt, fNaccPart );   // N (in the event - including jet1) vs P_{T}(jet1)
             fH22Toward->Fill ( jet1_pt, eventacc_pt );    // PT_{sum}(in the event - including jet1) vs P_{T}(jet1)
             fH23Toward->Fill ( track_pt );             // Pt Distribution of particles
             }
         else
-        if ( ( dphi_part_jet1 <= (-1)*kPI_3 ) && ( dphi_part > (-1)*k2PI_3 ) )
+        if ( ( dphi_part_jet1 <= (-1)*kPI_3 ) && ( dphi_part_jet1 > (-1)*k2PI_3 ) )
             {
             fH21Transverse_min->Fill ( jet1_pt, fNaccPart );   // N (in the event - including jet1) vs P_{T}(jet1)
             fH22Transverse_min->Fill ( jet1_pt, eventacc_pt );    // PT_{sum}(in the event - including jet1) vs P_{T}(jet1)
             fH23Transverse_min->Fill ( track_pt );             // Pt Distribution of particles
             }
         else
-        if ( ( dphi_part_jet1 >= kPI_3 ) && ( dphi_part < k2PI_3 ) )
+        if ( ( dphi_part_jet1 >= kPI_3 ) && ( dphi_part_jet1 < k2PI_3 ) )
             {
             fH21Transverse_max->Fill ( jet1_pt, fNaccPart );   // N (in the event - including jet1) vs P_{T}(jet1)
             fH22Transverse_max->Fill ( jet1_pt, eventacc_pt );    // PT_{sum}(in the event - including jet1) vs P_{T}(jet1)
