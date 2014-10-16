@@ -241,11 +241,14 @@ Bool_t AliAnalysisTaskEmcalJetCDF::Run()
 //__________________________________________________________________
 // computing of pt sum of event - acccepted tracks
     eventacc_pt = 0.;
-    for ( UInt_t i = 0 ; i < fNaccPart ; i++ )
-         {// replace the index order by the sorted array
-         AliVParticle* track = fTracksCont->GetNextAcceptParticle ( event_acctracks_sorted_idx_vec.at(i) );
-         if (track) {  eventacc_pt += track->Pt(); } // pt sum of event
-         }
+
+    AliVTrack* track = static_cast<AliVTrack*>(fTracksCont->GetNextAcceptParticle(0));
+    while(track)
+        {
+        eventacc_pt += track->Pt();  // pt sum of event
+        track = static_cast<AliVTrack*>(fTracksCont->GetNextAcceptParticle());
+        }
+    track = NULL;
     if ( fDebug > 2 ) { std::cout << "Sum of Pt in event pt_sum_event = " << eventacc_pt << std::endl; }
 
     // Run analysis code here, if needed. It will be executed before FillHistograms().
@@ -259,15 +262,18 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
     Double_t const kPI_3      = TMath::Pi()/3.;
     Double_t const k2PI_3     = 2 * kPI_3 ;
 
-    for ( Size_t i = 0 ; i < fNJets_accepted ; i++ )
+    AliEmcalJet* jet = fJetsCont->GetNextAcceptJet(0);
+    while(jet)
         {
-        AliEmcalJet* jet = fJetsCont->GetAcceptJet(i); if (!jet) {continue;}
-
         fH1->Fill ( jet->Pt() );  // Pt distribution of jets
         fH2->Fill ( jet->Eta() ); // Eta distribution of jets
         fH3->Fill ( jet->Phi() ); // Phi distribution of jets
         fH4->Fill ( jet->GetNumberOfTracks() );  // Multiplicity of jets
+
+        jet = fJetsCont->GetNextAcceptJet();
         }
+    jet = NULL;
+
     fH5->Fill ( fNJets_accepted );   // Distribution of jets in events;
 
     if ( fDebug > 2 ) { Printf ( "CDFhistos:: end of global jet histos \n" ); }
@@ -294,9 +300,10 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
     Int_t    counter_part = 0  ; Double_t counter_pt   = 0. ;
 //___________________________________________________________________________
 // parsing tracks of jet1 (leading jet) in decreasing order of Pt
+    AliVParticle* track = NULL;
     for ( Size_t i = 0 ; i < jet1_npart ; i++ )
         {
-        AliVParticle* track = jet1->TrackAt ( jet1_sorted_idx_vec.at(i), fTracksCont_array );
+        track = jet1->TrackAt ( jet1_sorted_idx_vec.at(i), fTracksCont_array );
         Double_t dpart = jet1->DeltaR ( track );
         Double_t track_pt = track->Pt() ;
 
@@ -332,7 +339,7 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
             fH27jet1_pt80->Fill ( dpart, jet1_pt );        //  PT_{sum} vs the Distance R from Jet1
             }
         }
-
+    track = NULL;
 
     // reset counter for new usage
     counter_part = 0 ; counter_pt = 0.;
@@ -340,7 +347,7 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
 // parsing accepted tracks in EVENT in decreasing order of Pt //
 for ( Size_t i = 0 ; i < fNaccPart ; i++ )
         {// replace the index order by the sorted array
-        AliVParticle* track = fTracksCont->GetNextAcceptParticle ( event_acctracks_sorted_idx_vec.at(i) );
+        track = fTracksCont->GetNextAcceptParticle ( event_acctracks_sorted_idx_vec.at(i) );
         if ( !track ) { std::cout << "track not retrieved from fTracksCont" << std::endl; continue; }
 
         // pt of the current track
@@ -435,12 +442,12 @@ for ( Size_t i = 0 ; i < fNaccPart ; i++ )
             }
 
         }
-
+    track = NULL;
 
 // post data at every processing
-    PostData ( 1, fOutput ); // Post data for ALL output slots > 0 here.
-    return kTRUE;
-    }
+PostData ( 1, fOutput ); // Post data for ALL output slots > 0 here.
+return kTRUE;
+}
 
 //________________________________________________________________________
 void AliAnalysisTaskEmcalJetCDF::UserCreateOutputObjects()
