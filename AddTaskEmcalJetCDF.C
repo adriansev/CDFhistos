@@ -9,6 +9,7 @@ AliAnalysisTaskEmcalJetCDF* AddTaskEmcalJetCDF(
   const char* type               = "TPC",      // EMCAL, TPC
   Int_t       leadhadtype        = 0,          // AliJetContainer :: Int_t fLeadingHadronType;  0 = charged, 1 = neutral, 2 = both
   const char* taskname           = "JetCDF"
+//   Int_t       nCentBins          = 1,
 )
 {
     // Get the pointer to the existing analysis manager via the static access method.
@@ -40,6 +41,8 @@ AliAnalysisTaskEmcalJetCDF* AddTaskEmcalJetCDF(
 //     cout << "CDF Jet task name : " << name.Data() << endl;
 
     AliAnalysisTaskEmcalJetCDF* jetTask = new AliAnalysisTaskEmcalJetCDF(name);
+//     jetTask->SetCentRange(0.,100.);
+//     jetTask->SetNCentBins(nCentBins);
 
     AliParticleContainer* trackCont  = jetTask->AddParticleContainer(ntracks);
     trackCont->SetClassName("AliVTrack");
