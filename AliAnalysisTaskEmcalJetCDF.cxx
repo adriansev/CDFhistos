@@ -545,7 +545,7 @@ void AliAnalysisTaskEmcalJetCDF::UserCreateOutputObjects()
     Int_t h9_nbin = 50; Double_t h9_binwidth = 3.6; Double_t h9_xlow = 0. ; Double_t h9_xhigh = h9_xlow + h9_binwidth * h9_nbin;
     fH9 = new TProfile ( "histo9", "N vs the Azimuthal Angle from Jet1", h9_nbin , h9_xlow , h9_xhigh );
     fH9->SetStats ( kTRUE );
-    fH9->GetXaxis()->SetTitle ( "#Delta#phi (degrees)" );
+    fH9->GetXaxis()->SetTitle ( "|#Delta#phi| (degrees)" );
     fH9->GetYaxis()->SetTitle ( "<N> in 3.6 degree bin" );
     fH9->GetXaxis()->SetTitleColor ( 1 );
     fH9->SetMarkerStyle ( kFullCircle );
@@ -612,7 +612,7 @@ void AliAnalysisTaskEmcalJetCDF::UserCreateOutputObjects()
 
     fH21 = new TProfile ( "histo21", "N(in the event - including jet1) vs P_{T}(jet1)", 200, 0., 200. ) ;
     fH21->SetStats ( kTRUE );
-    fH21->GetXaxis()->SetTitle ( "P_{T} (jet1) (GeV/c)" );
+    fH21->GetXaxis()->SetTitle ( "p_{T}(jet1) (GeV/c)" );
     fH21->GetYaxis()->SetTitle ( "<N(in the event - including jet1)> in 1 GeV/c bin" );
     fH21->GetXaxis()->SetTitleColor ( 1 );
     fH21->SetMarkerStyle ( kFullCircle );
@@ -620,7 +620,7 @@ void AliAnalysisTaskEmcalJetCDF::UserCreateOutputObjects()
 
     fH21Toward = new TProfile ( "histo21_toward", "N(in the event - including jet1) vs P_{T}(jet1) - toward", 200, 0., 200. ) ;
     fH21Toward->SetStats ( kTRUE );
-    fH21Toward->GetXaxis()->SetTitle ( "P_{T} (jet1) (GeV/c)" );
+    fH21Toward->GetXaxis()->SetTitle ( "p_{T}(jet1) (GeV/c)" );
     fH21Toward->GetYaxis()->SetTitle ( "<N(in the event - including jet1)> in 1 GeV/c bin" );
     fH21Toward->GetXaxis()->SetTitleColor ( 1 );
     fH21Toward->SetMarkerStyle ( kFullCircle );
@@ -628,7 +628,7 @@ void AliAnalysisTaskEmcalJetCDF::UserCreateOutputObjects()
 
     fH21Transverse_min = new TProfile ( "histo21_transverse_min", "N(in the event - including jet1) vs P_{T}(jet1) - transverse MIN", 200, 0., 200. ) ;
     fH21Transverse_min->SetStats ( kTRUE );
-    fH21Transverse_min->GetXaxis()->SetTitle ( "P_{T} (jet1) (GeV/c)" );
+    fH21Transverse_min->GetXaxis()->SetTitle ( "p_{T}(jet1) (GeV/c)" );
     fH21Transverse_min->GetYaxis()->SetTitle ( "<N(in the event - including jet1)> in 1 GeV/c bin" );
     fH21Transverse_min->GetXaxis()->SetTitleColor ( 1 );
     fH21Transverse_min->SetMarkerStyle ( kFullCircle );
@@ -636,7 +636,7 @@ void AliAnalysisTaskEmcalJetCDF::UserCreateOutputObjects()
 
     fH21Transverse_max = new TProfile ( "histo21_transverse_max", "N(in the event - including jet1) vs P_{T}(jet1) - transverse MAX", 200, 0., 200. ) ;
     fH21Transverse_max->SetStats ( kTRUE );
-    fH21Transverse_max->GetXaxis()->SetTitle ( "P_{T} (jet1) (GeV/c)" );
+    fH21Transverse_max->GetXaxis()->SetTitle ( "p_{T}(jet1) (GeV/c)" );
     fH21Transverse_max->GetYaxis()->SetTitle ( "<N(in the event - including jet1)> in 1 GeV/c bin" );
     fH21Transverse_max->GetXaxis()->SetTitleColor ( 1 );
     fH21Transverse_max->SetMarkerStyle ( kFullCircle );
@@ -644,7 +644,7 @@ void AliAnalysisTaskEmcalJetCDF::UserCreateOutputObjects()
 
     fH21Away = new TProfile ( "histo21_away", "N(in the event - including jet1) vs P_{T}(jet1) - away", 200, 0., 200. ) ;
     fH21Away->SetStats ( kTRUE );
-    fH21Away->GetXaxis()->SetTitle ( "P_{T} (jet1) (GeV/c)" );
+    fH21Away->GetXaxis()->SetTitle ( "p_{T}(jet1) (GeV/c)" );
     fH21Away->GetYaxis()->SetTitle ( "<N(in the event - including jet1)> in 1 GeV/c bin" );
     fH21Away->GetXaxis()->SetTitleColor ( 1 );
     fH21Away->SetMarkerStyle ( kFullCircle );
@@ -653,7 +653,7 @@ void AliAnalysisTaskEmcalJetCDF::UserCreateOutputObjects()
     //__________________________________________________________________
     fH22 = new TProfile ( "histo22", "PT_{sum}(in the event - including jet1) vs P_{T}(jet1)", 200, 0. , 200. ) ;
     fH22->SetStats ( kTRUE );
-    fH22->GetXaxis()->SetTitle ( "P_{T} (jet1) (GeV/c)" );
+    fH22->GetXaxis()->SetTitle ( "p_{T}(jet1) (GeV/c)" );
     fH22->GetYaxis()->SetTitle ( "<PT_{sum}(in the event - including jet1)> in 1 GeV/c bin" );
     fH22->GetXaxis()->SetTitleColor ( 1 );
     fH22->SetMarkerStyle ( kFullCircle );
@@ -661,7 +661,7 @@ void AliAnalysisTaskEmcalJetCDF::UserCreateOutputObjects()
 
     fH22Toward = new TProfile ( "histo22_toward", "PT_{sum}(in the event - including jet1) vs P_{T}(jet1) - toward", 200, 0. , 200. ) ;
     fH22Toward->SetStats ( kTRUE );
-    fH22Toward->GetXaxis()->SetTitle ( "P_{T} (jet1) (GeV/c)" );
+    fH22Toward->GetXaxis()->SetTitle ( "p_{T}(jet1) (GeV/c)" );
     fH22Toward->GetYaxis()->SetTitle ( "<PT_{sum}(in the event - including jet1)> in 1 GeV/c bin" );
     fH22Toward->GetXaxis()->SetTitleColor ( 1 );
     fH22Toward->SetMarkerStyle ( kFullCircle );
@@ -669,7 +669,7 @@ void AliAnalysisTaskEmcalJetCDF::UserCreateOutputObjects()
 
     fH22Transverse_min = new TProfile ( "histo22_transverse_min", "PT_{sum}(in the event - including jet1) vs P_{T}(jet1) - transverse MIN", 200, 0. , 200. ) ;
     fH22Transverse_min->SetStats ( kTRUE );
-    fH22Transverse_min->GetXaxis()->SetTitle ( "P_{T} (jet1) (GeV/c)" );
+    fH22Transverse_min->GetXaxis()->SetTitle ( "p_{T}(jet1) (GeV/c)" );
     fH22Transverse_min->GetYaxis()->SetTitle ( "<PT_{sum}(in the event - including jet1)> in 1 GeV/c bin" );
     fH22Transverse_min->GetXaxis()->SetTitleColor ( 1 );
     fH22Transverse_min->SetMarkerStyle ( kFullCircle );
@@ -677,7 +677,7 @@ void AliAnalysisTaskEmcalJetCDF::UserCreateOutputObjects()
 
     fH22Transverse_max = new TProfile ( "histo22_transverse_max", "PT_{sum}(in the event - including jet1) vs P_{T}(jet1) - transverse MAX", 200, 0. , 200. ) ;
     fH22Transverse_max->SetStats ( kTRUE );
-    fH22Transverse_max->GetXaxis()->SetTitle ( "P_{T} (jet1) (GeV/c)" );
+    fH22Transverse_max->GetXaxis()->SetTitle ( "p_{T}(jet1) (GeV/c)" );
     fH22Transverse_max->GetYaxis()->SetTitle ( "<PT_{sum}(in the event - including jet1)> in 1 GeV/c bin" );
     fH22Transverse_max->GetXaxis()->SetTitleColor ( 1 );
     fH22Transverse_max->SetMarkerStyle ( kFullCircle );
@@ -685,7 +685,7 @@ void AliAnalysisTaskEmcalJetCDF::UserCreateOutputObjects()
 
     fH22Away = new TProfile ( "histo22_away", "PT_{sum}(in the event - including jet1) vs P_{T}(jet1) - away", 200, 0. , 200. ) ;
     fH22Away->SetStats ( kTRUE );
-    fH22Away->GetXaxis()->SetTitle ( "P_{T} (jet1) (GeV/c)" );
+    fH22Away->GetXaxis()->SetTitle ( "p_{T}(jet1) (GeV/c)" );
     fH22Away->GetYaxis()->SetTitle ( "<PT_{sum}(in the event - including jet1)> in 1 GeV/c bin" );
     fH22Away->GetXaxis()->SetTitleColor ( 1 );
     fH22Away->SetMarkerStyle ( kFullCircle );
@@ -694,7 +694,7 @@ void AliAnalysisTaskEmcalJetCDF::UserCreateOutputObjects()
     //____________________________________________________________________________________
     fH23 = new TH1D ( "histo23", "Pt Distribution of particles", 1500, 0., 1500. );
     fH23->SetStats ( kTRUE );
-    fH23->GetXaxis()->SetTitle ( "P_{T}  (GeV/c)" );
+    fH23->GetXaxis()->SetTitle ( "p_{T} (GeV/c)" );
     fH23->GetYaxis()->SetTitle ( "dN/dP_{T} (1/GeV/c)" );
     fH23->GetXaxis()->SetTitleColor ( 1 );
     fH23->SetMarkerStyle ( kFullCircle );
@@ -702,7 +702,7 @@ void AliAnalysisTaskEmcalJetCDF::UserCreateOutputObjects()
 
     fH23jet1 = new TH1D ( "histo23jet1", "Pt Distribution of particles in jet1", 1000, 0., 1000. );
     fH23jet1->SetStats ( kTRUE );
-    fH23jet1->GetXaxis()->SetTitle ( "P_{T} (jet1) (GeV/c)" );
+    fH23jet1->GetXaxis()->SetTitle ( "p_{T}(jet1) (GeV/c)" );
     fH23jet1->GetYaxis()->SetTitle ( "dN/dP_{T}(jet1) (1/GeV/c)" );
     fH23jet1->GetXaxis()->SetTitleColor ( 1 );
     fH23jet1->SetMarkerStyle ( kFullCircle );
@@ -710,7 +710,7 @@ void AliAnalysisTaskEmcalJetCDF::UserCreateOutputObjects()
 
     fH23Toward = new TH1D ( "histo23_toward", "'Toward' Pt Distribution of particles", 1500, 0., 1500. );
     fH23Toward->SetStats ( kTRUE );
-    fH23Toward->GetXaxis()->SetTitle ( "P_{T} (GeV/c)" );
+    fH23Toward->GetXaxis()->SetTitle ( "p_{T} (GeV/c)" );
     fH23Toward->GetYaxis()->SetTitle ( "dN/dP_{T} (1/GeV/c)" );
     fH23Toward->GetXaxis()->SetTitleColor ( 1 );
     fH23Toward->SetMarkerStyle ( kFullCircle );
@@ -718,7 +718,7 @@ void AliAnalysisTaskEmcalJetCDF::UserCreateOutputObjects()
 
     fH23Transverse_min = new TH1D ( "histo23_transverse_min", "Pt Distribution of particles - Transverse MIN", 1500, 0., 1500. );
     fH23Transverse_min->SetStats ( kTRUE );
-    fH23Transverse_min->GetXaxis()->SetTitle ( "P_{T} (GeV/c)" );
+    fH23Transverse_min->GetXaxis()->SetTitle ( "p_{T} (GeV/c)" );
     fH23Transverse_min->GetYaxis()->SetTitle ( "dN/dP_{T} (1/GeV/c)" );
     fH23Transverse_min->GetXaxis()->SetTitleColor ( 1 );
     fH23Transverse_min->SetMarkerStyle ( kFullCircle );
@@ -726,7 +726,7 @@ void AliAnalysisTaskEmcalJetCDF::UserCreateOutputObjects()
 
     fH23Transverse_max = new TH1D ( "histo23_transverse_max", "Pt Distribution of particles  - Transverse MAX", 1500, 0., 1500. );
     fH23Transverse_max->SetStats ( kTRUE );
-    fH23Transverse_max->GetXaxis()->SetTitle ( "P_{T} (GeV/c)" );
+    fH23Transverse_max->GetXaxis()->SetTitle ( "p_{T} (GeV/c)" );
     fH23Transverse_max->GetYaxis()->SetTitle ( "dN/dP_{T} (1/GeV/c)" );
     fH23Transverse_max->GetXaxis()->SetTitleColor ( 1 );
     fH23Transverse_max->SetMarkerStyle ( kFullCircle );
@@ -734,7 +734,7 @@ void AliAnalysisTaskEmcalJetCDF::UserCreateOutputObjects()
 
     fH23Away = new TH1D ( "histo23_away", "'Away' Pt Distribution of particles", 1500, 0., 1500. );
     fH23Away->SetStats ( kTRUE );
-    fH23Away->GetXaxis()->SetTitle ( "P_{T} (GeV/c)" );
+    fH23Away->GetXaxis()->SetTitle ( "p_{T} (GeV/c)" );
     fH23Away->GetYaxis()->SetTitle ( "dN/dP_{T} (1/GeV/c)" );
     fH23Away->GetXaxis()->SetTitleColor ( 1 );
     fH23Away->SetMarkerStyle ( kFullCircle );
@@ -744,7 +744,7 @@ void AliAnalysisTaskEmcalJetCDF::UserCreateOutputObjects()
     Int_t h24_nbin = 400; Double_t h24_binwidth = 1.; Double_t h24_low = 0.; Double_t h24_high = h24_low + h24_binwidth * h24_nbin;
     fH24 = new TProfile ( "histo24", "Jet1 Size vs P_{T}(jet1) - 80% of particles", h24_nbin, h24_low, h24_high );
     fH24->SetStats ( kTRUE );
-    fH24->GetXaxis()->SetTitle ( "P_{T} (jet1) (GeV/c)" );
+    fH24->GetXaxis()->SetTitle ( "p_{T}(jet1) (GeV/c)" );
     fH24->GetYaxis()->SetTitle ( "<R(jet1)> in 1 GeV/c bin" );
     fH24->GetXaxis()->SetTitleColor ( 1 );
     fH24->SetMarkerStyle ( kFullCircle );
@@ -753,7 +753,7 @@ void AliAnalysisTaskEmcalJetCDF::UserCreateOutputObjects()
     Int_t h25_nbin = 400; Double_t h25_binwidth = 1.; Double_t h25_low = 0.; Double_t h25_high = h25_low + h25_binwidth * h25_nbin;
     fH25 = new TProfile ( "histo25", "Jet1 Size vs P_{T}(jet1) - 80% of Pt", h25_nbin, h25_low, h25_high ) ;
     fH25->SetStats ( kTRUE );
-    fH25->GetXaxis()->SetTitle ( "P_{T} (jet1) (GeV/c)" );
+    fH25->GetXaxis()->SetTitle ( "p_{T}(jet1) (GeV/c)" );
     fH25->GetYaxis()->SetTitle ( "<R(jet1)> in 1 GeV/c bin" );
     fH25->GetXaxis()->SetTitleColor ( 1 );
     fH25->SetMarkerStyle ( kFullCircle );
@@ -844,19 +844,19 @@ void AliAnalysisTaskEmcalJetCDF::UserCreateOutputObjects()
     fOutput->Add ( fH27jet1 );
 
     fH27jet1_n80 = new TProfile ( "histo27jet1_n80", "Jet1 p_{T} vs the Distance R from Jet1 - 80% of particles", h27_nbin, h27_low, h27_high );
-    fH27->SetStats ( kTRUE );
-    fH27->GetXaxis()->SetTitle ( "Distance R" );
-    fH27->GetYaxis()->SetTitle ( "<PT_{sum}> (GeV/c) in 0.02 bin" );
-    fH27->GetXaxis()->SetTitleColor ( 1 );
-    fH27->SetMarkerStyle ( kFullCircle );
+    fH27jet1_n80->SetStats ( kTRUE );
+    fH27jet1_n80->GetXaxis()->SetTitle ( "Distance R" );
+    fH27jet1_n80->GetYaxis()->SetTitle ( "<PT_{sum}> (GeV/c) in 0.02 bin" );
+    fH27jet1_n80->GetXaxis()->SetTitleColor ( 1 );
+    fH27jet1_n80->SetMarkerStyle ( kFullCircle );
     fOutput->Add ( fH27jet1_n80 );
 
     fH27jet1_pt80 = new TProfile ( "histo27jet1_pt80", "Jet1 p_{T} vs the Distance R from Jet1 - 80% of Pt", h27_nbin, h27_low, h27_high );
-    fH27->SetStats ( kTRUE );
-    fH27->GetXaxis()->SetTitle ( "Distance R" );
-    fH27->GetYaxis()->SetTitle ( "<PT_{sum}> (GeV/c) in 0.02 bin" );
-    fH27->GetXaxis()->SetTitleColor ( 1 );
-    fH27->SetMarkerStyle ( kFullCircle );
+    fH27jet1_pt80->SetStats ( kTRUE );
+    fH27jet1_pt80->GetXaxis()->SetTitle ( "Distance R" );
+    fH27jet1_pt80->GetYaxis()->SetTitle ( "<PT_{sum}> (GeV/c) in 0.02 bin" );
+    fH27jet1_pt80->GetXaxis()->SetTitleColor ( 1 );
+    fH27jet1_pt80->SetMarkerStyle ( kFullCircle );
     fOutput->Add ( fH27jet1_pt80 );
 
     //____________________________________________________________________________________
