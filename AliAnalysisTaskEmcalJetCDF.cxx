@@ -367,8 +367,8 @@ for ( Size_t i = 0 ; i < fNaccPart ; i++ )
         fH9 ->Fill ( TMath::RadToDeg() * TMath::Abs(dphi_part_jet1), fNaccPart )   ; //  N vs the Azimuthal Angle from Jet1
         fH10->Fill ( TMath::RadToDeg() * TMath::Abs(dphi_part_jet1), eventacc_pt ) ; //  P_{T} sum vs the Azimuthal Angle from Jet1
 
-        fH26->Fill ( dpart, counter_part );   //  N vs the Distance R from Jet1
-        fH27->Fill ( dpart, counter_pt );     //  PT_{sum} vs the Distance R from Jet1
+        fH26->Fill ( dpart, fNaccPart );       //  N vs the Distance R from Jet1
+        fH27->Fill ( dpart, eventacc_pt );     //  PT_{sum} vs the Distance R from Jet1
 
         counter_part++;           // next particle
         counter_pt += track_pt;   // next particle pt
@@ -419,8 +419,8 @@ for ( Size_t i = 0 ; i < fNaccPart ; i++ )
 // dphi track to leading track distribution (total and per toward,away,transverse regions)
         if ( ( dphi_part > (-1)*kPI_3 ) && ( dphi_part < kPI_3 ) )
             {
-            fH40toward->Fill (jet1_ptmax, fNaccPart);
-            fH41toward->Fill (jet1_ptmax, eventacc_pt);
+            fH40toward->Fill (jet1_ptmax, fNaccPart - 1);             // remove ptmax
+            fH41toward->Fill (jet1_ptmax, eventacc_pt - jet1_ptmax);  // remove ptmax
             }
         else
         if ( ( dphi_part <= (-1)*kPI_3 ) && ( dphi_part > (-1)*k2PI_3 ) )
