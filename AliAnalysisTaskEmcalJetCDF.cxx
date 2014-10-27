@@ -307,6 +307,9 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
         Double_t dpart = jet1->DeltaR ( track );
         Double_t track_pt = track->Pt() ;
 
+        counter_part++;
+        counter_pt += track_pt;
+
         fH8->Fill      ( jet1->GetZ(track) ) ;  //  Momentum distribution for leading jet (FF)
         fH8xi->Fill    ( jet1->GetXi(track) ) ; //  Momentum distribution for leading jet (FF) xi
         fH23jet1->Fill ( track->Pt() ) ;        // jet1 pt distribution
@@ -315,19 +318,16 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
         fH20->Fill ( dpart );            // Distribution of R in leading jet
         fH15->Fill ( dpart, track_pt );  // <p_{T}> track vs the Distance R from Jet1
 
-        fH26jet1->Fill ( dpart, jet1_npart );   //  N vs the Distance R from Jet1
-        fH27jet1->Fill ( dpart, jet1_pt );      //  PT_{sum} vs the Distance R from Jet1
-
-        counter_part++;
-        counter_pt += track_pt;
+        fH26jet1->Fill ( dpart, counter_part );   //  N vs the Distance R from Jet1
+        fH27jet1->Fill ( dpart, counter_pt );     //  PT_{sum} vs the Distance R from Jet1
 
         if ( counter_part <= jet1_n80 )
             { // fill histograms for 80% of particles
             fH15_n80->Fill     ( dpart, track_pt );       //  <p_{T}> track vs the Distance R from Jet1 - 80% of particles
             fH24->Fill         ( jet1_pt, dpart );        //  Jet1 Size vs P_{T}(jet1) - 80% of particles
             fH20_n80->Fill     ( dpart );                 //  Distribution of R in leading jet
-            fH26jet1_n80->Fill ( dpart, jet1_npart );     //  N vs the Distance R from Jet1
-            fH27jet1_n80->Fill ( dpart, jet1_pt );        //  PT_{sum} vs the Distance R from Jet1
+            fH26jet1_n80->Fill ( dpart, counter_part );   //  N vs the Distance R from Jet1
+            fH27jet1_n80->Fill ( dpart, counter_pt );     //  PT_{sum} vs the Distance R from Jet1
             }
 
         if ( counter_pt <= jet1_pt80 )
@@ -335,8 +335,8 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
             fH15_pt80->Fill     ( dpart, track_pt );       //  <p_{T}> track vs the Distance R from Jet1 - 80% of pt
             fH25->Fill          ( jet1_pt, dpart );        //  Jet1 Size vs P_{T}(jet1) - 80% of Pt
             fH20_pt80->Fill     ( dpart );                 //  Distribution of R in leading jet
-            fH26jet1_pt80->Fill ( dpart, jet1_npart );     //  N vs the Distance R from Jet1
-            fH27jet1_pt80->Fill ( dpart, jet1_pt );        //  PT_{sum} vs the Distance R from Jet1
+            fH26jet1_pt80->Fill ( dpart, counter_part );   //  N vs the Distance R from Jet1
+            fH27jet1_pt80->Fill ( dpart, counter_pt );     //  PT_{sum} vs the Distance R from Jet1
             }
         }
     track = NULL;
@@ -362,83 +362,83 @@ for ( Size_t i = 0 ; i < fNaccPart ; i++ )
         // dR of track from leading jet (jet1)
         Double_t dpart = jet1->DeltaR ( track );
 
-        fH23->Fill ( track_pt ); //  Pt Distribution of particles in event
-
-        fH9 ->Fill ( TMath::RadToDeg() * TMath::Abs(dphi_part_jet1), fNaccPart )   ; //  N vs the Azimuthal Angle from Jet1
-        fH10->Fill ( TMath::RadToDeg() * TMath::Abs(dphi_part_jet1), eventacc_pt ) ; //  P_{T} sum vs the Azimuthal Angle from Jet1
-
-        fH26->Fill ( dpart, fNaccPart );       //  N vs the Distance R from Jet1
-        fH27->Fill ( dpart, eventacc_pt );     //  PT_{sum} vs the Distance R from Jet1
-
         counter_part++;           // next particle
         counter_pt += track_pt;   // next particle pt
 
+        fH23->Fill ( track_pt ); //  Pt Distribution of particles in event
+
+        fH9 ->Fill ( TMath::RadToDeg() * TMath::Abs(dphi_part_jet1), counter_part );  //  N vs the Azimuthal Angle from Jet1
+        fH10->Fill ( TMath::RadToDeg() * TMath::Abs(dphi_part_jet1), counter_pt ) ;   //  P_{T} sum vs the Azimuthal Angle from Jet1
+
+        fH26->Fill ( dpart, counter_part );   //  N vs the Distance R from Jet1
+        fH27->Fill ( dpart, counter_pt );     //  PT_{sum} vs the Distance R from Jet1
+
         if ( counter_part <= jet1_n80 )
             { // fill histograms for 80% of particles
-            fH26_n80->Fill ( dpart, fNaccPart );    //  N vs the Distance R from Jet1
-            fH27_n80->Fill ( dpart, eventacc_pt );  //  PT_{sum} vs the Distance R from Jet1
+            fH26_n80->Fill ( dpart, counter_part );   //  N vs the Distance R from Jet1
+            fH27_n80->Fill ( dpart, counter_pt );     //  PT_{sum} vs the Distance R from Jet1
             }
 
         if ( counter_pt <= jet1_pt80 )
             { // fill histograms for 80% of pt
-            fH26_pt80->Fill ( dpart, fNaccPart );    //  N vs the Distance R from Jet1
-            fH27_pt80->Fill ( dpart, eventacc_pt );  //  PT_{sum} vs the Distance R from Jet1
+            fH26_pt80->Fill ( dpart, counter_part ); //  N vs the Distance R from Jet1
+            fH27_pt80->Fill ( dpart, counter_pt );   //  PT_{sum} vs the Distance R from Jet1
             }
 
 
 // dphi track to jet1 distribution (total and per toward,away,transverse regions)
         if ( ( dphi_part_jet1 > (-1)*kPI_3 ) && ( dphi_part_jet1 < kPI_3 ) )
             {
-            fH21Toward->Fill ( jet1_pt, fNaccPart );   // N (in the event - including jet1) vs P_{T}(jet1)
-            fH22Toward->Fill ( jet1_pt, eventacc_pt ); // PT_{sum}(in the event - including jet1) vs P_{T}(jet1)
-            fH23Toward->Fill ( track_pt );             // Pt Distribution of particles
+            fH21Toward->Fill ( jet1_pt, counter_part );   // N (in the event - including jet1) vs P_{T}(jet1)
+            fH22Toward->Fill ( jet1_pt, counter_pt );     // PT_{sum}(in the event - including jet1) vs P_{T}(jet1)
+            fH23Toward->Fill ( track_pt );                // Pt Distribution of particles
             }
         else
         if ( ( dphi_part_jet1 <= (-1)*kPI_3 ) && ( dphi_part_jet1 > (-1)*k2PI_3 ) )
             {
-            fH21Transverse_min->Fill ( jet1_pt, fNaccPart );   // N (in the event - including jet1) vs P_{T}(jet1)
-            fH22Transverse_min->Fill ( jet1_pt, eventacc_pt ); // PT_{sum}(in the event - including jet1) vs P_{T}(jet1)
-            fH23Transverse_min->Fill ( track_pt );             // Pt Distribution of particles
+            fH21Transverse_min->Fill ( jet1_pt, counter_part );   // N (in the event - including jet1) vs P_{T}(jet1)
+            fH22Transverse_min->Fill ( jet1_pt, counter_pt );     // PT_{sum}(in the event - including jet1) vs P_{T}(jet1)
+            fH23Transverse_min->Fill ( track_pt );                // Pt Distribution of particles
             }
         else
         if ( ( dphi_part_jet1 >= kPI_3 ) && ( dphi_part_jet1 < k2PI_3 ) )
             {
-            fH21Transverse_max->Fill ( jet1_pt, fNaccPart );   // N (in the event - including jet1) vs P_{T}(jet1)
-            fH22Transverse_max->Fill ( jet1_pt, eventacc_pt ); // PT_{sum}(in the event - including jet1) vs P_{T}(jet1)
-            fH23Transverse_max->Fill ( track_pt );             // Pt Distribution of particles
+            fH21Transverse_max->Fill ( jet1_pt, counter_part );   // N (in the event - including jet1) vs P_{T}(jet1)
+            fH22Transverse_max->Fill ( jet1_pt, counter_pt );     // PT_{sum}(in the event - including jet1) vs P_{T}(jet1)
+            fH23Transverse_max->Fill ( track_pt );                // Pt Distribution of particles
             }
         else
         if ( ( dphi_part_jet1 >= k2PI_3 ) || ( dphi_part_jet1 <= (-1)*k2PI_3 ) )
             {
-            fH21Away->Fill ( jet1_pt, fNaccPart );   // N (in the event - including jet1) vs P_{T}(jet1)
-            fH22Away->Fill ( jet1_pt, eventacc_pt ); // PT_{sum}(in the event - including jet1) vs P_{T}(jet1)
-            fH23Away->Fill ( track_pt );             // Pt Distribution of particles
+            fH21Away->Fill ( jet1_pt, counter_part );   // N (in the event - including jet1) vs P_{T}(jet1)
+            fH22Away->Fill ( jet1_pt, counter_pt );     // PT_{sum}(in the event - including jet1) vs P_{T}(jet1)
+            fH23Away->Fill ( track_pt );                // Pt Distribution of particles
             }
 
 // NEW UE histos
 // dphi track to leading track distribution (total and per toward,away,transverse regions)
         if ( ( dphi_part > (-1)*kPI_3 ) && ( dphi_part < kPI_3 ) )
             {
-            fH40toward->Fill (jet1_ptmax, fNaccPart - 1);             // remove ptmax
-            fH41toward->Fill (jet1_ptmax, eventacc_pt - jet1_ptmax);  // remove ptmax
+            fH40toward->Fill (jet1_ptmax, counter_part );         // remove ptmax
+            fH41toward->Fill (jet1_ptmax, counter_pt );           // remove ptmax
             }
         else
         if ( ( dphi_part <= (-1)*kPI_3 ) && ( dphi_part > (-1)*k2PI_3 ) )
             {
-            fH40transmin->Fill (jet1_ptmax, fNaccPart);
-            fH41transmin->Fill (jet1_ptmax, eventacc_pt);
+            fH40transmin->Fill (jet1_ptmax, counter_part);
+            fH41transmin->Fill (jet1_ptmax, counter_pt);
             }
         else
         if ( ( dphi_part >= kPI_3 ) && ( dphi_part < k2PI_3 ) )
             {
-            fH40transmax->Fill (jet1_ptmax, fNaccPart);
-            fH41transmax->Fill (jet1_ptmax, eventacc_pt);
+            fH40transmax->Fill (jet1_ptmax, counter_part);
+            fH41transmax->Fill (jet1_ptmax, counter_pt);
             }
         else
         if ( ( dphi_part >= k2PI_3 ) || ( dphi_part <= (-1)*k2PI_3 ) )
             {
-            fH40away->Fill (jet1_ptmax, fNaccPart);
-            fH41away->Fill (jet1_ptmax, eventacc_pt);
+            fH40away->Fill (jet1_ptmax, counter_part);
+            fH41away->Fill (jet1_ptmax, counter_pt);
             }
 
         }
