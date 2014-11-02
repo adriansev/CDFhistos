@@ -59,7 +59,7 @@ AliAnalysisTaskEmcalJetCDF* AddTaskEmcalJetCDF(
         jetCont->SetPercAreaCut(jetareacut);
         jetCont->SetJetPtCut(jetptcut);
         jetCont->SetLeadingHadronType(leadhadtype); // Int_t fLeadingHadronType;  0 = charged, 1 = neutral, 2 = both
-        jetCont->SetZLeadingCut(0.9999,0.9999);
+        jetCont->SetZLeadingCut(0.,1.);
         }
 
     //-------------------------------------------------------
