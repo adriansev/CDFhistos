@@ -281,21 +281,17 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
     Double_t jet1_pt    = jet1->Pt();
     UInt_t   jet1_npart = jet1->GetNumberOfTracks();
 
-    Int_t jet1_n80 = ( Int_t )(0.8 * jet1_npart);
+    Int_t    jet1_n80  = ( Int_t )(0.8 * jet1_npart);
     Double_t jet1_pt80 = 0.8 * jet1_pt;
 
+    Int_t     event_n80 = ( Int_t )(0.8 * fNaccPart);
+    Double_t event_pt80 = 0.8 * eventacc_pt;
+
     AliVParticle* jet1_trklead = jet1->GetLeadingTrack (fTracks);
-    Double_t      jet1_ptmax = jet1_trklead->Pt();
+    Double_t      jet1_ptmax   = jet1_trklead->Pt();
 
     fH6->Fill ( jet1_npart );          // Jet1 Multiplicity Distribution ( ->Scale (1/events) )
     fH7->Fill ( jet1_pt, jet1_npart ); // N(jet1) vs P_{T}(jet1)
-
-    fH21->Fill ( jet1_pt, fNaccPart );   // N (in the event - including jet1) vs P_{T}(jet1)
-    fH22->Fill ( jet1_pt, eventacc_pt ); // PT_{sum}(in the event - including jet1) vs P_{T}(jet1)
-
-    fH40->Fill (jet1_ptmax, fNaccPart);    // total particles fNPart w.r.t PTmax (pt of leading particle from leading jet)
-    fH41->Fill (jet1_ptmax, eventacc_pt);  // PTsum w.r.t PTmax
-
 
     Int_t    counter_part = 0  ; Double_t counter_pt   = 0. ;
 //___________________________________________________________________________
@@ -307,7 +303,7 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
         Double_t dpart = jet1->DeltaR ( track );
         Double_t track_pt = track->Pt() ;
 
-        counter_part++;
+        ++counter_part;
         counter_pt += track_pt;
 
         fH8->Fill      ( jet1->GetZ(track) ) ;  //  Momentum distribution for leading jet (FF)
@@ -364,7 +360,7 @@ for ( Size_t i = 0 ; i < fNaccPart ; i++ )
         // dR of track from leading jet (jet1)
         Double_t dpart = jet1->DeltaR ( track );
 
-        counter_part++;           // next particle
+        ++counter_part;           // next particle
         counter_pt += track_pt;   // next particle pt
 
         fH23->Fill ( track_pt ); //  Pt Distribution of particles in event
@@ -387,8 +383,10 @@ for ( Size_t i = 0 ; i < fNaccPart ; i++ )
             fH27_pt80->Fill ( dpart, counter_pt );   //  PT_{sum} vs the Distance R from Jet1
             }
 
-
 // dphi track to jet1 distribution (total and per toward,away,transverse regions)
+        fH21->Fill ( jet1_pt, counter_part );   // N (in the event - including jet1) vs P_{T}(jet1)
+        fH22->Fill ( jet1_pt, counter_pt ); // PT_{sum}(in the event - including jet1) vs P_{T}(jet1)
+
         if ( ( dphi_part_jet1 > (-1)*kPI_3 ) && ( dphi_part_jet1 < kPI_3 ) )
             {
             fH21Toward->Fill ( jet1_pt, counter_part );   // N (in the event - including jet1) vs P_{T}(jet1)
@@ -419,6 +417,9 @@ for ( Size_t i = 0 ; i < fNaccPart ; i++ )
 
 // NEW UE histos
 // dphi track to leading track distribution (total and per toward,away,transverse regions)
+        fH40->Fill (jet1_ptmax, counter_part);    // total particles fNPart w.r.t PTmax (pt of leading particle from leading jet)
+        fH41->Fill (jet1_ptmax, counter_pt);      // PTsum w.r.t PTmax
+
         if ( ( dphi_part > (-1)*kPI_3 ) && ( dphi_part < kPI_3 ) )
             {
             fH40toward->Fill (jet1_ptmax, counter_part );         // remove ptmax
