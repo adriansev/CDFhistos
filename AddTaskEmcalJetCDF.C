@@ -27,7 +27,7 @@ AliAnalysisTaskEmcalJetCDF* AddTaskEmcalJetCDF(
 
     TString name(taskname); TString tracks (ntracks);
     TString clusters (nclusters); TString jets (njets);  TString rho (nrho);
-    TString stype (type);
+    TString acctype = type;
 
     if (jetptcut < 1. ) { jetptcut = 1.; }
     TString jetstr = "jpt";
@@ -36,7 +36,7 @@ AliAnalysisTaskEmcalJetCDF* AddTaskEmcalJetCDF(
     if ( !jets.IsNull() )  { name += "_" + jets; }
     name += "_" + jetstr;
     if ( !rho.IsNull()  )  { name += "_" + rho; }
-    if ( !stype.IsNull() ) { name += "_" + stype; }
+    if ( !acctype.IsNull() ) { name += "_" + acctype; }
 
 //     cout << "CDF Jet task name : " << name.Data() << endl;
 
@@ -50,7 +50,7 @@ AliAnalysisTaskEmcalJetCDF* AddTaskEmcalJetCDF(
     AliClusterContainer* clusterCont = jetTask->AddClusterContainer(nclusters);
     clusterCont->SetClassName("AliVCluster");
 
-    AliJetContainer* jetCont = jetTask->AddJetContainer(njets,stype,jetradius);
+    AliJetContainer* jetCont = jetTask->AddJetContainer(njets,"kUser",jetradius);
     if ( jetCont )
         {
         jetCont->SetRhoName(nrho);
@@ -61,6 +61,9 @@ AliAnalysisTaskEmcalJetCDF* AddTaskEmcalJetCDF(
         jetCont->SetLeadingHadronType(leadhadtype); // Int_t fLeadingHadronType;  0 = charged, 1 = neutral, 2 = both
         jetCont->SetZLeadingCut(0.,1.);
         }
+
+    // setting acceptance (fiducial)
+    SetJetAccFid ( jetCont, acctype);
 
     //-------------------------------------------------------
     // Final settings, pass to manager and set the containers
@@ -94,4 +97,29 @@ AliAnalysisTaskEmcalJetCDF* AddTaskEmcalJetCDF ( AliEmcalJetTask* jetFinderTask,
 return AddTaskEmcalJetCDF ( ntracks , nclusters, njets, nrho, jetradius, jetptcut, jetareacut, type, leadhadtype, taskname);
 
 }
+
+//________________________________________________________________________
+void SetJetAccFid( AliJetContainer* jetCont, TString cut = "TPC")
+{
+    cut.ToLower();
+    Float_t radius = jetCont->GetJetRadius();
+
+    Float_t fJetMinEta = -0.9, fJetMaxEta = 0.9 ;
+    Float_t fJetMinPhi = -10., fJetMaxPhi = 10. ;
+
+    if ( cut.EqualTo("emcal"))
+        {
+        fJetMinEta = -0.7   ; fJetMaxEta =  0.7 ;
+        fJetMinPhi =  1.405 ; fJetMaxPhi =  3.135 ;
+
+        fJetMinPhi += radius;
+        fJetMaxPhi -= radius;
+        }
+
+    jetCont->SetJetPhiLimits( fJetMinPhi, fJetMaxPhi );
+    jetCont->SetJetEtaLimits( fJetMinEta + radius, fJetMaxEta - radius );
+}
+
+
+// kate: indent-mode none; indent-width 4; replace-tabs on;
 
