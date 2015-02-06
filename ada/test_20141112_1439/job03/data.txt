@@ -1,0 +1,3 @@
+file:///data/data/data/2013/LHC13g/000197531/pass1/AOD155/0001/AliAOD.root
+file:///data/data/data/2013/LHC13g/000197531/pass1/AOD155/0006/AliAOD.root
+file:///data/data/data/2013/LHC13g/000197531/pass1/AOD155/0008/AliAOD.root

@@ -28,7 +28,6 @@ AliAnalysisTaskEmcalJetCDF* AddTaskEmcalJetCDF(
     TString name(taskname); TString tracks (ntracks);
     TString clusters (nclusters); TString jets (njets);  TString rho (nrho);
     TString acctype = type;
-    acctype.ToUpper();
 
     if (jetptcut < 1. ) { jetptcut = 1.; }
     TString jetstr = "jpt";
@@ -38,10 +37,6 @@ AliAnalysisTaskEmcalJetCDF* AddTaskEmcalJetCDF(
     name += "_" + jetstr;
     if ( !rho.IsNull()  )  { name += "_" + rho; }
     if ( !acctype.IsNull() ) { name += "_" + acctype; }
-
-    if ( acctype.CompareTo("TPC")   ) { acctype = "TPC"; }
-    if ( acctype.CompareTo("EMCAL") ) { acctype = "EMCAL"; }
-    if ( acctype.CompareTo("KUSER") ) { acctype = "kUser"; }
 
 //     cout << "CDF Jet task name : " << name.Data() << endl;
 
@@ -55,7 +50,7 @@ AliAnalysisTaskEmcalJetCDF* AddTaskEmcalJetCDF(
     AliClusterContainer* clusterCont = jetTask->AddClusterContainer(nclusters);
     clusterCont->SetClassName("AliVCluster");
 
-    AliJetContainer* jetCont = jetTask->AddJetContainer(njets, acctype.Data(), jetradius);
+    AliJetContainer* jetCont = jetTask->AddJetContainer(njets,"kUser",jetradius);
     if ( jetCont )
         {
         jetCont->SetRhoName(nrho);
@@ -103,7 +98,27 @@ return AddTaskEmcalJetCDF ( ntracks , nclusters, njets, nrho, jetradius, jetptcu
 
 }
 
+//________________________________________________________________________
+void SetJetAccFid( AliJetContainer* jetCont, TString cut = "TPC")
+{
+    cut.ToLower();
+    Float_t radius = jetCont->GetJetRadius();
 
+    Float_t fJetMinEta = -0.9, fJetMaxEta = 0.9 ;
+    Float_t fJetMinPhi = -10., fJetMaxPhi = 10. ;
+
+    if ( cut.EqualTo("emcal"))
+        {
+        fJetMinEta = -0.7   ; fJetMaxEta =  0.7 ;
+        fJetMinPhi =  1.405 ; fJetMaxPhi =  3.135 ;
+
+        fJetMinPhi += radius;
+        fJetMaxPhi -= radius;
+        }
+
+    jetCont->SetJetPhiLimits( fJetMinPhi, fJetMaxPhi );
+    jetCont->SetJetEtaLimits( fJetMinEta + radius, fJetMaxEta - radius );
+}
 
 
 // kate: indent-mode none; indent-width 4; replace-tabs on;

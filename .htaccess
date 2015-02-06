@@ -1,0 +1,6 @@
+AuthType Basic
+AuthName "ISS-ALICE Private Area"
+AuthUserFile /home/adrian/public_html/jets/.htpasswd
+require valid-user 
+
+ 

@@ -1,0 +1,52 @@
+From 76c9c4f60f2b4c61108eeb605e93b338fc0a9b23 Mon Sep 17 00:00:00 2001
+From: asevcenc <adrian.sevcenco@cern.ch>
+Date: Thu, 11 Sep 2014 00:07:41 +0300
+Subject: [PATCH] added minJetPt in "name" format
+
+Signed-off-by: asevcenc <adrian.sevcenco@cern.ch>
+---
+ PWGJE/EMCALJetTasks/macros/AddTaskEmcalJet.C | 19 +++++++++++++------
+ 1 file changed, 13 insertions(+), 6 deletions(-)
+
+diff --git a/PWGJE/EMCALJetTasks/macros/AddTaskEmcalJet.C b/PWGJE/EMCALJetTasks/macros/AddTaskEmcalJet.C
+index 317518e..ac49cec 100644
+--- a/PWGJE/EMCALJetTasks/macros/AddTaskEmcalJet.C
++++ b/PWGJE/EMCALJetTasks/macros/AddTaskEmcalJet.C
+@@ -69,6 +69,13 @@ AliEmcalJetTask* AddTaskEmcalJet(
+   else if (minTrPt>=1.0)
+     sprintf(pTString,"pT%4.0f",minTrPt*1000.0);
+ 
++  char JetPtString[200];
++  if ( minJetPt == 0 )  { sprintf ( JetPtString, "JetPt0000"); }
++  else 
++  if ( minJetPt < 1.0 ) { sprintf ( JetPtString, "JetPt0%3.0f", minJetPt*1000.0); }
++  else
++  if ( minJetPt >= 1.0) { sprintf ( JetPtString, "JetPt%4.0f", minTrPt*1000.0); }
++
+   char ETString[200];
+   if (minClPt==0)
+     sprintf(ETString,"ET0000");
+@@ -101,14 +108,14 @@ AliEmcalJetTask* AddTaskEmcalJet(
+ 
+   TString name;
+   if (*nTracks && *nClusters)
+-    name = TString(Form("%s_%s%s%s_%s_%s_%s_%s_%s",
+-                        tag,algoString,typeString,radiusString,nTracks,pTString,nClusters,ETString,recombSchemeString));
++    name = TString(Form("%s_%s%s%s_%s_%s_%s_%s_%s_%s",
++                        tag,algoString,typeString,radiusString,nTracks,JetPtString,pTString,nClusters,ETString,recombSchemeString));
+   else if (!*nClusters)
+-    name = TString(Form("%s_%s%s%s_%s_%s_%s",
+-                        tag,algoString,typeString,radiusString,nTracks,pTString,recombSchemeString));
++    name = TString(Form("%s_%s%s%s_%s_%s_%s_%s",
++                        tag,algoString,typeString,radiusString,nTracks,JetPtString,pTString,recombSchemeString));
+   else if (!*nTracks)
+-    name = TString(Form("%s_%s%s%s_%s_%s_%s",
+-                        tag,algoString,typeString,radiusString,nClusters,ETString,recombSchemeString));
++    name = TString(Form("%s_%s%s%s_%s_%s_%s_%s",
++                        tag,algoString,typeString,radiusString,nClusters,JetPtString,ETString,recombSchemeString));
+  
+   AliEmcalJetTask* mgrTask = mgr->GetTask(name.Data());
+   if (mgrTask)
+-- 
+1.9.3
+

@@ -1,0 +1,4 @@
+for esd in `seq -w 1 27`
+do
+   cp file$esd/histos.root results/histos$esd.root
+done   

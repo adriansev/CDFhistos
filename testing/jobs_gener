@@ -1,0 +1,52 @@
+#!/bin/bash
+
+DATA_FILE="data.txt"
+DATA_FILE_LIST=`cat $DATA_FILE`
+
+DATA_PREFIX="subdata_"
+
+TIME=`date +%Y%m%d_%H%M`
+DIR="test"
+
+NR_FILES=`wc -l $DATA_FILE | awk '{print $1}'`
+
+NR_JOBS="4"
+
+DIR_JOBS="${DIR}_${TIME}"
+
+mkdir -p $DIR_JOBS
+
+FILESJOB=$(( NR_FILES/NR_JOBS ))
+
+
+echo "NR_FILES : " $NR_FILES
+echo "RUN DIR : " $DIR_JOBS
+echo "Files per job : " $FILESJOB
+
+split -a 2 -d -l $FILESJOB data.txt $DATA_PREFIX
+
+PROGRAM='aliroot -l -b -q EmcalJetCDF.C\(\"local\",\"test\",\"data.txt\"\)'
+
+JOB_FILES="EmcalJetCDF.C AddTaskEmcalJetCDF.C AliAnalysisTaskEmcalJetCDF.cxx AliAnalysisTaskEmcalJetCDF.h InputData.C AliAnalysisTaskEmcalJetCDF_cxx.d AliAnalysisTaskEmcalJetCDF_cxx.so"
+
+compileC_aliroot AliAnalysisTaskEmcalJetCDF.cxx
+
+for data in `ls -1 $DATA_PREFIX*`
+{
+  IDX=${data#"subdata_"}
+
+  ## create job dir
+  SUBJOB_DIR=$DIR_JOBS/job$IDX
+
+  mkdir -pv $SUBJOB_DIR
+
+  mv $data  $SUBJOB_DIR/data.txt
+
+  for file in $JOB_FILES
+  do
+    cp $file $SUBJOB_DIR/
+  done
+
+}
+
+

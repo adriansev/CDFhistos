@@ -1,0 +1,438 @@
+<?xml version="1.0"?>
+<alien>
+  <collection name="collection">
+    <event name="1">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 16:10:36" dir="24950420" entryId="24950649" expiretime="" gowner="alidaq" guid="993E3706-8E77-11E3-BE0B-37A2C0433404" guidtime="11E38E77" jobid="352679222" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0001/AliAOD.root" md5="f7fddcfea49610b0235add355a807cf1" owner="alidaq" perm="755" replicated="0" size="32265930" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0001/AliAOD.root" type="f" />
+    </event>
+    <event name="10">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 18:44:41" dir="25012187" entryId="25012629" expiretime="" gowner="alidaq" guid="EB9B7896-8E8C-11E3-91CE-F307E1596B34" guidtime="11E38E8C" jobid="352679231" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0010/AliAOD.root" md5="119afea146544828ab541ec01c0a6c20" owner="alidaq" perm="755" replicated="0" size="652976994" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0010/AliAOD.root" type="f" />
+    </event>
+    <event name="100">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 18:52:51" dir="25014588" entryId="25014774" expiretime="" gowner="alidaq" guid="38BA35C6-8E8E-11E3-B740-F349E57631E0" guidtime="11E38E8E" jobid="352679369" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0100/AliAOD.root" md5="6075b0a846b8a92bda116ccf1960a2c9" owner="alidaq" perm="755" replicated="0" size="651964598" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0100/AliAOD.root" type="f" />
+    </event>
+    <event name="101">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 18:42:59" dir="25012065" entryId="25012235" expiretime="" gowner="alidaq" guid="D90CEFD4-8E8C-11E3-9098-6F156910DD4D" guidtime="11E38E8C" jobid="352679370" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0101/AliAOD.root" md5="b071aa305e362c86cf5557e57b96d4d5" owner="alidaq" perm="755" replicated="0" size="650174266" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0101/AliAOD.root" type="f" />
+    </event>
+    <event name="102">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 18:00:49" dir="25002519" entryId="25002892" expiretime="" gowner="alidaq" guid="DE1E0D38-8E86-11E3-8F03-FF22D3A77DED" guidtime="11E38E86" jobid="352679372" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0102/AliAOD.root" md5="5ae167fd8f99f228d86d8f7ae171a31f" owner="alidaq" perm="755" replicated="0" size="263752035" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0102/AliAOD.root" type="f" />
+    </event>
+    <event name="103">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 16:23:02" dir="24958782" entryId="24959171" expiretime="" gowner="alidaq" guid="52F6C8CE-8E79-11E3-B32F-6B58CABA6981" guidtime="11E38E79" jobid="352679374" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0103/AliAOD.root" md5="b3427753ba045349f890b8ce6fa4db59" owner="alidaq" perm="755" replicated="0" size="33363161" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0103/AliAOD.root" type="f" />
+    </event>
+    <event name="104">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 17:13:57" dir="24985875" entryId="24986068" expiretime="" gowner="alidaq" guid="7274979C-8E80-11E3-BB55-87B040CF6F23" guidtime="11E38E80" jobid="352679376" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0104/AliAOD.root" md5="ec3247f327710f49a47ffba06be0e23b" owner="alidaq" perm="755" replicated="0" size="66709366" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0104/AliAOD.root" type="f" />
+    </event>
+    <event name="105">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 18:12:26" dir="25005672" entryId="25005834" expiretime="" gowner="alidaq" guid="90CA6110-8E88-11E3-8C29-9776FD625959" guidtime="11E38E88" jobid="352679378" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0105/AliAOD.root" md5="7f40fa2576d199a77205f0c8b22a9bcd" owner="alidaq" perm="755" replicated="0" size="66150960" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0105/AliAOD.root" type="f" />
+    </event>
+    <event name="106">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-06 08:49:20" dir="25045088" entryId="25045092" expiretime="" gowner="alidaq" guid="14837328-8F03-11E3-AFFC-E3B50194254F" guidtime="11E38F03" jobid="352679380" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0106/AliAOD.root" md5="0f7f3ad63021f234a0eb2b9533019985" owner="alidaq" perm="755" replicated="0" size="87128556" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0106/AliAOD.root" type="f" />
+    </event>
+    <event name="107">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 16:01:02" dir="24946963" entryId="24947024" expiretime="" gowner="alidaq" guid="36743EFA-8E76-11E3-AAF0-974E510866A8" guidtime="11E38E76" jobid="352679382" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0107/AliAOD.root" md5="0e51d960271fabe2209a92d041890008" owner="alidaq" perm="755" replicated="0" size="1649626" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0107/AliAOD.root" type="f" />
+    </event>
+    <event name="108">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 17:14:06" dir="24985880" entryId="24986122" expiretime="" gowner="alidaq" guid="75DE65F2-8E80-11E3-A796-DF18EFD791BD" guidtime="11E38E80" jobid="352679384" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0108/AliAOD.root" md5="70b8d8643df0dbbd0dc25674aaeaff7d" owner="alidaq" perm="755" replicated="0" size="33786143" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0108/AliAOD.root" type="f" />
+    </event>
+    <event name="11">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 17:39:34" dir="24995715" entryId="24996287" expiretime="" gowner="alidaq" guid="E3E59B62-8E83-11E3-87E2-BBDAD8B16800" guidtime="11E38E83" jobid="352679232" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0011/AliAOD.root" md5="fa8aa1ab7d0a2f55da6ba5e5e8fa7e80" owner="alidaq" perm="755" replicated="0" size="652132239" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0011/AliAOD.root" type="f" />
+    </event>
+    <event name="12">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 18:38:33" dir="25011046" entryId="25011344" expiretime="" gowner="alidaq" guid="282ADDCA-8E8C-11E3-9239-8F6ECA0D4A93" guidtime="11E38E8C" jobid="352679233" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0012/AliAOD.root" md5="4ccb8959e3cfc93bab5200b5b0d5cde9" owner="alidaq" perm="755" replicated="0" size="651318257" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0012/AliAOD.root" type="f" />
+    </event>
+    <event name="13">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 18:31:16" dir="25009557" entryId="25009890" expiretime="" gowner="alidaq" guid="2AD37114-8E8B-11E3-AAF5-23F3719EEF9F" guidtime="11E38E8B" jobid="352679234" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0013/AliAOD.root" md5="d078de01e55532e902c4759c1d2c23f4" owner="alidaq" perm="755" replicated="0" size="650788830" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0013/AliAOD.root" type="f" />
+    </event>
+    <event name="14">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 18:30:06" dir="25009419" entryId="25009585" expiretime="" gowner="alidaq" guid="0711F8F4-8E8B-11E3-B926-E3E276C0D646" guidtime="11E38E8B" jobid="352679235" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0014/AliAOD.root" md5="7a5ff0c214d467ef9178e5d69d958e22" owner="alidaq" perm="755" replicated="0" size="618893878" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0014/AliAOD.root" type="f" />
+    </event>
+    <event name="15">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 19:10:23" dir="25015990" entryId="25018920" expiretime="" gowner="alidaq" guid="F85F5474-8E8E-11E3-ACE3-EF5052E1B47A" guidtime="11E38E8E" jobid="352679236" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0015/AliAOD.root" md5="ccfb30ef4af0c7e90a76f2b92168a81d" owner="alidaq" perm="755" replicated="0" size="662363723" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0015/AliAOD.root" type="f" />
+    </event>
+    <event name="16">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 18:33:38" dir="25010238" entryId="25010424" expiretime="" gowner="alidaq" guid="862929D2-8E8B-11E3-81FA-83D605EE0458" guidtime="11E38E8B" jobid="352679237" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0016/AliAOD.root" md5="610174b2ea92a068c15e55f724a90672" owner="alidaq" perm="755" replicated="0" size="651913083" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0016/AliAOD.root" type="f" />
+    </event>
+    <event name="17">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 19:18:02" dir="25020217" entryId="25020548" expiretime="" gowner="alidaq" guid="B9D444FA-8E91-11E3-8B5D-17543EE99248" guidtime="11E38E91" jobid="352679238" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0017/AliAOD.root" md5="298af6572dce5aac8a2c6b9c36a8e213" owner="alidaq" perm="755" replicated="0" size="650921276" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0017/AliAOD.root" type="f" />
+    </event>
+    <event name="18">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 17:20:21" dir="24988178" entryId="24988615" expiretime="" gowner="alidaq" guid="48FF66E8-8E81-11E3-85E2-EB8A0AA73FD6" guidtime="11E38E81" jobid="352679239" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0018/AliAOD.root" md5="b0fd4c6e2d74936c2e38761e381a3efa" owner="alidaq" perm="755" replicated="0" size="295301515" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0018/AliAOD.root" type="f" />
+    </event>
+    <event name="19">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 18:58:48" dir="25016181" entryId="25016431" expiretime="" gowner="alidaq" guid="0895CA58-8E8F-11E3-9F09-1F508A793D09" guidtime="11E38E8F" jobid="352679240" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0019/AliAOD.root" md5="5462c047068464dbe43b2b5fade9c5a4" owner="alidaq" perm="755" replicated="0" size="658412589" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0019/AliAOD.root" type="f" />
+    </event>
+    <event name="2">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 17:40:02" dir="24996075" entryId="24996484" expiretime="" gowner="alidaq" guid="06B0B974-8E84-11E3-8263-53956A489FB9" guidtime="11E38E84" jobid="352679223" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0002/AliAOD.root" md5="9fea46b6695276f4f809cf301ad0bcd2" owner="alidaq" perm="755" replicated="0" size="649026041" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0002/AliAOD.root" type="f" />
+    </event>
+    <event name="20">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 18:55:52" dir="25015050" entryId="25015527" expiretime="" gowner="alidaq" guid="8EF59700-8E8E-11E3-9C8E-E33C60AF63BC" guidtime="11E38E8E" jobid="352679241" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0020/AliAOD.root" md5="8fdc17e7d5fd58eadab5f7a551901044" owner="alidaq" perm="755" replicated="0" size="654918441" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0020/AliAOD.root" type="f" />
+    </event>
+    <event name="21">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 18:55:53" dir="25012214" entryId="25015535" expiretime="" gowner="alidaq" guid="F35A802C-8E8C-11E3-B1F3-F7003EDC27AB" guidtime="11E38E8C" jobid="352679242" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0021/AliAOD.root" md5="c2a09945fa97c4f0f7ecb0c28bf319ad" owner="alidaq" perm="755" replicated="0" size="655755692" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0021/AliAOD.root" type="f" />
+    </event>
+    <event name="22">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 18:29:34" dir="25009243" entryId="25009496" expiretime="" gowner="alidaq" guid="F0CF1284-8E8A-11E3-877A-2BA5EBE08DAE" guidtime="11E38E8A" jobid="352679243" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0022/AliAOD.root" md5="cbe607ef942d1766304200488f9f1118" owner="alidaq" perm="755" replicated="0" size="656112380" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0022/AliAOD.root" type="f" />
+    </event>
+    <event name="23">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 18:01:28" dir="25002637" entryId="25003081" expiretime="" gowner="alidaq" guid="EE87743E-8E86-11E3-89F8-2FBA8F6DB715" guidtime="11E38E86" jobid="352679244" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0023/AliAOD.root" md5="7a22e88100ac75c89510eadeb11efb90" owner="alidaq" perm="755" replicated="0" size="648227803" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0023/AliAOD.root" type="f" />
+    </event>
+    <event name="24">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 17:52:51" dir="24998905" entryId="25000879" expiretime="" gowner="alidaq" guid="17139CAE-8E85-11E3-95E6-5779713A4C66" guidtime="11E38E85" jobid="352679245" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0024/AliAOD.root" md5="c05bd05afe3f2f5d427c1b1a9a3250a9" owner="alidaq" perm="755" replicated="0" size="644482615" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0024/AliAOD.root" type="f" />
+    </event>
+    <event name="25">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 18:43:21" dir="25009187" entryId="25012330" expiretime="" gowner="alidaq" guid="E2785A4C-8E8A-11E3-AE88-FF24982BB7D0" guidtime="11E38E8A" jobid="352679246" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0025/AliAOD.root" md5="6d43752ea9a4009033fcad456ba569a6" owner="alidaq" perm="755" replicated="0" size="651352177" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0025/AliAOD.root" type="f" />
+    </event>
+    <event name="26">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 16:25:18" dir="24960365" entryId="24960950" expiretime="" gowner="alidaq" guid="A3D56C0A-8E79-11E3-8B56-AF4D705C22B2" guidtime="11E38E79" jobid="352679247" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0026/AliAOD.root" md5="8203e8564e0d6144b5f1b18862a48bec" owner="alidaq" perm="755" replicated="0" size="198862376" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0026/AliAOD.root" type="f" />
+    </event>
+    <event name="27">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 18:13:25" dir="25005840" entryId="25006093" expiretime="" gowner="alidaq" guid="B500EC3E-8E88-11E3-B722-0788A92CA227" guidtime="11E38E88" jobid="352679248" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0027/AliAOD.root" md5="0860c1a076e89009f50cb1af4db904c1" owner="alidaq" perm="755" replicated="0" size="622279454" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0027/AliAOD.root" type="f" />
+    </event>
+    <event name="28">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 18:34:59" dir="25010338" entryId="25010665" expiretime="" gowner="alidaq" guid="9BF531D4-8E8B-11E3-B860-130A91548C9A" guidtime="11E38E8B" jobid="352679249" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0028/AliAOD.root" md5="740782ec788a1fbb36bb4550db2bdd9b" owner="alidaq" perm="755" replicated="0" size="617569623" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0028/AliAOD.root" type="f" />
+    </event>
+    <event name="29">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 17:34:41" dir="24993874" entryId="24994323" expiretime="" gowner="alidaq" guid="44174568-8E83-11E3-8D72-7B881C9F66F0" guidtime="11E38E83" jobid="352679250" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0029/AliAOD.root" md5="435a415a40e7560680039ab6c3743748" owner="alidaq" perm="755" replicated="0" size="653180469" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0029/AliAOD.root" type="f" />
+    </event>
+    <event name="3">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 18:10:03" dir="25005111" entryId="25005357" expiretime="" gowner="alidaq" guid="3CB7D490-8E88-11E3-9291-63C4D27CC6B0" guidtime="11E38E88" jobid="352679224" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0003/AliAOD.root" md5="bcee77e88948cae30a1e6470fc21a555" owner="alidaq" perm="755" replicated="0" size="654050936" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0003/AliAOD.root" type="f" />
+    </event>
+    <event name="30">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 18:23:57" dir="25008129" entryId="25008402" expiretime="" gowner="alidaq" guid="1F87AB8C-8E8A-11E3-A4AA-DB55757A30AA" guidtime="11E38E8A" jobid="352679251" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0030/AliAOD.root" md5="ece0a5097ad121f601c4272f5ac04eb8" owner="alidaq" perm="755" replicated="0" size="657182000" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0030/AliAOD.root" type="f" />
+    </event>
+    <event name="31">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 18:15:16" dir="25006314" entryId="25006566" expiretime="" gowner="alidaq" guid="F72FB45A-8E88-11E3-AEE2-3F911EA706B9" guidtime="11E38E88" jobid="352679252" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0031/AliAOD.root" md5="a8e399a3f617c0f8cb3b005e76ba3835" owner="alidaq" perm="755" replicated="0" size="653426078" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0031/AliAOD.root" type="f" />
+    </event>
+    <event name="32">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 17:53:12" dir="25000609" entryId="25001015" expiretime="" gowner="alidaq" guid="D4BBB5AC-8E85-11E3-9303-F3DE4BC0C160" guidtime="11E38E85" jobid="352679253" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0032/AliAOD.root" md5="ba16f3c2b50eb82e07e604ed72a619e3" owner="alidaq" perm="755" replicated="0" size="665680119" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0032/AliAOD.root" type="f" />
+    </event>
+    <event name="33">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 17:34:20" dir="24993818" entryId="24994215" expiretime="" gowner="alidaq" guid="3E80EF28-8E83-11E3-93CA-07A81754B2F5" guidtime="11E38E83" jobid="352679254" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0033/AliAOD.root" md5="e0a917697b5e4ba68454837a4243756e" owner="alidaq" perm="755" replicated="0" size="652628314" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0033/AliAOD.root" type="f" />
+    </event>
+    <event name="34">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 18:45:35" dir="25012551" entryId="25012871" expiretime="" gowner="alidaq" guid="2E56A994-8E8D-11E3-8281-473DD9A9C7A2" guidtime="11E38E8D" jobid="352679255" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0034/AliAOD.root" md5="3c6815aa4fef1d96173e8fb0bdc04d20" owner="alidaq" perm="755" replicated="0" size="615821237" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0034/AliAOD.root" type="f" />
+    </event>
+    <event name="35">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 17:21:11" dir="24988507" entryId="24988945" expiretime="" gowner="alidaq" guid="63C1CDAE-8E81-11E3-BB0B-FF8301A030F7" guidtime="11E38E81" jobid="352679256" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0035/AliAOD.root" md5="f8f1f400af100d5b8ff47fefcc7a32bb" owner="alidaq" perm="755" replicated="0" size="654525659" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0035/AliAOD.root" type="f" />
+    </event>
+    <event name="36">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 17:13:26" dir="24985498" entryId="24985859" expiretime="" gowner="alidaq" guid="58DE3F90-8E80-11E3-8F6B-BB96C8DD516A" guidtime="11E38E80" jobid="352679257" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0036/AliAOD.root" md5="3b5822b0f7f141ec03f1dcfd47a5102e" owner="alidaq" perm="755" replicated="0" size="327191505" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0036/AliAOD.root" type="f" />
+    </event>
+    <event name="37">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 16:14:00" dir="24952492" entryId="24952645" expiretime="" gowner="alidaq" guid="18D44AFA-8E78-11E3-A655-57760E870EBE" guidtime="11E38E78" jobid="352679258" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0037/AliAOD.root" md5="0f201636f34641c64738be30d0de7103" owner="alidaq" perm="755" replicated="0" size="99268752" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0037/AliAOD.root" type="f" />
+    </event>
+    <event name="38">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 16:23:00" dir="24958654" entryId="24959151" expiretime="" gowner="alidaq" guid="4C841F0A-8E79-11E3-AA13-3F5F44F33F35" guidtime="11E38E79" jobid="352679259" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0038/AliAOD.root" md5="d5b6766436440e2d06df29ee13d6a995" owner="alidaq" perm="755" replicated="0" size="20400484" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0038/AliAOD.root" type="f" />
+    </event>
+    <event name="39">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 17:41:16" dir="24996479" entryId="24996930" expiretime="" gowner="alidaq" guid="2A46859E-8E84-11E3-A354-1F1F0B617515" guidtime="11E38E84" jobid="352679260" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0039/AliAOD.root" md5="c4e080931920901f0653ea59c8b6c35e" owner="alidaq" perm="755" replicated="0" size="660515607" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0039/AliAOD.root" type="f" />
+    </event>
+    <event name="4">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 19:11:57" dir="25015728" entryId="25019245" expiretime="" gowner="alidaq" guid="DB438234-8E8E-11E3-A1AE-0FE508FE339C" guidtime="11E38E8E" jobid="352679225" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0004/AliAOD.root" md5="579913e661fb0d30a7049c30819b9d1e" owner="alidaq" perm="755" replicated="0" size="650582058" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0004/AliAOD.root" type="f" />
+    </event>
+    <event name="40">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 16:33:00" dir="24964750" entryId="24965301" expiretime="" gowner="alidaq" guid="A550FA8A-8E7A-11E3-B663-D7E8EB01A98A" guidtime="11E38E7A" jobid="352679261" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0040/AliAOD.root" md5="85d1748f963d68e4f9dd2c15d2d02ddb" owner="alidaq" perm="755" replicated="0" size="196208552" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0040/AliAOD.root" type="f" />
+    </event>
+    <event name="41">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 17:19:41" dir="24987947" entryId="24988359" expiretime="" gowner="alidaq" guid="3431F71C-8E81-11E3-B876-2F1B96C2C807" guidtime="11E38E81" jobid="352679262" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0041/AliAOD.root" md5="9378908bed30859c89d0faeb0b0e50a5" owner="alidaq" perm="755" replicated="0" size="587670737" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0041/AliAOD.root" type="f" />
+    </event>
+    <event name="42">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 17:15:37" dir="24986347" entryId="24986741" expiretime="" gowner="alidaq" guid="A0233888-8E80-11E3-BFC4-838AC4518564" guidtime="11E38E80" jobid="352679263" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0042/AliAOD.root" md5="fb55583547acd751978829a9c197dd44" owner="alidaq" perm="755" replicated="0" size="378484272" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0042/AliAOD.root" type="f" />
+    </event>
+    <event name="43">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 16:09:06" dir="24949715" entryId="24949931" expiretime="" gowner="alidaq" guid="675182FC-8E77-11E3-8673-A3F1D7F28982" guidtime="11E38E77" jobid="352679264" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0043/AliAOD.root" md5="52d7af3881de0088efd29d29049f5c02" owner="alidaq" perm="755" replicated="0" size="32719406" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0043/AliAOD.root" type="f" />
+    </event>
+    <event name="44">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 17:32:39" dir="24993112" entryId="24993542" expiretime="" gowner="alidaq" guid="FE932B60-8E82-11E3-8E43-53B1E127339E" guidtime="11E38E82" jobid="352679265" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0044/AliAOD.root" md5="0353b77f5889d0b5cd517a1b2f9801dd" owner="alidaq" perm="755" replicated="0" size="653285852" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0044/AliAOD.root" type="f" />
+    </event>
+    <event name="45">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 18:19:20" dir="25007281" entryId="25007418" expiretime="" gowner="alidaq" guid="86D6F780-8E89-11E3-8337-B7411702F163" guidtime="11E38E89" jobid="352679266" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0045/AliAOD.root" md5="e6ebffebe60d61af0e3b146d6c9981b9" owner="alidaq" perm="755" replicated="0" size="650863187" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0045/AliAOD.root" type="f" />
+    </event>
+    <event name="46">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 16:24:49" dir="24959638" entryId="24960493" expiretime="" gowner="alidaq" guid="81D3451E-8E79-11E3-BE89-E7FE506530F9" guidtime="11E38E79" jobid="352679267" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0046/AliAOD.root" md5="dd9a34d9ed81479eaa3a652a1f734777" owner="alidaq" perm="755" replicated="0" size="163492733" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0046/AliAOD.root" type="f" />
+    </event>
+    <event name="47">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 18:50:17" dir="25013870" entryId="25014156" expiretime="" gowner="alidaq" guid="D5B8CCF8-8E8D-11E3-8AEB-EF63D5D0BD3B" guidtime="11E38E8D" jobid="352679268" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0047/AliAOD.root" md5="6ff16a2118ba9b3256fb52b8cac6528a" owner="alidaq" perm="755" replicated="0" size="651520265" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0047/AliAOD.root" type="f" />
+    </event>
+    <event name="48">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 17:58:55" dir="25002228" entryId="25002411" expiretime="" gowner="alidaq" guid="B456060E-8E86-11E3-975B-DF7B15DFF51E" guidtime="11E38E86" jobid="352679269" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0048/AliAOD.root" md5="c1e654ca7441fb551ceecd4f58564a0d" owner="alidaq" perm="755" replicated="0" size="360878959" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0048/AliAOD.root" type="f" />
+    </event>
+    <event name="49">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 16:39:38" dir="24969056" entryId="24969426" expiretime="" gowner="alidaq" guid="A4F5CE66-8E7B-11E3-9080-7FEEF8EDFF61" guidtime="11E38E7B" jobid="352679270" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0049/AliAOD.root" md5="24ff840535ff465aa03e4e5863c6ec80" owner="alidaq" perm="755" replicated="0" size="197943234" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0049/AliAOD.root" type="f" />
+    </event>
+    <event name="5">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 17:44:06" dir="24997678" entryId="24998028" expiretime="" gowner="alidaq" guid="9C473472-8E84-11E3-AC8B-4B88914E67E4" guidtime="11E38E84" jobid="352679226" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0005/AliAOD.root" md5="1796a8b85f51f8d4e9238c87b820f9d5" owner="alidaq" perm="755" replicated="0" size="655181583" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0005/AliAOD.root" type="f" />
+    </event>
+    <event name="50">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 18:37:31" dir="25010970" entryId="25011151" expiretime="" gowner="alidaq" guid="0BB01A8E-8E8C-11E3-9EFB-5FC360516578" guidtime="11E38E8C" jobid="352679271" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0050/AliAOD.root" md5="040f0f4ea625f2e9d74f6c29b8a2b0a6" owner="alidaq" perm="755" replicated="0" size="649041944" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0050/AliAOD.root" type="f" />
+    </event>
+    <event name="51">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 18:27:33" dir="25008911" entryId="25009113" expiretime="" gowner="alidaq" guid="AB468C24-8E8A-11E3-9A80-33DE25642420" guidtime="11E38E8A" jobid="352679272" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0051/AliAOD.root" md5="7008a0baecfe4767d365fbeaf77880b8" owner="alidaq" perm="755" replicated="0" size="653497531" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0051/AliAOD.root" type="f" />
+    </event>
+    <event name="52">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 18:50:26" dir="25010719" entryId="25014206" expiretime="" gowner="alidaq" guid="E23EE86A-8E8B-11E3-92CF-AFA5AA740DC8" guidtime="11E38E8B" jobid="352679273" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0052/AliAOD.root" md5="768cf2e599175e692cbfc1cc1184982f" owner="alidaq" perm="755" replicated="0" size="647277218" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0052/AliAOD.root" type="f" />
+    </event>
+    <event name="53">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 17:41:26" dir="24996697" entryId="24997010" expiretime="" gowner="alidaq" guid="3E3CC932-8E84-11E3-84E8-AFD5D6532F3A" guidtime="11E38E84" jobid="352679274" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0053/AliAOD.root" md5="f25c5cd43fd78371e591ba6e764c038d" owner="alidaq" perm="755" replicated="0" size="647748746" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0053/AliAOD.root" type="f" />
+    </event>
+    <event name="54">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 18:42:19" dir="25011865" entryId="25012140" expiretime="" gowner="alidaq" guid="BACBAD12-8E8C-11E3-8468-13D5403ED9B8" guidtime="11E38E8C" jobid="352679276" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0054/AliAOD.root" md5="b3554090eee5c65f5a2a87ae518b070f" owner="alidaq" perm="755" replicated="0" size="654221791" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0054/AliAOD.root" type="f" />
+    </event>
+    <event name="55">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 17:42:15" dir="24996964" entryId="24997327" expiretime="" gowner="alidaq" guid="5C88AADC-8E84-11E3-9877-EB9EB2683845" guidtime="11E38E84" jobid="352679278" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0055/AliAOD.root" md5="a1ea9dbf4e929c44825282528c12869f" owner="alidaq" perm="755" replicated="0" size="654073628" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0055/AliAOD.root" type="f" />
+    </event>
+    <event name="56">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 17:32:19" dir="24992923" entryId="24993398" expiretime="" gowner="alidaq" guid="F06E9222-8E82-11E3-ACD7-A7EEDD2C8C40" guidtime="11E38E82" jobid="352679280" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0056/AliAOD.root" md5="8a7fbb63797794d1e69b3ea6a6dfd884" owner="alidaq" perm="755" replicated="0" size="651530724" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0056/AliAOD.root" type="f" />
+    </event>
+    <event name="57">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 17:25:46" dir="24990340" entryId="24990728" expiretime="" gowner="alidaq" guid="0D1FBDAC-8E82-11E3-9748-2F2551290BE8" guidtime="11E38E82" jobid="352679282" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0057/AliAOD.root" md5="e58e3c221cac29282a75ddf6c5e77115" owner="alidaq" perm="755" replicated="0" size="652643325" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0057/AliAOD.root" type="f" />
+    </event>
+    <event name="58">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 17:31:39" dir="24992801" entryId="24993157" expiretime="" gowner="alidaq" guid="E3D9FE5C-8E82-11E3-A585-1B6BAC5599F4" guidtime="11E38E82" jobid="352679284" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0058/AliAOD.root" md5="f71eb3961ca790a8cc9b83cd90a6299f" owner="alidaq" perm="755" replicated="0" size="655075914" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0058/AliAOD.root" type="f" />
+    </event>
+    <event name="59">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 18:45:54" dir="25012548" entryId="25012965" expiretime="" gowner="alidaq" guid="2AA7ED08-8E8D-11E3-9D2A-7F2E4FF38C24" guidtime="11E38E8D" jobid="352679286" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0059/AliAOD.root" md5="6dc38825241d52e79ad923abbd6bf0a4" owner="alidaq" perm="755" replicated="0" size="651834383" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0059/AliAOD.root" type="f" />
+    </event>
+    <event name="6">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 18:29:44" dir="25009330" entryId="25009523" expiretime="" gowner="alidaq" guid="FB8A1EF8-8E8A-11E3-81C8-7B6941CBB8BC" guidtime="11E38E8A" jobid="352679227" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0006/AliAOD.root" md5="d144223acf483934047a5852f30ffb15" owner="alidaq" perm="755" replicated="0" size="651583553" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0006/AliAOD.root" type="f" />
+    </event>
+    <event name="60">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 18:12:54" dir="25005738" entryId="25005919" expiretime="" gowner="alidaq" guid="A03D821C-8E88-11E3-AE79-63939D6A6858" guidtime="11E38E88" jobid="352679288" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0060/AliAOD.root" md5="0230aa14dce7a3a5dd3869708cbaf228" owner="alidaq" perm="755" replicated="0" size="656936708" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0060/AliAOD.root" type="f" />
+    </event>
+    <event name="61">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 16:24:56" dir="24960205" entryId="24960610" expiretime="" gowner="alidaq" guid="9B3D63EA-8E79-11E3-9A73-BF510C577700" guidtime="11E38E79" jobid="352679290" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0061/AliAOD.root" md5="77c02fca07ebe52a91e6c6d54624b092" owner="alidaq" perm="755" replicated="0" size="128908913" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0061/AliAOD.root" type="f" />
+    </event>
+    <event name="62">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 17:32:58" dir="24993287" entryId="24993626" expiretime="" gowner="alidaq" guid="0F6D033E-8E83-11E3-9A56-4B90871CCE2C" guidtime="11E38E83" jobid="352679293" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0062/AliAOD.root" md5="c0129603f7f495ce7e647f74fb2acd15" owner="alidaq" perm="755" replicated="0" size="652716901" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0062/AliAOD.root" type="f" />
+    </event>
+    <event name="63">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 18:21:55" dir="25007693" entryId="25008004" expiretime="" gowner="alidaq" guid="D70C405C-8E89-11E3-A05F-DB7EE92AA7AC" guidtime="11E38E89" jobid="352679295" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0063/AliAOD.root" md5="27681fc9df366c61b87eb232da707849" owner="alidaq" perm="755" replicated="0" size="655063053" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0063/AliAOD.root" type="f" />
+    </event>
+    <event name="64">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 20:00:36" dir="25025757" entryId="25025809" expiretime="" gowner="alidaq" guid="A8B1DAC4-8E97-11E3-8FE9-138E8C9656C2" guidtime="11E38E97" jobid="352679296" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0064/AliAOD.root" md5="84fb82703ce59d2ef7ef050dea0004ec" owner="alidaq" perm="755" replicated="0" size="655028781" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0064/AliAOD.root" type="f" />
+    </event>
+    <event name="65">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 18:32:17" dir="25009886" entryId="25010178" expiretime="" gowner="alidaq" guid="545FCD7A-8E8B-11E3-8150-C77ABCB6D361" guidtime="11E38E8B" jobid="352679299" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0065/AliAOD.root" md5="d1cdb2798debef5d60ee8688c68ebcdd" owner="alidaq" perm="755" replicated="0" size="648657682" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0065/AliAOD.root" type="f" />
+    </event>
+    <event name="66">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 18:55:23" dir="25015047" entryId="25015368" expiretime="" gowner="alidaq" guid="8AFFB3A6-8E8E-11E3-ACB4-D3D7951D1C48" guidtime="11E38E8E" jobid="352679300" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0066/AliAOD.root" md5="3f92be3ebfed82e4c7935319bd22b991" owner="alidaq" perm="755" replicated="0" size="662050224" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0066/AliAOD.root" type="f" />
+    </event>
+    <event name="67">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 17:37:53" dir="24995332" entryId="24995679" expiretime="" gowner="alidaq" guid="BD6DF222-8E83-11E3-8B3C-C3E6928FBEE1" guidtime="11E38E83" jobid="352679303" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0067/AliAOD.root" md5="0cccfccbb6fb5b8418eae2552ee3808a" owner="alidaq" perm="755" replicated="0" size="654615266" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0067/AliAOD.root" type="f" />
+    </event>
+    <event name="68">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 18:09:33" dir="25004955" entryId="25005202" expiretime="" gowner="alidaq" guid="2AFBCB30-8E88-11E3-BA8A-0F0D0DDF1AE7" guidtime="11E38E88" jobid="352679305" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0068/AliAOD.root" md5="435943e5f6d6b3711222e21920d9183c" owner="alidaq" perm="755" replicated="0" size="645434192" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0068/AliAOD.root" type="f" />
+    </event>
+    <event name="69">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 18:37:11" dir="25010761" entryId="25011076" expiretime="" gowner="alidaq" guid="F060A8FC-8E8B-11E3-A278-53F551CBD5A6" guidtime="11E38E8B" jobid="352679306" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0069/AliAOD.root" md5="26b63f4e7485a2af64c5a7b7e066753a" owner="alidaq" perm="755" replicated="0" size="650270431" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0069/AliAOD.root" type="f" />
+    </event>
+    <event name="7">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 17:47:17" dir="24998790" entryId="24999138" expiretime="" gowner="alidaq" guid="074F1A14-8E85-11E3-8A21-4711B1D1D251" guidtime="11E38E85" jobid="352679228" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0007/AliAOD.root" md5="f1fa4afb3a2858b2fb5a9aa3e48efe71" owner="alidaq" perm="755" replicated="0" size="650756374" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0007/AliAOD.root" type="f" />
+    </event>
+    <event name="70">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 18:22:47" dir="25007857" entryId="25008176" expiretime="" gowner="alidaq" guid="EFE998D6-8E89-11E3-B607-5BA09170D5FF" guidtime="11E38E89" jobid="352679308" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0070/AliAOD.root" md5="d9d9f1db5da87d16ebb50c32a8e57770" owner="alidaq" perm="755" replicated="0" size="647439366" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0070/AliAOD.root" type="f" />
+    </event>
+    <event name="71">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 17:28:35" dir="24991366" entryId="24991675" expiretime="" gowner="alidaq" guid="63177394-8E82-11E3-BB50-27E1139513B8" guidtime="11E38E82" jobid="352679310" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0071/AliAOD.root" md5="4dbb59f6bb6ff79cc5b0a70bbca93777" owner="alidaq" perm="755" replicated="0" size="429143881" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0071/AliAOD.root" type="f" />
+    </event>
+    <event name="72">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 17:51:12" dir="25000128" entryId="25000502" expiretime="" gowner="alidaq" guid="9BBA8E2C-8E85-11E3-84B7-5F9EDD0B5018" guidtime="11E38E85" jobid="352679312" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0072/AliAOD.root" md5="8c5db643835497722c95728da9e0190a" owner="alidaq" perm="755" replicated="0" size="645704086" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0072/AliAOD.root" type="f" />
+    </event>
+    <event name="73">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 17:32:58" dir="24992859" entryId="24993634" expiretime="" gowner="alidaq" guid="E728B274-8E82-11E3-9B91-273047C7CCC7" guidtime="11E38E82" jobid="352679314" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0073/AliAOD.root" md5="81d8db33ff3c7c2940737122739eedb0" owner="alidaq" perm="755" replicated="0" size="423477557" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0073/AliAOD.root" type="f" />
+    </event>
+    <event name="74">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 18:23:05" dir="25008017" entryId="25008269" expiretime="" gowner="alidaq" guid="08E5CE9A-8E8A-11E3-B122-7366A6E766E6" guidtime="11E38E8A" jobid="352679316" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0074/AliAOD.root" md5="f9bc44f5166c6f8a40b23a7cd0b57663" owner="alidaq" perm="755" replicated="0" size="638785629" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0074/AliAOD.root" type="f" />
+    </event>
+    <event name="75">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 17:20:11" dir="24988120" entryId="24988561" expiretime="" gowner="alidaq" guid="448B4014-8E81-11E3-AAD4-4B5709838D08" guidtime="11E38E81" jobid="352679319" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0075/AliAOD.root" md5="824353d5076d68696f68a120bf066731" owner="alidaq" perm="755" replicated="0" size="650121503" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0075/AliAOD.root" type="f" />
+    </event>
+    <event name="76">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 18:23:14" dir="25008018" entryId="25008281" expiretime="" gowner="alidaq" guid="08641314-8E8A-11E3-A24B-D3D4144CA295" guidtime="11E38E8A" jobid="352679320" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0076/AliAOD.root" md5="8822fcd875f537bce5ffc517fb9c3ea3" owner="alidaq" perm="755" replicated="0" size="645118893" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0076/AliAOD.root" type="f" />
+    </event>
+    <event name="77">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 17:47:38" dir="24998941" entryId="24999299" expiretime="" gowner="alidaq" guid="1AD4C818-8E85-11E3-B219-5F0C69174E53" guidtime="11E38E85" jobid="352679322" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0077/AliAOD.root" md5="d9711791f0873f1e09606b1fe385201a" owner="alidaq" perm="755" replicated="0" size="504343305" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0077/AliAOD.root" type="f" />
+    </event>
+    <event name="78">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 17:24:13" dir="24989647" entryId="24990139" expiretime="" gowner="alidaq" guid="CFE90588-8E81-11E3-A221-B343502CE87D" guidtime="11E38E81" jobid="352679324" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0078/AliAOD.root" md5="3468353e89b6d69f842c53ece546d543" owner="alidaq" perm="755" replicated="0" size="647841674" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0078/AliAOD.root" type="f" />
+    </event>
+    <event name="79">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 18:31:39" dir="25009331" entryId="25009988" expiretime="" gowner="alidaq" guid="FDF0FCC0-8E8A-11E3-9569-D305F76475CB" guidtime="11E38E8A" jobid="352679327" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0079/AliAOD.root" md5="3ea31a2464ff111006afaf25b8cb90cc" owner="alidaq" perm="755" replicated="0" size="648155272" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0079/AliAOD.root" type="f" />
+    </event>
+    <event name="8">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 17:43:14" dir="24997196" entryId="24997692" expiretime="" gowner="alidaq" guid="6E9448F8-8E84-11E3-832C-F7D8D3D650E6" guidtime="11E38E84" jobid="352679229" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0008/AliAOD.root" md5="d068e230eb46dd14f79e43d5b472be6d" owner="alidaq" perm="755" replicated="0" size="655140560" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0008/AliAOD.root" type="f" />
+    </event>
+    <event name="80">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 18:15:49" dir="25006406" entryId="25006743" expiretime="" gowner="alidaq" guid="0395D076-8E89-11E3-8667-3BC92DF1327D" guidtime="11E38E89" jobid="352679329" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0080/AliAOD.root" md5="34ccdabc97f6c9933da05480dcf7d8cd" owner="alidaq" perm="755" replicated="0" size="638189431" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0080/AliAOD.root" type="f" />
+    </event>
+    <event name="81">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 18:18:08" dir="25006886" entryId="25007205" expiretime="" gowner="alidaq" guid="3FED56E8-8E89-11E3-9A02-5B4DBE61F73B" guidtime="11E38E89" jobid="352679331" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0081/AliAOD.root" md5="8627b6fe836d3f68d52bdc178fa93bd7" owner="alidaq" perm="755" replicated="0" size="642962906" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0081/AliAOD.root" type="f" />
+    </event>
+    <event name="82">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 18:23:57" dir="25008107" entryId="25008410" expiretime="" gowner="alidaq" guid="17CF9648-8E8A-11E3-BD6D-03D4F6F262AF" guidtime="11E38E8A" jobid="352679333" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0082/AliAOD.root" md5="925db6b7b598bd5c527d6fc368de84dd" owner="alidaq" perm="755" replicated="0" size="653248283" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0082/AliAOD.root" type="f" />
+    </event>
+    <event name="83">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 17:54:55" dir="25001139" entryId="25001442" expiretime="" gowner="alidaq" guid="1538F70C-8E86-11E3-8547-7F5F5C219FD3" guidtime="11E38E86" jobid="352679334" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0083/AliAOD.root" md5="3f2b35f9ce31a1ea148276bb300c69bf" owner="alidaq" perm="755" replicated="0" size="650556224" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0083/AliAOD.root" type="f" />
+    </event>
+    <event name="84">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 18:11:13" dir="25005385" entryId="25005639" expiretime="" gowner="alidaq" guid="63AA4588-8E88-11E3-8AD4-E376498371FA" guidtime="11E38E88" jobid="352679336" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0084/AliAOD.root" md5="f10fd7472011d74347641f98de4e6585" owner="alidaq" perm="755" replicated="0" size="659180465" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0084/AliAOD.root" type="f" />
+    </event>
+    <event name="85">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 18:02:20" dir="25002949" entryId="25003346" expiretime="" gowner="alidaq" guid="1E8CD4BC-8E87-11E3-A74F-8773C2C5071C" guidtime="11E38E87" jobid="352679339" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0085/AliAOD.root" md5="c6ff6c82df42411dffa8142c9d47d567" owner="alidaq" perm="755" replicated="0" size="652943168" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0085/AliAOD.root" type="f" />
+    </event>
+    <event name="86">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 16:34:17" dir="24965275" entryId="24966221" expiretime="" gowner="alidaq" guid="CB7055EE-8E7A-11E3-A229-87EA06B858AD" guidtime="11E38E7A" jobid="352679341" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0086/AliAOD.root" md5="7048ea69d49480dda76c092c42cac147" owner="alidaq" perm="755" replicated="0" size="96930918" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0086/AliAOD.root" type="f" />
+    </event>
+    <event name="87">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 16:40:07" dir="24968979" entryId="24969614" expiretime="" gowner="alidaq" guid="99FE8EDA-8E7B-11E3-A581-D3FA8DFED222" guidtime="11E38E7B" jobid="352679343" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0087/AliAOD.root" md5="ac518184ec0030bf7a791ffd6846b083" owner="alidaq" perm="755" replicated="0" size="129789806" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0087/AliAOD.root" type="f" />
+    </event>
+    <event name="88">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 16:48:18" dir="24973330" entryId="24973808" expiretime="" gowner="alidaq" guid="D8562002-8E7C-11E3-90B5-D71EA06C06B7" guidtime="11E38E7C" jobid="352679345" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0088/AliAOD.root" md5="518976f0ab3b0257b0da9374072df6a6" owner="alidaq" perm="755" replicated="0" size="162527425" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0088/AliAOD.root" type="f" />
+    </event>
+    <event name="89">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 18:19:21" dir="25007034" entryId="25007426" expiretime="" gowner="alidaq" guid="5D76CC62-8E89-11E3-9ECD-432DCA33D6D5" guidtime="11E38E89" jobid="352679347" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0089/AliAOD.root" md5="1a625b059585269e5df6c414d6fae856" owner="alidaq" perm="755" replicated="0" size="604569871" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0089/AliAOD.root" type="f" />
+    </event>
+    <event name="9">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 17:41:03" dir="24996480" entryId="24996819" expiretime="" gowner="alidaq" guid="2BB6B5F2-8E84-11E3-A3BB-73C8EDF1CBAE" guidtime="11E38E84" jobid="352679230" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0009/AliAOD.root" md5="f2bf49225af0df3c33f6836b3642078d" owner="alidaq" perm="755" replicated="0" size="641115723" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0009/AliAOD.root" type="f" />
+    </event>
+    <event name="90">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 19:04:27" dir="25017498" entryId="25017817" expiretime="" gowner="alidaq" guid="CE2E5B54-8E8F-11E3-8E95-878C997AE82D" guidtime="11E38E8F" jobid="352679349" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0090/AliAOD.root" md5="5c863feef924b25372f0c593fffab645" owner="alidaq" perm="755" replicated="0" size="634859598" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0090/AliAOD.root" type="f" />
+    </event>
+    <event name="91">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 17:32:28" dir="24992509" entryId="24993421" expiretime="" gowner="alidaq" guid="CF4DEC5A-8E82-11E3-A1C8-973B91466EAE" guidtime="11E38E82" jobid="352679351" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0091/AliAOD.root" md5="1706a886ae91873582c4fa8ac5ca70f3" owner="alidaq" perm="755" replicated="0" size="558092158" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0091/AliAOD.root" type="f" />
+    </event>
+    <event name="92">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 16:28:16" dir="24962264" entryId="24962610" expiretime="" gowner="alidaq" guid="0B8C408A-8E7A-11E3-8129-D315E47520F4" guidtime="11E38E7A" jobid="352679353" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0092/AliAOD.root" md5="f60d7fde79d4e7646c73540c4f8e52f4" owner="alidaq" perm="755" replicated="0" size="98140282" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0092/AliAOD.root" type="f" />
+    </event>
+    <event name="93">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 18:30:47" dir="25009425" entryId="25009734" expiretime="" gowner="alidaq" guid="0A5EADC2-8E8B-11E3-A897-0F3955977B33" guidtime="11E38E8B" jobid="352679355" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0093/AliAOD.root" md5="b06bc57c554c1508316061c90acb129c" owner="alidaq" perm="755" replicated="0" size="650190141" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0093/AliAOD.root" type="f" />
+    </event>
+    <event name="94">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 17:16:38" dir="24986909" entryId="24987203" expiretime="" gowner="alidaq" guid="CEB93E22-8E80-11E3-BFD9-8BBC3744308C" guidtime="11E38E80" jobid="352679357" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0094/AliAOD.root" md5="45e9281bbcff204739a29ccae3da022a" owner="alidaq" perm="755" replicated="0" size="33008008" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0094/AliAOD.root" type="f" />
+    </event>
+    <event name="95">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 18:23:57" dir="25004783" entryId="25008418" expiretime="" gowner="alidaq" guid="11E9631E-8E88-11E3-8EAF-5F8987F1B93E" guidtime="11E38E88" jobid="352679359" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0095/AliAOD.root" md5="805b3b7b1f6baabaa6c657a5da1efb15" owner="alidaq" perm="755" replicated="0" size="606936478" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0095/AliAOD.root" type="f" />
+    </event>
+    <event name="96">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 18:40:44" dir="25003238" entryId="25011791" expiretime="" gowner="alidaq" guid="38513E4C-8E87-11E3-A6BF-1BBB81923C36" guidtime="11E38E87" jobid="352679360" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0096/AliAOD.root" md5="02d65666b1fce6c161660949b41a35b1" owner="alidaq" perm="755" replicated="0" size="427877056" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0096/AliAOD.root" type="f" />
+    </event>
+    <event name="97">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 16:07:14" dir="24948603" entryId="24948791" expiretime="" gowner="alidaq" guid="25E60E00-8E77-11E3-AF07-AB3A3935C7C5" guidtime="11E38E77" jobid="352679362" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0097/AliAOD.root" md5="33ea3b37c6acaf708217d873262e737f" owner="alidaq" perm="755" replicated="0" size="33271077" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0097/AliAOD.root" type="f" />
+    </event>
+    <event name="98">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 16:46:07" dir="24972252" entryId="24972535" expiretime="" gowner="alidaq" guid="8AB00ED0-8E7C-11E3-B177-C7DE0829CC0C" guidtime="11E38E7C" jobid="352679364" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0098/AliAOD.root" md5="727f1ac8a8fc238497940fbed75ce1c7" owner="alidaq" perm="755" replicated="0" size="230853261" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0098/AliAOD.root" type="f" />
+    </event>
+    <event name="99">
+      <file name="AliAOD.root" aclId="" broken="0" ctime="2014-02-05 18:42:02" dir="25011799" entryId="25012057" expiretime="" gowner="alidaq" guid="AD8EB284-8E8C-11E3-A5CB-3B8DA9D7407D" guidtime="11E38E8C" jobid="352679366" lfn="/alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0099/AliAOD.root" md5="9cf879c38355912e45bcf01e4256c803" owner="alidaq" perm="755" replicated="0" size="649502265" turl="alien:///alice/data/2010/LHC10e/000130358/ESDs/pass2/AOD147/0099/AliAOD.root" type="f" />
+    </event>
+    <info command="[/alice/cern.ch/user/a/asevcenc/lhc10e_EMCALchg/]: find -z -x collection -l 15000 -o 0 /alice/data/2010/LHC10e/000130358 */ESDs/pass2/AOD147/*AliAOD.root" creator="admin" date="Wed Oct 15 02:57:11 CEST 2014" timestamp="1413334631" />
+  </collection>
+</alien>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

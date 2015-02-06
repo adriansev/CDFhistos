@@ -1,0 +1,12 @@
+file:///data/data/data/2011/LHC11a/000146746/AODs/pass4_with_SDD/AOD113/0002/AliAOD.root
+file:///data/data/data/2011/LHC11a/000146688/AODs/pass4_with_SDD/AOD113/0006/AliAOD.root
+file:///data/data/data/2011/LHC11a/000146688/AODs/pass4_with_SDD/AOD113/0004/AliAOD.root
+file:///data/data/data/2011/LHC11a/000146688/AODs/pass4_with_SDD/AOD113/0003/AliAOD.root
+file:///data/data/data/2011/LHC11a/000146747/AODs/pass4_with_SDD/AOD113/0017/AliAOD.root
+file:///data/data/data/2011/LHC11a/000146746/AODs/pass4_with_SDD/AOD113/0004/AliAOD.root
+file:///data/data/data/2011/LHC11a/000146688/AODs/pass4_with_SDD/AOD113/0017/AliAOD.root
+file:///data/data/data/2011/LHC11a/000146688/AODs/pass4_with_SDD/AOD113/0002/AliAOD.root
+file:///data/data/data/2011/LHC11a/000146688/AODs/pass4_with_SDD/AOD113/0018/AliAOD.root
+file:///data/data/data/2011/LHC11a/000146688/AODs/pass4_with_SDD/AOD113/0005/AliAOD.root
+file:///data/data/data/2011/LHC11a/000146688/AODs/pass4_with_SDD/AOD113/0011/AliAOD.root
+file:///data/data/data/2011/LHC11a/000146746/AODs/pass4_with_SDD/AOD113/0003/AliAOD.root
