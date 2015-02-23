@@ -61,6 +61,9 @@ AliAnalysisTaskEmcalJetCDF::AliAnalysisTaskEmcalJetCDF() : AliAnalysisTaskEmcalJ
     fH15 ( NULL ),
     fH15_n80 ( NULL ),
     fH15_pt80 ( NULL ),
+    fH15_bin ( NULL ),
+    fH15_bin_n80 ( NULL ),
+    fH15_bin_pt80 ( NULL ),
     fH20 ( NULL ),
     fH20_n80 ( NULL ),
     fH20_pt80 ( NULL ),
@@ -180,6 +183,9 @@ AliAnalysisTaskEmcalJetCDF::AliAnalysisTaskEmcalJetCDF ( const char* name ) : Al
     fH15 ( NULL ),
     fH15_n80 ( NULL ),
     fH15_pt80 ( NULL ),
+    fH15_bin ( NULL ),
+    fH15_bin_n80 ( NULL ),
+    fH15_bin_pt80 ( NULL ),
     fH20 ( NULL ),
     fH20_n80 ( NULL ),
     fH20_pt80 ( NULL ),
@@ -409,6 +415,7 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
         // Recomputing of radius of particles in leading jet
         fH20->Fill ( dpart );            // Distribution of R in leading jet
         fH15->Fill ( dpart, track_pt );  // <p_{T}> track vs the Distance R from Jet1
+        fH15_bin->Fill ( dpart, track_pt );  // p_{T} track vs the Distance R from Jet1
 
         fH26jet1->Fill ( dpart, counter_part );   //  N vs the Distance R from Jet1
         fH27jet1->Fill ( dpart, counter_pt );     //  PT_{sum} vs the Distance R from Jet1
@@ -419,6 +426,7 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
         if ( counter_part <= jet1_n80 )
             { // fill histograms for 80% of particles
             fH15_n80->Fill     ( dpart, track_pt );       //  <p_{T}> track vs the Distance R from Jet1 - 80% of particles
+            fH15_bin_n80->Fill ( dpart, track_pt );   //  p_{T} track vs the Distance R from Jet1 - 80% of particles
 
             fH24->Fill         ( jet1_pt, dpart );        //  Jet1 Size vs P_{T}(jet1) - 80% of particles
             fH20_n80->Fill     ( dpart );                 //  Distribution of R in leading jet
@@ -433,6 +441,7 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
         if ( counter_pt <= jet1_pt80 )
             { // fill histograms for 80% of pt
             fH15_pt80->Fill     ( dpart, track_pt );       //  <p_{T}> track vs the Distance R from Jet1 - 80% of pt
+            fH15_bin_pt80->Fill ( dpart, track_pt );       //  p_{T} track vs the Distance R from Jet1 - 80% of pt
 
             fH25->Fill          ( jet1_pt, dpart );        //  Jet1 Size vs P_{T}(jet1) - 80% of Pt
             fH20_pt80->Fill     ( dpart );                 //  Distribution of R in leading jet
@@ -811,6 +820,31 @@ void AliAnalysisTaskEmcalJetCDF::UserCreateOutputObjects()
     fH15_pt80->GetXaxis()->SetTitleColor ( 1 );
     fH15_pt80->SetMarkerStyle ( kFullCircle );
     fOutput->Add ( fH15_pt80 );
+
+    //____________________________________________________________________________________
+    fH15_bin = new TProfile ( "histo15_bin", "p_{T}*dR (track) vs the Distance R from Jet1", h15_nbin , h15_xlow , h15_xhigh );
+    fH15_bin->SetStats ( kTRUE );
+    fH15_bin->GetXaxis()->SetTitle ( "R" );
+    fH15_bin->GetYaxis()->SetTitle ( "p_{T}*dR (track)" );
+    fH15_bin->GetXaxis()->SetTitleColor ( 1 );
+    fH15_bin->SetMarkerStyle ( kFullCircle );
+    fOutput->Add ( fH15_bin );
+
+    fH15_bin_n80 = new TProfile ( "histo15_bin_n80", "p_{T}*dR (track) vs the Distance R from Jet1 - 80% of particles", h15_nbin , h15_xlow , h15_xhigh );
+    fH15_bin_n80->SetStats ( kTRUE );
+    fH15_bin_n80->GetXaxis()->SetTitle ( "R" );
+    fH15_bin_n80->GetYaxis()->SetTitle ( "p_{T}*dR (track)" );
+    fH15_bin_n80->GetXaxis()->SetTitleColor ( 1 );
+    fH15_bin_n80->SetMarkerStyle ( kFullCircle );
+    fOutput->Add ( fH15_bin_n80 );
+
+    fH15_bin_pt80 = new TProfile ( "histo15_bin_pt80", "pp_{T}*dR (track) vs the Distance R from Jet1 - 80% of Pt", h15_nbin , h15_xlow , h15_xhigh );
+    fH15_bin_pt80->SetStats ( kTRUE );
+    fH15_bin_pt80->GetXaxis()->SetTitle ( "R" );
+    fH15_bin_pt80->GetYaxis()->SetTitle ( "p_{T}*dR (track)" );
+    fH15_bin_pt80->GetXaxis()->SetTitleColor ( 1 );
+    fH15_bin_pt80->SetMarkerStyle ( kFullCircle );
+    fOutput->Add ( fH15_bin_pt80 );
 
     //____________________________________________________________________________________
     Int_t h20_nbin = 100; Double_t h20_binwidth = 0.01; Double_t h20_low = 0.; Double_t h20_high = h20_low + h20_binwidth * h20_nbin;
@@ -1203,7 +1237,7 @@ void AliAnalysisTaskEmcalJetCDF::UserCreateOutputObjects()
     fOutput->Add ( fH26jet1_pt80 );
 
     //____________________________________________________________________________________
-    fH26_bin = new TProfile ( "histo26_bin", "<N> vs the Distance R from Jet1", h26_nbin, h26_low, h26_high );
+    fH26_bin = new TH1D ( "histo26_bin", "<N> vs the Distance R from Jet1", h26_nbin, h26_low, h26_high );
     fH26_bin->SetStats ( kTRUE );
     fH26_bin->GetXaxis()->SetTitle ( "Distance R" );
     fH26_bin->GetYaxis()->SetTitle ( "<N> in 0.02 bin" );
@@ -1211,7 +1245,7 @@ void AliAnalysisTaskEmcalJetCDF::UserCreateOutputObjects()
     fH26_bin->SetMarkerStyle ( kFullCircle );
     fOutput->Add ( fH26_bin );
 
-    fH26_n80_bin = new TProfile ( "histo26_n80_bin", "<N> vs the Distance R from Jet1 - 80% of particles", h26_nbin, h26_low, h26_high );
+    fH26_n80_bin = new TH1D ( "histo26_n80_bin", "<N> vs the Distance R from Jet1 - 80% of particles", h26_nbin, h26_low, h26_high );
     fH26_n80_bin->SetStats ( kTRUE );
     fH26_n80_bin->GetXaxis()->SetTitle ( "Distance R" );
     fH26_n80_bin->GetYaxis()->SetTitle ( "<N> in 0.02 bin" );
@@ -1219,7 +1253,7 @@ void AliAnalysisTaskEmcalJetCDF::UserCreateOutputObjects()
     fH26_n80_bin->SetMarkerStyle ( kFullCircle );
     fOutput->Add ( fH26_n80_bin );
 
-    fH26_pt80_bin = new TProfile ( "histo26_pt80_bin", "<N> vs the Distance R from Jet1 - 80% of Pt", h26_nbin, h26_low, h26_high );
+    fH26_pt80_bin = new TH1D ( "histo26_pt80_bin", "<N> vs the Distance R from Jet1 - 80% of Pt", h26_nbin, h26_low, h26_high );
     fH26_pt80_bin->SetStats ( kTRUE );
     fH26_pt80_bin->GetXaxis()->SetTitle ( "Distance R" );
     fH26_pt80_bin->GetYaxis()->SetTitle ( "<N> in 0.02 bin" );
@@ -1227,7 +1261,7 @@ void AliAnalysisTaskEmcalJetCDF::UserCreateOutputObjects()
     fH26_pt80_bin->SetMarkerStyle ( kFullCircle );
     fOutput->Add ( fH26_pt80_bin );
 
-    fH26jet1_bin = new TProfile ( "histo26jet1_bin", "<N>(jet1) vs the Distance R from Jet1", h26_nbin, h26_low, h26_high );
+    fH26jet1_bin = new TH1D ( "histo26jet1_bin", "<N>(jet1) vs the Distance R from Jet1", h26_nbin, h26_low, h26_high );
     fH26jet1_bin->SetStats ( kTRUE );
     fH26jet1_bin->GetXaxis()->SetTitle ( "Distance R" );
     fH26jet1_bin->GetYaxis()->SetTitle ( "<N> in 0.02 bin" );
@@ -1235,7 +1269,7 @@ void AliAnalysisTaskEmcalJetCDF::UserCreateOutputObjects()
     fH26jet1_bin->SetMarkerStyle ( kFullCircle );
     fOutput->Add ( fH26jet1_bin );
 
-    fH26jet1_n80_bin = new TProfile ( "histo26jet1_n80_bin", "<N>(jet1) vs the Distance R from Jet1 - 80% of particles", h26_nbin, h26_low, h26_high );
+    fH26jet1_n80_bin = new TH1D ( "histo26jet1_n80_bin", "<N>(jet1) vs the Distance R from Jet1 - 80% of particles", h26_nbin, h26_low, h26_high );
     fH26jet1_n80_bin->SetStats ( kTRUE );
     fH26jet1_n80_bin->GetXaxis()->SetTitle ( "Distance R" );
     fH26jet1_n80_bin->GetYaxis()->SetTitle ( "<N> in 0.02 bin" );
@@ -1243,7 +1277,7 @@ void AliAnalysisTaskEmcalJetCDF::UserCreateOutputObjects()
     fH26jet1_n80_bin->SetMarkerStyle ( kFullCircle );
     fOutput->Add ( fH26jet1_n80_bin );
 
-    fH26jet1_pt80_bin = new TProfile ( "histo26jet1_pt80_bin", "<N>(jet1) vs the Distance R from Jet1 - 80% of Pt", h26_nbin, h26_low, h26_high );
+    fH26jet1_pt80_bin = new TH1D ( "histo26jet1_pt80_bin", "<N>(jet1) vs the Distance R from Jet1 - 80% of Pt", h26_nbin, h26_low, h26_high );
     fH26jet1_pt80_bin->SetStats ( kTRUE );
     fH26jet1_pt80_bin->GetXaxis()->SetTitle ( "Distance R" );
     fH26jet1_pt80_bin->GetYaxis()->SetTitle ( "<N> in 0.02 bin" );
@@ -1302,6 +1336,55 @@ void AliAnalysisTaskEmcalJetCDF::UserCreateOutputObjects()
     fOutput->Add ( fH27jet1_pt80 );
 
     //____________________________________________________________________________________
+    fH27_bin = new TH1D ( "histo27_bin", "PT_{sum} vs the Distance R from Jet1", h27_nbin, h27_low, h27_high );
+    fH27_bin->SetStats ( kTRUE );
+    fH27_bin->GetXaxis()->SetTitle ( "Distance R" );
+    fH27_bin->GetYaxis()->SetTitle ( "<PT_{sum}> (GeV/c) in 0.02 bin" );
+    fH27_bin->GetXaxis()->SetTitleColor ( 1 );
+    fH27_bin->SetMarkerStyle ( kFullCircle );
+    fOutput->Add ( fH27_bin );
+
+    fH27_n80_bin = new TH1D ( "histo27_n80_bin", "PT_{sum} vs the Distance R from Jet1 - 80% of particles", h27_nbin, h27_low, h27_high );
+    fH27_n80_bin->SetStats ( kTRUE );
+    fH27_n80_bin->GetXaxis()->SetTitle ( "Distance R" );
+    fH27_n80_bin->GetYaxis()->SetTitle ( "<PT_{sum}> (GeV/c) in 0.02 bin" );
+    fH27_n80_bin->GetXaxis()->SetTitleColor ( 1 );
+    fH27_n80_bin->SetMarkerStyle ( kFullCircle );
+    fOutput->Add ( fH27_n80_bin );
+
+    fH27_pt80_bin = new TH1D ( "histo27_pt80_bin", "PT_{sum} vs the Distance R from Jet1 - 80% of Pt", h27_nbin, h27_low, h27_high );
+    fH27_pt80_bin->SetStats ( kTRUE );
+    fH27_pt80_bin->GetXaxis()->SetTitle ( "Distance R" );
+    fH27_pt80_bin->GetYaxis()->SetTitle ( "<PT_{sum}> (GeV/c) in 0.02 bin" );
+    fH27_pt80_bin->GetXaxis()->SetTitleColor ( 1 );
+    fH27_pt80_bin->SetMarkerStyle ( kFullCircle );
+    fOutput->Add ( fH27_pt80_bin );
+
+    fH27jet1_bin = new TH1D ( "histo27jet1_bin", "Jet1 p_{T} vs the Distance R from Jet1", h27_nbin, h27_low, h27_high );
+    fH27jet1_bin->SetStats ( kTRUE );
+    fH27jet1_bin->GetXaxis()->SetTitle ( "Distance R" );
+    fH27jet1_bin->GetYaxis()->SetTitle ( "<PT_{sum}> (GeV/c) in 0.02 bin" );
+    fH27jet1_bin->GetXaxis()->SetTitleColor ( 1 );
+    fH27jet1_bin->SetMarkerStyle ( kFullCircle );
+    fOutput->Add ( fH27jet1_bin );
+
+    fH27jet1_n80_bin = new TH1D ( "histo27jet1_n80_bin", "Jet1 p_{T} vs the Distance R from Jet1 - 80% of particles", h27_nbin, h27_low, h27_high );
+    fH27jet1_n80_bin->SetStats ( kTRUE );
+    fH27jet1_n80_bin->GetXaxis()->SetTitle ( "Distance R" );
+    fH27jet1_n80_bin->GetYaxis()->SetTitle ( "<PT_{sum}> (GeV/c) in 0.02 bin" );
+    fH27jet1_n80_bin->GetXaxis()->SetTitleColor ( 1 );
+    fH27jet1_n80_bin->SetMarkerStyle ( kFullCircle );
+    fOutput->Add ( fH27jet1_n80_bin );
+
+    fH27jet1_pt80_bin = new TH1D ( "histo27jet1_pt80_bin", "Jet1 p_{T} vs the Distance R from Jet1 - 80% of Pt", h27_nbin, h27_low, h27_high );
+    fH27jet1_pt80_bin->SetStats ( kTRUE );
+    fH27jet1_pt80_bin->GetXaxis()->SetTitle ( "Distance R" );
+    fH27jet1_pt80_bin->GetYaxis()->SetTitle ( "<PT_{sum}> (GeV/c) in 0.02 bin" );
+    fH27jet1_pt80_bin->GetXaxis()->SetTitleColor ( 1 );
+    fH27jet1_pt80_bin->SetMarkerStyle ( kFullCircle );
+    fOutput->Add ( fH27jet1_pt80_bin );
+
+    //____________________________________________________________________________________
     Int_t h40_nbin = 200; Double_t h40_binwidth = 1.; Double_t h40_low = 0.; Double_t h40_high = h40_low + h40_binwidth * h40_nbin;
     fH40 = new TProfile ( "histo40", "total particles fNPart w.r.t PTmax (pt of leading particle from jet1)", h40_nbin, h40_low, h40_high );
     fH40->SetStats ( kTRUE );
@@ -1343,6 +1426,49 @@ void AliAnalysisTaskEmcalJetCDF::UserCreateOutputObjects()
     fH40transmax->SetMarkerStyle ( kFullCircle );
     fOutput->Add ( fH40transmax );
 
+    //____________________________________________________________________________________
+    fH40_bin = new TH1D ( "histo40_bin", "total particles fNPart w.r.t PTmax (pt of leading particle from jet1)", h40_nbin, h40_low, h40_high );
+    fH40_bin->SetStats ( kTRUE );
+    fH40_bin->GetXaxis()->SetTitle ( "PTmax" );
+    fH40_bin->GetYaxis()->SetTitle ( "<fNPart> (accepted)" );
+    fH40_bin->GetXaxis()->SetTitleColor ( 1 );
+    fH40_bin->SetMarkerStyle ( kFullCircle );
+    fOutput->Add ( fH40_bin );
+
+    fH40toward_bin = new TH1D ( "histo40toward_bin", "total particles fNPart w.r.t PTmax (pt of leading particle from jet1) - TOWARD", h40_nbin, h40_low, h40_high );
+    fH40toward_bin->SetStats ( kTRUE );
+    fH40toward_bin->GetXaxis()->SetTitle ( "PTmax" );
+    fH40toward_bin->GetYaxis()->SetTitle ( "<fNPart> (accepted)" );
+    fH40toward_bin->GetXaxis()->SetTitleColor ( 1 );
+    fH40toward_bin->SetMarkerStyle ( kFullCircle );
+    fOutput->Add ( fH40toward_bin );
+
+    fH40away_bin = new TH1D ( "histo40away_bin", "total particles fNPart w.r.t PTmax (pt of leading particle from jet1) - AWAY", h40_nbin, h40_low, h40_high );
+    fH40away_bin->SetStats ( kTRUE );
+    fH40away_bin->GetXaxis()->SetTitle ( "PTmax" );
+    fH40away_bin->GetYaxis()->SetTitle ( "<fNPart> (accepted)" );
+    fH40away_bin->GetXaxis()->SetTitleColor ( 1 );
+    fH40away_bin->SetMarkerStyle ( kFullCircle );
+    fOutput->Add ( fH40away_bin );
+
+    fH40transmin_bin = new TH1D ( "histo40transmin_bin", "total particles fNPart w.r.t PTmax (pt of leading particle from jet1) - TRANSMIN", h40_nbin, h40_low, h40_high );
+    fH40transmin_bin->SetStats ( kTRUE );
+    fH40transmin_bin->GetXaxis()->SetTitle ( "PTmax" );
+    fH40transmin_bin->GetYaxis()->SetTitle ( "<fNPart> (accepted)" );
+    fH40transmin_bin->GetXaxis()->SetTitleColor ( 1 );
+    fH40transmin_bin->SetMarkerStyle ( kFullCircle );
+    fOutput->Add ( fH40transmin_bin );
+
+    fH40transmax_bin = new TH1D ( "histo40transmax_bin", "total particles fNPart w.r.t PTmax (pt of leading particle from jet1) - TRANSMAX", h40_nbin, h40_low, h40_high );
+    fH40transmax_bin->SetStats ( kTRUE );
+    fH40transmax_bin->GetXaxis()->SetTitle ( "PTmax" );
+    fH40transmax_bin->GetYaxis()->SetTitle ( "<fNPart> (accepted)" );
+    fH40transmax_bin->GetXaxis()->SetTitleColor ( 1 );
+    fH40transmax_bin->SetMarkerStyle ( kFullCircle );
+    fOutput->Add ( fH40transmax_bin );
+
+
+    //____________________________________________________________________________________
     Int_t h41_nbin = 200; Double_t h41_binwidth = 1.; Double_t h41_low = 0.; Double_t h41_high = h41_low + h41_binwidth * h41_nbin;
     fH41 = new TProfile ( "histo41", "PTsum w.r.t PTmax (pt of leading particle from jet1)", h41_nbin, h41_low, h41_high );
     fH41->SetStats ( kTRUE );
@@ -1384,15 +1510,55 @@ void AliAnalysisTaskEmcalJetCDF::UserCreateOutputObjects()
     fH41transmax->SetMarkerStyle ( kFullCircle );
     fOutput->Add ( fH41transmax );
 
+    //____________________________________________________________________________________
+    fH41_bin = new TH1D ( "histo41_bin", "PTsum w.r.t PTmax (pt of leading particle from jet1)", h41_nbin, h41_low, h41_high );
+    fH41_bin->SetStats ( kTRUE );
+    fH41_bin->GetXaxis()->SetTitle ( "PTmax" );
+    fH41_bin->GetYaxis()->SetTitle ( "PTsum (GeV/c)" );
+    fH41_bin->GetXaxis()->SetTitleColor ( 1 );
+    fH41_bin->SetMarkerStyle ( kFullCircle );
+    fOutput->Add ( fH41_bin );
+
+    fH41toward_bin = new TH1D ( "histo41toward_bin", "PTsum w.r.t PTmax (pt of leading particle from jet1) - TOWARD", h41_nbin, h41_low, h41_high );
+    fH41toward_bin->SetStats ( kTRUE );
+    fH41toward_bin->GetXaxis()->SetTitle ( "PTmax" );
+    fH41toward_bin->GetYaxis()->SetTitle ( "PTsum (GeV/c)" );
+    fH41toward_bin->GetXaxis()->SetTitleColor ( 1 );
+    fH41toward_bin->SetMarkerStyle ( kFullCircle );
+    fOutput->Add ( fH41toward_bin );
+
+    fH41away_bin = new TH1D ( "histo41away_bin", "PTsum w.r.t PTmax (pt of leading particle from jet1) - AWAY", h41_nbin, h41_low, h41_high );
+    fH41away_bin->SetStats ( kTRUE );
+    fH41away_bin->GetXaxis()->SetTitle ( "PTmax" );
+    fH41away_bin->GetYaxis()->SetTitle ( "PTsum (GeV/c)" );
+    fH41away_bin->GetXaxis()->SetTitleColor ( 1 );
+    fH41away_bin->SetMarkerStyle ( kFullCircle );
+    fOutput->Add ( fH41away_bin );
+
+    fH41transmin_bin = new TH1D ( "histo41transmin_bin", "PTsum w.r.t PTmax (pt of leading particle from jet1) - TRANSMIN", h41_nbin, h41_low, h41_high );
+    fH41transmin_bin->SetStats ( kTRUE );
+    fH41transmin_bin->GetXaxis()->SetTitle ( "PTmax" );
+    fH41transmin_bin->GetYaxis()->SetTitle ( "PTsum (GeV/c)" );
+    fH41transmin_bin->GetXaxis()->SetTitleColor ( 1 );
+    fH41transmin_bin->SetMarkerStyle ( kFullCircle );
+    fOutput->Add ( fH41transmin_bin );
+
+    fH41transmax_bin = new TH1D ( "histo41transmax_bin", "PTsum w.r.t PTmax (pt of leading particle from jet1) - TRANSMAX", h41_nbin, h41_low, h41_high );
+    fH41transmax_bin->SetStats ( kTRUE );
+    fH41transmax_bin->GetXaxis()->SetTitle ( "PTmax" );
+    fH41transmax_bin->GetYaxis()->SetTitle ( "PTsum (GeV/c)" );
+    fH41transmax_bin->GetXaxis()->SetTitleColor ( 1 );
+    fH41transmax_bin->SetMarkerStyle ( kFullCircle );
+    fOutput->Add ( fH41transmax_bin );
 
     // =========== Switch on Sumw2 for all histos ===========
     for ( Int_t i = 0; i < fOutput->GetEntries(); ++i )
         {
-        TH1* h1 = dynamic_cast<TH1*> ( fOutput->At ( i ) );
+        TH1* h1 = dynamic_cast<TH1*> ( fOutput->At(i) );
 
         if ( h1 ) { h1->Sumw2(); continue; }
 
-        TProfile* hprof1 = dynamic_cast<TProfile*> ( fOutput->At ( i ) );
+        TProfile* hprof1 = dynamic_cast<TProfile*> ( fOutput->At (i) );
 
         if ( hprof1 ) { hprof1->Sumw2(); }
         }
