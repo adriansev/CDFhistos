@@ -78,6 +78,10 @@ class AliAnalysisTaskEmcalJetCDF : public AliAnalysisTaskEmcalJet
         TProfile*  fH15_n80;           //!  <p_{T}> track vs the Distance R from Jet1 - 80% of particles
         TProfile*  fH15_pt80;          //!  <p_{T}> track vs the Distance R from Jet1 - 80% of Pt
 
+        TH1D*      fH15_bin;           //!  p_{T} track vs the Distance R from Jet1
+        TH1D*      fH15_bin_n80;       //!  p_{T} track vs the Distance R from Jet1 - 80% of particles
+        TH1D*      fH15_bin_pt80;      //!  p_{T} track vs the Distance R from Jet1 - 80% of Pt
+
         TH1D*      fH20;               //!  Distribution of R in leading jet
         TH1D*      fH20_n80;           //!  Distribution of R in leading jet - 80% of particles
         TH1D*      fH20_pt80;          //!  Distribution of R in leading jet - 80% of Pt
@@ -191,8 +195,8 @@ class AliAnalysisTaskEmcalJetCDF : public AliAnalysisTaskEmcalJet
         UInt_t                     fNaccPart;                   //  Multiplicity in event - accepted tracks in tracks container
         Double_t                   fEvPt;                       //  Scalar sum of pt off all accepted tracks in events
 
-        std::vector<Int_t>         fJet1_sorted_idxvec;           // vector of sorted indexes of particles in leading jet
-        std::vector<Int_t>         fEvent_sorted_idxvec;   // vector of sorted indexes of accepted tracks in the event
+        std::vector<Int_t>         fJet1_sorted_idxvec;         // vector of sorted indexes of particles in leading jet
+        std::vector<Int_t>         fEvent_sorted_idxvec;        // vector of sorted indexes of accepted tracks in the event
 
     private:
         struct sort_descend
