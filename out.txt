@@ -1,1 +1,0 @@
-nohup aliroot -l -b -q EmcalJetCDF.C("local","test","data.txt")
