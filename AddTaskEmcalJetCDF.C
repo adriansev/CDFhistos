@@ -2,7 +2,7 @@ AliAnalysisTaskEmcalJetCDF* AddTaskEmcalJetCDF(
   const char* ntracks            = "Tracks",
   const char* nclusters          = "CaloClusters",
   const char* njets              = "Jets",
-  const char* nrho               = "Rho",
+  const char* nrho               = "",
   Double_t    jetradius          = 0.2,
   Double_t    jetptcut           = 1.,
   Double_t    jetareacut         = 0.001,
@@ -43,17 +43,15 @@ AliAnalysisTaskEmcalJetCDF* AddTaskEmcalJetCDF(
     if ( acctype.CompareTo("EMCAL") ) { acctype = "EMCAL"; }
     if ( acctype.CompareTo("KUSER") ) { acctype = "kUser"; }
 
-//     cout << "CDF Jet task name : " << name.Data() << endl;
-
     AliAnalysisTaskEmcalJetCDF* jetTask = new AliAnalysisTaskEmcalJetCDF(name);
-//     jetTask->SetCentRange(0.,100.);
-//     jetTask->SetNCentBins(nCentBins);
+    jetTask->SetCentRange(0.,100.);
+    jetTask->SetNCentBins(1);
 
     AliParticleContainer* trackCont  = jetTask->AddParticleContainer(ntracks);
     trackCont->SetClassName("AliVTrack");
 
     AliClusterContainer* clusterCont = jetTask->AddClusterContainer(nclusters);
-    clusterCont->SetClassName("AliVCluster");
+//     clusterCont->SetClassName("AliVCluster");
 
     AliJetContainer* jetCont = jetTask->AddJetContainer(njets, acctype.Data(), jetradius);
     if ( jetCont )
@@ -66,9 +64,6 @@ AliAnalysisTaskEmcalJetCDF* AddTaskEmcalJetCDF(
         jetCont->SetLeadingHadronType(leadhadtype); // Int_t fLeadingHadronType;  0 = charged, 1 = neutral, 2 = both
         jetCont->SetZLeadingCut(0.,1.);
         }
-
-    // setting acceptance (fiducial)
-    SetJetAccFid ( jetCont, acctype);
 
     //-------------------------------------------------------
     // Final settings, pass to manager and set the containers
@@ -87,16 +82,16 @@ AliAnalysisTaskEmcalJetCDF* AddTaskEmcalJetCDF(
 }
 
 AliAnalysisTaskEmcalJetCDF* AddTaskEmcalJetCDF ( AliEmcalJetTask* jetFinderTask,
-    Double_t     jetptcut     = 1.,
-    Double_t     jetareacut   = 0.001,
-    const char*  type         = "TPC",     // EMCAL, TPC
-    Int_t        leadhadtype  = 0,         // AliJetContainer :: Int_t fLeadingHadronType;  0 = charged, 1 = neutral, 2 = both
-    const char*  taskname     = "JetCDF" )
+                                                Double_t     jetptcut     = 1.,
+                                                Double_t     jetareacut   = 0.001,
+                                                const char*  type         = "TPC",     // EMCAL, TPC
+                                                Int_t        leadhadtype  = 0,         // AliJetContainer :: Int_t fLeadingHadronType;  0 = charged, 1 = neutral, 2 = both
+                                                const char*  nrho         = "",
+                                                const char*  taskname     = "JetCDF" )
 {
     const char* ntracks            = jetFinderTask->GetTracksName();
     const char* nclusters          = jetFinderTask->GetClusName();
     const char* njets              = jetFinderTask->GetJetsName();
-    const char* nrho               = jetFinderTask->GetRhoName();
     Double_t    jetradius          = jetFinderTask->GetRadius();
 
 return AddTaskEmcalJetCDF ( ntracks , nclusters, njets, nrho, jetradius, jetptcut, jetareacut, type, leadhadtype, taskname);
