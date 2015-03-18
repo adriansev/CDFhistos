@@ -947,7 +947,7 @@ void AliAnalysisTaskEmcalJetCDF::UserCreateOutputObjects()
   fOutput->Add ( fH15_pt80 );
 
   //____________________________________________________________________________________
-  fH15_bin = new TProfile ( "histo15_bin", "p_{T}*dR (track) vs the Distance R from Jet1", h15_nbin, h15_xlow, h15_xhigh );
+  fH15_bin = new TH1D ( "histo15_bin", "p_{T}*dR (track) vs the Distance R from Jet1", h15_nbin, h15_xlow, h15_xhigh );
   fH15_bin->SetStats ( kTRUE );
   fH15_bin->GetXaxis()->SetTitle ( "R" );
   fH15_bin->GetYaxis()->SetTitle ( "p_{T}*dR (track)" );
@@ -955,7 +955,7 @@ void AliAnalysisTaskEmcalJetCDF::UserCreateOutputObjects()
   fH15_bin->SetMarkerStyle ( kFullCircle );
   fOutput->Add ( fH15_bin );
 
-  fH15_bin_n80 = new TProfile ( "histo15_bin_n80", "p_{T}*dR (track) vs the Distance R from Jet1 - 80% of particles",
+  fH15_bin_n80 = new TH1D ( "histo15_bin_n80", "p_{T}*dR (track) vs the Distance R from Jet1 - 80% of particles",
                                 h15_nbin, h15_xlow, h15_xhigh );
   fH15_bin_n80->SetStats ( kTRUE );
   fH15_bin_n80->GetXaxis()->SetTitle ( "R" );
@@ -964,7 +964,7 @@ void AliAnalysisTaskEmcalJetCDF::UserCreateOutputObjects()
   fH15_bin_n80->SetMarkerStyle ( kFullCircle );
   fOutput->Add ( fH15_bin_n80 );
 
-  fH15_bin_pt80 = new TProfile ( "histo15_bin_pt80", "pp_{T}*dR (track) vs the Distance R from Jet1 - 80% of Pt",
+  fH15_bin_pt80 = new TH1D ( "histo15_bin_pt80", "pp_{T}*dR (track) vs the Distance R from Jet1 - 80% of Pt",
                                  h15_nbin, h15_xlow, h15_xhigh );
   fH15_bin_pt80->SetStats ( kTRUE );
   fH15_bin_pt80->GetXaxis()->SetTitle ( "R" );
