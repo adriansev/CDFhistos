@@ -39,7 +39,9 @@
 
 using namespace std;
 
-ClassImp ( AliAnalysisTaskEmcalJetCDF )
+/// \cond CLASSIMP
+ClassImp ( AliAnalysisTaskEmcalJetCDF );
+/// \endcond
 
 //________________________________________________________________________
 AliAnalysisTaskEmcalJetCDF::AliAnalysisTaskEmcalJetCDF()
@@ -633,8 +635,7 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
           fH23Away->Fill ( track_pt );           // Pt Distribution of particles
 
           fH21Away_bin->Fill ( jet1_pt );        // N (in the event - including jet1) vs P_{T}(jet1)
-          fH22Away_bin->Fill ( jet1_pt, track_pt ); // PT_{sum}(in the event -
-          // including jet1) vs P_{T}(jet1)
+          fH22Away_bin->Fill ( jet1_pt, track_pt ); // PT_{sum}(in the event - including jet1) vs P_{T}(jet1)
           }
 
       // Condition if track is in leading jet
@@ -642,21 +643,15 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
           {
           // from leading jet
           fH9_bin_wojet1->Fill ( dphi_part_jet1_absdeg );         //  N vs the Azimuthal Angle from Jet1
-          fH10_bin_wojet1->Fill ( dphi_part_jet1_absdeg, track_pt ); //  P_{T} sum vs
-          // the Azimuthal
-          // Angle from Jet1
+          fH10_bin_wojet1->Fill ( dphi_part_jet1_absdeg, track_pt ); //  P_{T} sum vs the Azimuthal Angle from Jet1
 
           fH21_bin_wojet1->Fill ( jet1_pt );        // N (in the event - including jet1) vs P_{T}(jet1)
-          fH22_bin_wojet1->Fill ( jet1_pt, track_pt ); // PT_{sum}(in the event -
-          // including jet1) vs
-          // P_{T}(jet1)
+          fH22_bin_wojet1->Fill ( jet1_pt, track_pt ); // PT_{sum}(in the event - including jet1) vs P_{T}(jet1)
 
           if ( ( dphi_part_jet1 > ( -1 ) * kPI_3 ) && ( dphi_part_jet1 < kPI_3 ) )
               {
               fH21Toward_bin_wojet1->Fill ( jet1_pt );        // N (in the event - including jet1) vs P_{T}(jet1)
-              fH22Toward_bin_wojet1->Fill ( jet1_pt, track_pt ); // PT_{sum}(in the event
-              // - including jet1) vs
-              // P_{T}(jet1)
+              fH22Toward_bin_wojet1->Fill ( jet1_pt, track_pt ); // PT_{sum}(in the event - including jet1) vs P_{T}(jet1)
               }
           else if ( ( dphi_part_jet1 <= ( -1 ) * kPI_3 ) && ( dphi_part_jet1 > ( -1 ) * k2PI_3 ) )
               {
@@ -673,15 +668,12 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
           else if ( ( dphi_part_jet1 >= k2PI_3 ) || ( dphi_part_jet1 <= ( -1 ) * k2PI_3 ) )
               {
               fH21Away_bin_wojet1->Fill ( jet1_pt );        // N (in the event - including jet1) vs P_{T}(jet1)
-              fH22Away_bin_wojet1->Fill ( jet1_pt, track_pt ); // PT_{sum}(in the event -
-              // including jet1) vs
-              // P_{T}(jet1)
+              fH22Away_bin_wojet1->Fill ( jet1_pt, track_pt ); // PT_{sum}(in the event - including jet1) vs P_{T}(jet1)
               }
           }
 
       // NEW UE histos
-      // dphi track to leading track distribution (total and per
-      // toward,away,transverse regions)
+      // dphi track to leading track distribution (total and per toward,away,transverse regions)
       fH40->Fill ( jet1_ptmax, counter_part ); // total particles fNPart w.r.t PTmax
       // (pt of leading particle from
       // leading jet)
@@ -1812,8 +1804,6 @@ std::vector<Int_t> AliAnalysisTaskEmcalJetCDF::SortTracksPt ( AliVEvent *event )
   //___________________________________________
   // Sorting by p_T (decreasing) event tracks
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  typedef std::pair<Double_t, Int_t> ptidx_pair;
-
   Int_t entries = event->GetNumberOfTracks();
 
   // Create vector for Pt sorting
@@ -1853,8 +1843,6 @@ std::vector<Int_t> AliAnalysisTaskEmcalJetCDF::SortTracksPt ( AliParticleContain
   //___________________________________________
   // Sorting by p_T (decreasing) event tracks
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  typedef std::pair<Double_t, Int_t> ptidx_pair;
-
   Int_t entries = trackscont->GetNAcceptedParticles();
 
   // Create vector for Pt sorting
@@ -1893,10 +1881,7 @@ Bool_t AliAnalysisTaskEmcalJetCDF::IdxInArray ( Int_t index, TArrayI &array )
   {
   for ( Size_t i = 0; i < array.GetSize(); i++ )
       {
-      if ( index == array[i] )
-          {
-          return kTRUE;
-          }
+      if ( index == array[i] ) { return kTRUE; }
       }
 
   return kFALSE;
@@ -1907,20 +1892,11 @@ void AliAnalysisTaskEmcalJetCDF::ExecOnce()
   {
   AliAnalysisTaskEmcalJet::ExecOnce();
 
-  if ( fJetsCont && fJetsCont->GetArray() == 0 )
-      {
-      fJetsCont = 0;
-      }
+  if ( fJetsCont && fJetsCont->GetArray() == 0 ) { fJetsCont = 0; }
 
-  if ( fTracksCont && fTracksCont->GetArray() == 0 )
-      {
-      fTracksCont = 0;
-      }
+  if ( fTracksCont && fTracksCont->GetArray() == 0 ) { fTracksCont = 0; }
 
-  if ( fCaloClustersCont && fCaloClustersCont->GetArray() == 0 )
-      {
-      fCaloClustersCont = 0;
-      }
+  if ( fCaloClustersCont && fCaloClustersCont->GetArray() == 0 ) { fCaloClustersCont = 0; }
   }
 
 //________________________________________________________________________
@@ -1928,7 +1904,7 @@ void AliAnalysisTaskEmcalJetCDF::Terminate ( Option_t * )
   {
   // Called once at the end of the analysis.
   // Update pointers reading them from the output slot
-  fOutput = dynamic_cast<TList *> ( GetOutputData ( 0 ) );
+  fOutput = dynamic_cast<TList *> ( GetOutputData (0) );
   }
 
 // kate: indent-mode none; indent-width 2; replace-tabs on;
