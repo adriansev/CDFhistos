@@ -1,15 +1,14 @@
-/// \class AliAnalysisTaskEmcalJetCDF
+/// \class AliAnalysisTaskEmcalJetCDFUE
 /// \brief Analysis of leading jets distribution of pt and multiplicity
 ///
-/// Analysis of leading jets distribution of pt and multiplicity, R distribution
-/// N80 and Pt80 and Toward, Transverse, Away UE histos
+/// Analysis of UE - Toward, Transverse, Away histos
 ///
 /// \author Adrian SEVCENCO <Adrian.Sevcenco@cern.ch>, Institute of Space Science, Romania
 /// \date Mar 23, 2015
 
 
-#ifndef ALIANALYSISTASKEMCALJETCDF_H
-#define ALIANALYSISTASKEMCALJETCDF_H
+#ifndef ALIANALYSISTASKEMCALJETCDFUE_H
+#define ALIANALYSISTASKEMCALJETCDFUE_H
 
 #include <cstdio>
 #include <Rtypes.h>
