@@ -63,8 +63,6 @@ AliAnalysisTaskEmcalJetCDF *AddTaskEmcalJetCDF (
 
   if ( !rho.IsNull() )  { name += "_" + rho; }
 
-  if ( acctype.CompareTo ( "TPC" )   ) { acctype = "TPC"; }
-  if ( acctype.CompareTo ( "EMCAL" ) ) { acctype = "EMCAL"; }
   if ( acctype.CompareTo ( "KUSER" ) ) { acctype = "kUser"; }
 
   if ( !acctype.IsNull() ) { name += "_" + acctype; }
