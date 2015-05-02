@@ -63,7 +63,7 @@ AliAnalysisTaskEmcalJetCDFUE *AddTaskEmcalJetCDFUE (
   if ( !rho.IsNull() )     { name += "_" + rho; }
   if ( !acctype.IsNull() ) { name += "_" + acctype; }
 
-  AliAnalysisTaskEmcalJetCDF *jetTask = new AliAnalysisTaskEmcalJetCDFUE ( name );
+  AliAnalysisTaskEmcalJetCDFUE *jetTask = new AliAnalysisTaskEmcalJetCDFUE ( name );
   jetTask->SetCentRange ( 0., 100. );
   jetTask->SetNCentBins ( 1 );
 
