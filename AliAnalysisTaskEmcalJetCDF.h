@@ -47,7 +47,6 @@ class AliAnalysisTaskEmcalJetCDF : public AliAnalysisTaskEmcalJet
     void                        UserCreateOutputObjects();
     void                        Terminate ( Option_t *option );
 
-
     /// Setting of index of the jet container to be processed
     /// \param index of jet container
     void                        SetProcessJetCont (Int_t i) {idx_jetcont = i;}
@@ -166,7 +165,7 @@ class AliAnalysisTaskEmcalJetCDF : public AliAnalysisTaskEmcalJet
     TH1D      *fH15_bin_pt70;      //!<!  p_{T} SUM track vs the Distance R from Jet1 - 80% of Pt
 
 //________________________________________________________________________
-    TH1D      *fH15all_bin;       //!<!  p_{T} SUM track vs the Distance R from owner jet 
+    TH1D      *fH15all_bin;       //!<!  p_{T} SUM track vs the Distance R from owner jet
 
     TH1D      *fH15all_bin_n90;   //!<!  p_{T} SUM track vs the Distance R from owner jet - 80% of particles
     TH1D      *fH15all_bin_n85;   //!<!  p_{T} SUM track vs the Distance R from owner jet - 80% of particles
@@ -212,6 +211,36 @@ class AliAnalysisTaskEmcalJetCDF : public AliAnalysisTaskEmcalJet
     TH1D      *fH20all_pt70;      //!<!  Distribution of R in jets - 80% of Pt
 
 //________________________________________________________________________
+    TH1D      *fHg;                //!<!  Distribution of girth (radial girth) g = sum_jet_parts ( r_i * ( pt_i/pt_jet ) )
+
+    TH1D      *fHg_n90;            //!<!  Distribution of girth (radial girth) g
+    TH1D      *fHg_n85;            //!<!  Distribution of girth (radial girth) g
+    TH1D      *fHg_n80;            //!<!  Distribution of girth (radial girth) g
+    TH1D      *fHg_n75;            //!<!  Distribution of girth (radial girth) g
+    TH1D      *fHg_n70;            //!<!  Distribution of girth (radial girth) g
+
+    TH1D      *fHg_pt90;           //!<!  Distribution of girth (radial girth) g
+    TH1D      *fHg_pt85;           //!<!  Distribution of girth (radial girth) g
+    TH1D      *fHg_pt80;           //!<!  Distribution of girth (radial girth) g
+    TH1D      *fHg_pt75;           //!<!  Distribution of girth (radial girth) g
+    TH1D      *fHg_pt70;           //!<!  Distribution of girth (radial girth) g
+
+//________________________________________________________________________
+    TH1D      *fHptd;                //!<!  Distribution of dispersion d pt_D = sqrt ( sum (pt_i^2) )/sum (pt_i)
+
+    TH1D      *fHptd_n90;            //!<!  Distribution of dispersion pt_D
+    TH1D      *fHptd_n85;            //!<!  Distribution of dispersion pt_D
+    TH1D      *fHptd_n80;            //!<!  Distribution of dispersion pt_D
+    TH1D      *fHptd_n75;            //!<!  Distribution of dispersion pt_D
+    TH1D      *fHptd_n70;            //!<!  Distribution of dispersion pt_D
+
+    TH1D      *fHptd_pt90;           //!<!  Distribution of dispersion pt_D
+    TH1D      *fHptd_pt85;           //!<!  Distribution of dispersion pt_D
+    TH1D      *fHptd_pt80;           //!<!  Distribution of dispersion pt_D
+    TH1D      *fHptd_pt75;           //!<!  Distribution of dispersion pt_D
+    TH1D      *fHptd_pt70;           //!<!  Distribution of dispersion pt_D
+
+//________________________________________________________________________
     TProfile  *fH23;               //!<!  Jet1 Size vs P_{T}(jet1)
     TProfile  *fH24;               //!<!  Jet1 Size vs P_{T}(jet1) - 80% of particles
     TProfile  *fH25;               //!<!  Jet1 Size vs P_{T}(jet1) - 80% of Pt
@@ -230,8 +259,9 @@ class AliAnalysisTaskEmcalJetCDF : public AliAnalysisTaskEmcalJet
     TClonesArray              *fCaloClustContArray;         //!<! the array of clusters from the tracks container
 
     Int_t                      idx_jetcont;                 //!<! index of jet container to be processed
-    UInt_t                     fNJets_accepted;             //!<! Number of Jets found in event - accepted cuts applied by JetContainer
-    UInt_t                     fNaccPart;                   //!<! Multiplicity in event - accepted tracks in tracks container
+    Int_t                      fNJets_accepted;             //!<! Number of Jets found in event - accepted cuts applied by JetContainer
+    Int_t                      fNaccPart;                   //!<! Multiplicity in event - accepted tracks in tracks container
+    Int_t                      fNaccClus;                   //!<! Multiplicity in event - accepted clusters in cluster container
 
   private:
     /// (pt,index) pair

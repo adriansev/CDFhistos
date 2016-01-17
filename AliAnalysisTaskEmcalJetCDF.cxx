@@ -48,43 +48,92 @@ ClassImp ( AliAnalysisTaskEmcalJetCDF );
 //________________________________________________________________________
 AliAnalysisTaskEmcalJetCDF::AliAnalysisTaskEmcalJetCDF()
   : AliAnalysisTaskEmcalJet ( "AliAnalysisTaskEmcalJetCDF", kTRUE ),
-    fH1 ( NULL ),
-    fH2 ( NULL ),
-    fH3 ( NULL ),
-    fH4 ( NULL ),
-    fH4c ( NULL ),
-    fH5 ( NULL ),
-    fH6 ( NULL ),
-    fH7 ( NULL ),
-    fH8 ( NULL ),
-    fH8xi ( NULL ),
-    fH8_all ( NULL ),
-    fH8xi_all ( NULL ),
-    fH15 ( NULL ),
-    fH15_n80 ( NULL ),
-    fH15_pt80 ( NULL ),
-    fH15_bin ( NULL ),
-    fH15_bin_n80 ( NULL ),
-    fH15_bin_pt80 ( NULL ),
-    fH15all_bin ( NULL ),
-    fH15all_bin_n80 ( NULL ),
-    fH15all_bin_pt80 ( NULL ),
-    fH20 ( NULL ),
-    fH20_n80 ( NULL ),
-    fH20_pt80 ( NULL ),
-    fH20all ( NULL ),
-    fH20all_n80 ( NULL ),
-    fH20all_pt80 ( NULL ),
-    fH23 ( NULL ),
-    fH24 ( NULL ),
-    fH25 ( NULL ),
+    fH1( NULL ),
+    fH2( NULL ),
+    fH3( NULL ),
+    fH4( NULL ),
+    fH4c( NULL ),
+    fH5( NULL ),
+    fH6( NULL ),
+    fH6c( NULL ),
+    fH8( NULL ),
+    fH8xi( NULL ),
+    fH8_all( NULL ),
+    fH8xi_all( NULL ),
+    fH15_bin( NULL ),
+    fH15_bin_n90( NULL ),
+    fH15_bin_n85( NULL ),
+    fH15_bin_n80( NULL ),
+    fH15_bin_n75( NULL ),
+    fH15_bin_n70( NULL ),
+    fH15_bin_pt90( NULL ),
+    fH15_bin_pt85( NULL ),
+    fH15_bin_pt80( NULL ),
+    fH15_bin_pt75( NULL ),
+    fH15_bin_pt70( NULL ),
+    fH15all_bin( NULL ),
+    fH15all_bin_n90( NULL ),
+    fH15all_bin_n85( NULL ),
+    fH15all_bin_n80( NULL ),
+    fH15all_bin_n75( NULL ),
+    fH15all_bin_n70( NULL ),
+    fH15all_bin_pt90( NULL ),
+    fH15all_bin_pt85( NULL ),
+    fH15all_bin_pt80( NULL ),
+    fH15all_bin_pt75( NULL ),
+    fH15all_bin_pt70( NULL ),
+    fH20( NULL ),
+    fH20_n90( NULL ),
+    fH20_n85( NULL ),
+    fH20_n80( NULL ),
+    fH20_n75( NULL ),
+    fH20_n70( NULL ),
+    fH20_pt90( NULL ),
+    fH20_pt85( NULL ),
+    fH20_pt80( NULL ),
+    fH20_pt75( NULL ),
+    fH20_pt70( NULL ),
+    fH20all( NULL ),
+    fH20all_n90( NULL ),
+    fH20all_n85( NULL ),
+    fH20all_n80( NULL ),
+    fH20all_n75( NULL ),
+    fH20all_n70( NULL ),
+    fH20all_pt90( NULL ),
+    fH20all_pt85( NULL ),
+    fH20all_pt80( NULL ),
+    fH20all_pt75( NULL ),
+    fH20all_pt70( NULL ),
+    fHg( NULL ),
+    fHg_n90( NULL ),
+    fHg_n85( NULL ),
+    fHg_n80( NULL ),
+    fHg_n75( NULL ),
+    fHg_n70( NULL ),
+    fHg_pt90( NULL ),
+    fHg_pt85( NULL ),
+    fHg_pt80( NULL ),
+    fHg_pt75( NULL ),
+    fHg_pt70( NULL ),
+    fHptd( NULL ),
+    fHptd_n90( NULL ),
+    fHptd_n85( NULL ),
+    fHptd_n80( NULL ),
+    fHptd_n75( NULL ),
+    fHptd_n70( NULL ),
+    fHptd_pt90( NULL ),
+    fHptd_pt85( NULL ),
+    fHptd_pt80( NULL ),
+    fHptd_pt75( NULL ),
+    fHptd_pt70( NULL ),
     fJetsCont ( NULL ),
     fTracksCont ( NULL ),
     fCaloClustersCont ( NULL ),
     fTracksContArray ( NULL ),
     idx_jetcont(0),
     fNJets_accepted ( 0 ),
-    fNaccPart ( 0 )
+    fNaccPart ( 0 ),
+    fNaccClus ( 0 )
   {
   // Default constructor.
   fDebug = AliLog::GetGlobalDebugLevel();
@@ -94,43 +143,92 @@ AliAnalysisTaskEmcalJetCDF::AliAnalysisTaskEmcalJetCDF()
 //________________________________________________________________________
 AliAnalysisTaskEmcalJetCDF::AliAnalysisTaskEmcalJetCDF ( const char *name )
   : AliAnalysisTaskEmcalJet ( name, kTRUE ),
-    fH1 ( NULL ),
-    fH2 ( NULL ),
-    fH3 ( NULL ),
-    fH4 ( NULL ),
-    fH4c ( NULL ),
-    fH5 ( NULL ),
-    fH6 ( NULL ),
-    fH7 ( NULL ),
-    fH8 ( NULL ),
-    fH8xi ( NULL ),
-    fH8_all ( NULL ),
-    fH8xi_all ( NULL ),
-    fH15 ( NULL ),
-    fH15_n80 ( NULL ),
-    fH15_pt80 ( NULL ),
-    fH15_bin ( NULL ),
-    fH15_bin_n80 ( NULL ),
-    fH15_bin_pt80 ( NULL ),
-    fH15all_bin ( NULL ),
-    fH15all_bin_n80 ( NULL ),
-    fH15all_bin_pt80 ( NULL ),
-    fH20 ( NULL ),
-    fH20_n80 ( NULL ),
-    fH20_pt80 ( NULL ),
-    fH20all ( NULL ),
-    fH20all_n80 ( NULL ),
-    fH20all_pt80 ( NULL ),
-    fH23 ( NULL ),
-    fH24 ( NULL ),
-    fH25 ( NULL ),
+    fH1( NULL ),
+    fH2( NULL ),
+    fH3( NULL ),
+    fH4( NULL ),
+    fH4c( NULL ),
+    fH5( NULL ),
+    fH6( NULL ),
+    fH6c( NULL ),
+    fH8( NULL ),
+    fH8xi( NULL ),
+    fH8_all( NULL ),
+    fH8xi_all( NULL ),
+    fH15_bin( NULL ),
+    fH15_bin_n90( NULL ),
+    fH15_bin_n85( NULL ),
+    fH15_bin_n80( NULL ),
+    fH15_bin_n75( NULL ),
+    fH15_bin_n70( NULL ),
+    fH15_bin_pt90( NULL ),
+    fH15_bin_pt85( NULL ),
+    fH15_bin_pt80( NULL ),
+    fH15_bin_pt75( NULL ),
+    fH15_bin_pt70( NULL ),
+    fH15all_bin( NULL ),
+    fH15all_bin_n90( NULL ),
+    fH15all_bin_n85( NULL ),
+    fH15all_bin_n80( NULL ),
+    fH15all_bin_n75( NULL ),
+    fH15all_bin_n70( NULL ),
+    fH15all_bin_pt90( NULL ),
+    fH15all_bin_pt85( NULL ),
+    fH15all_bin_pt80( NULL ),
+    fH15all_bin_pt75( NULL ),
+    fH15all_bin_pt70( NULL ),
+    fH20( NULL ),
+    fH20_n90( NULL ),
+    fH20_n85( NULL ),
+    fH20_n80( NULL ),
+    fH20_n75( NULL ),
+    fH20_n70( NULL ),
+    fH20_pt90( NULL ),
+    fH20_pt85( NULL ),
+    fH20_pt80( NULL ),
+    fH20_pt75( NULL ),
+    fH20_pt70( NULL ),
+    fH20all( NULL ),
+    fH20all_n90( NULL ),
+    fH20all_n85( NULL ),
+    fH20all_n80( NULL ),
+    fH20all_n75( NULL ),
+    fH20all_n70( NULL ),
+    fH20all_pt90( NULL ),
+    fH20all_pt85( NULL ),
+    fH20all_pt80( NULL ),
+    fH20all_pt75( NULL ),
+    fH20all_pt70( NULL ),
+    fHg( NULL ),
+    fHg_n90( NULL ),
+    fHg_n85( NULL ),
+    fHg_n80( NULL ),
+    fHg_n75( NULL ),
+    fHg_n70( NULL ),
+    fHg_pt90( NULL ),
+    fHg_pt85( NULL ),
+    fHg_pt80( NULL ),
+    fHg_pt75( NULL ),
+    fHg_pt70( NULL ),
+    fHptd( NULL ),
+    fHptd_n90( NULL ),
+    fHptd_n85( NULL ),
+    fHptd_n80( NULL ),
+    fHptd_n75( NULL ),
+    fHptd_n70( NULL ),
+    fHptd_pt90( NULL ),
+    fHptd_pt85( NULL ),
+    fHptd_pt80( NULL ),
+    fHptd_pt75( NULL ),
+    fHptd_pt70( NULL ),
     fJetsCont ( NULL ),
     fTracksCont ( NULL ),
     fCaloClustersCont ( NULL ),
     fTracksContArray ( NULL ),
     idx_jetcont(0),
     fNJets_accepted ( 0 ),
-    fNaccPart ( 0 )
+    fNaccPart ( 0 ),
+    fNaccClus ( 0 )
   {
   // Standard constructor.
   fDebug = AliLog::GetGlobalDebugLevel();
@@ -167,32 +265,34 @@ Bool_t AliAnalysisTaskEmcalJetCDF::ProcessJetContainer(Int_t idx_jet_container)
       return kFALSE;
       }
 
-  // get particles and clusters connected to jets
+  // get particles connected to jets
   fTracksCont = fJetsCont->GetParticleContainer();
-  if (fTracksCont) 
-    { 
-    fTracksCont->SetClassName ( "AliVTrack" ); 
-    
+  if (fTracksCont)
+    {
+    fTracksCont->SetClassName ( "AliVTrack" );
+
     // get array of tracks
     fTracksContArray = fTracksCont->GetArray();
+
+    // Multiplicity in event - accepted tracks in tracks container
+    fNaccPart = fTracksCont->GetNAcceptedParticles();
     }
 
+  // get clusters connected to jets
   fCaloClustersCont = fJetsCont->GetClusterContainer();
-  if (fCaloClustersCont) 
-    { 
+  if (fCaloClustersCont)
+    {
     fCaloClustersCont->SetClassName ( "AliVCluster" );
 
     // get array of constituents
     fCaloClustContArray = fCaloClustersCont->GetArray();
+
+    // accepted clusters in cluster container
+    fNaccClus = fCaloClustersCont->GetNAcceptedClusters();
     }
 
   // Number of Jets found in event - accepted cuts applied by JetContainer
   fNJets_accepted = fJetsCont->GetNJets();
-
-  // Multiplicity in event - accepted tracks in tracks container
-  fNaccPart = fTracksCont->GetNAcceptedParticles();
-
-// TODO !!!!!! add number of constituents from CaloClusters; 
 
   // protection
   if ( ( fNJets_accepted < 1 ) || ( fNaccPart < 1 ) )
@@ -221,19 +321,37 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
 
   fH5->Fill ( fNJets_accepted ); // Distribution of jets in events;
 
-  Int_t counter_part = 0; Double_t counter_pt = 0.; // counter for npart and pt recording
+  UShort_t counter_part = 0; Double_t counter_pt = 0.; // counter for npart and pt recording
 
-  Int_t jet_n90 = -99 ; Double_t jet_pt90 = -99.99 ;
-  Int_t jet_n85 = -99 ; Double_t jet_pt85 = -99.99 ;
-  Int_t jet_n80 = -99 ; Double_t jet_pt80 = -99.99 ;
-  Int_t jet_n75 = -99 ; Double_t jet_pt75 = -99.99 ;
-  Int_t jet_n70 = -99 ; Double_t jet_pt70 = -99.99 ;
+  UShort_t jet_n90 = -99 ; Double_t jet_pt90 = -99.99 ;
+  UShort_t jet_n85 = -99 ; Double_t jet_pt85 = -99.99 ;
+  UShort_t jet_n80 = -99 ; Double_t jet_pt80 = -99.99 ;
+  UShort_t jet_n75 = -99 ; Double_t jet_pt75 = -99.99 ;
+  UShort_t jet_n70 = -99 ; Double_t jet_pt70 = -99.99 ;
 
-// ************************************************************** 
+  // variables used to compute g and ptD
+  Double_t g_tot = 0.; Double_t sum_part_pt_tot = 0.; Double_t sum_part_pt2_tot = 0.;
+
+  Double_t g_n90 = 0.; Double_t sum_part_pt_n90 = 0.; Double_t sum_part_pt2_n90 = 0.;
+  Double_t g_n85 = 0.; Double_t sum_part_pt_n85 = 0.; Double_t sum_part_pt2_n85 = 0.;
+  Double_t g_n80 = 0.; Double_t sum_part_pt_n80 = 0.; Double_t sum_part_pt2_n80 = 0.;
+  Double_t g_n75 = 0.; Double_t sum_part_pt_n75 = 0.; Double_t sum_part_pt2_n75 = 0.;
+  Double_t g_n70 = 0.; Double_t sum_part_pt_n70 = 0.; Double_t sum_part_pt2_n70 = 0.;
+
+  Double_t g_pt90 = 0.; Double_t sum_part_pt_pt90 = 0.; Double_t sum_part_pt2_pt90 = 0.;
+  Double_t g_pt85 = 0.; Double_t sum_part_pt_pt85 = 0.; Double_t sum_part_pt2_pt85 = 0.;
+  Double_t g_pt80 = 0.; Double_t sum_part_pt_pt80 = 0.; Double_t sum_part_pt2_pt80 = 0.;
+  Double_t g_pt75 = 0.; Double_t sum_part_pt_pt75 = 0.; Double_t sum_part_pt2_pt75 = 0.;
+  Double_t g_pt70 = 0.; Double_t sum_part_pt_pt70 = 0.; Double_t sum_part_pt2_pt70 = 0.;
+
+// **************************************************************
 //                        ALL JETS
 // **************************************************************
   // vector of sorted indexes of particles in jet
-  std::vector<Int_t> jet_sorted_idxvec();
+  std::vector< int > jet_sorted_idxvec ;
+
+  // jet propreties
+  Double_t jet_pt = 0. ; UShort_t jet_npart = 0; UShort_t jet_nconst = 0;
 
   jet = fJetsCont->GetNextAcceptJet (0);
   while ( jet )
@@ -243,23 +361,37 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
     // jet : Sorting by p_T jet constituents
     jet_sorted_idxvec = jet->SortConstituentsPt ( fTracksContArray );
 
-    Double_t jet_pt = jet->Pt();
-    UInt_t jet_npart = jet->GetNumberOfTracks();
-    UInt_t jet_nconst = jet->GetNumberOfConstituents();
+    jet_pt = jet->Pt();
+    jet_npart = jet->GetNumberOfTracks();
+    jet_nconst = jet->GetNumberOfConstituents();
 
-    jet_n90  = ( Int_t ) ( 0.9 * jet_npart );
+    g_tot = 0.; sum_part_pt_tot = 0.; sum_part_pt2_tot = 0.;
+
+    g_n90 = 0.; sum_part_pt_n90 = 0.; sum_part_pt2_n90 = 0.;
+    g_n85 = 0.; sum_part_pt_n85 = 0.; sum_part_pt2_n85 = 0.;
+    g_n80 = 0.; sum_part_pt_n80 = 0.; sum_part_pt2_n80 = 0.;
+    g_n75 = 0.; sum_part_pt_n75 = 0.; sum_part_pt2_n75 = 0.;
+    g_n70 = 0.; sum_part_pt_n70 = 0.; sum_part_pt2_n70 = 0.;
+
+    g_pt90 = 0.; sum_part_pt_pt90 = 0.; sum_part_pt2_pt90 = 0.;
+    g_pt85 = 0.; sum_part_pt_pt85 = 0.; sum_part_pt2_pt85 = 0.;
+    g_pt80 = 0.; sum_part_pt_pt80 = 0.; sum_part_pt2_pt80 = 0.;
+    g_pt75 = 0.; sum_part_pt_pt75 = 0.; sum_part_pt2_pt75 = 0.;
+    g_pt70 = 0.; sum_part_pt_pt70 = 0.; sum_part_pt2_pt70 = 0.;
+
+    jet_n90  = ( UShort_t ) ( 0.9 * jet_npart );
     jet_pt90 = 0.9 * jet_pt;
 
-    jet_n85  = ( Int_t ) ( 0.85 * jet_npart );
+    jet_n85  = ( UShort_t ) ( 0.85 * jet_npart );
     jet_pt85 = 0.85 * jet_pt;
 
-    jet_n80  = ( Int_t ) ( 0.8 * jet_npart );
+    jet_n80  = ( UShort_t ) ( 0.8 * jet_npart );
     jet_pt80 = 0.8 * jet_pt;
 
-    jet_n75  = ( Int_t ) ( 0.75 * jet_npart );
+    jet_n75  = ( UShort_t ) ( 0.75 * jet_npart );
     jet_pt75 = 0.75 * jet_pt;
 
-    jet_n70  = ( Int_t ) ( 0.7 * jet_npart );
+    jet_n70  = ( UShort_t ) ( 0.7 * jet_npart );
     jet_pt70 = 0.7 * jet_pt;
 
     fH1->Fill ( jet_pt );            // Pt distribution of jets
@@ -283,40 +415,174 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
       fH8_all->Fill   ( jet->GetZ  ( track ) );  // Momentum distribution for jets (FF)
       fH8xi_all->Fill ( jet->GetXi ( track ) );  // Momentum distribution for jets (FF) xi
 
-      fH20all->Fill ( dpart );                  // Distribution of R in leading jet
+      fH20all->Fill ( dpart );                   // Distribution of R in leading jet
 
       fH15all->Fill ( dpart, track_pt );         // p_{T} track vs the Distance R from Jet1
-      fH15all_bin->Fill ( dpart, track_pt );    // p_{T} track vs the Distance R from jet axis
+      fH15all_bin->Fill ( dpart, track_pt );     // p_{T} track vs the Distance R from jet axis
 
       fH23all->Fill ( jet_pt, dpart );           //  Jet1 Size vs P_{T} - all jets
 
-      // fill histograms for 80% of particles with highest pt
-      if ( counter_part <= jet_n80 )
+      // computing components for g and ptD in the jet tracks loop
+      g_tot += (track_pt * dpart)/jet_pt;
+      sum_part_pt_tot += track_pt;
+      sum_part_pt2_tot += TMath::Power( track_pt, 2 );
+
+//#############################################################################################
+      if ( counter_part <= jet_n90 )         /// N90
+          {
+          fH15all_n90->Fill ( dpart, track_pt );         // p_{T} track vs the Distance R from Jet - 80% of particles
+          fH15all_bin_n90->Fill ( dpart, track_pt );     // p_{T} track vs the Distance R from Jet - 80% of particles
+          fH20all_n90->Fill ( dpart );                   //  Distribution of R in leading jet
+
+          // computing components for g and ptD in the jet tracks loop
+          g_n90 += (track_pt * dpart)/jet_pt;
+          sum_part_pt_n90 += track_pt;
+          sum_part_pt2_n90 += TMath::Power( track_pt, 2 );
+          }
+
+      if ( counter_pt <= jet_pt90 )         /// PT90
+          {
+          fH15all_pt90->Fill ( dpart, track_pt ); //  p_{T} track vs the Distance R from Jet - 80% of pt
+          fH15all_bin_pt90->Fill ( dpart, track_pt ); //  p_{T} track vs the Distance R from Jet - 80% of pt
+          fH20all_pt90->Fill ( dpart );               //  Distribution of R in leading jet
+
+          // computing components for g and ptD in the jet tracks loop
+          g_pt90 += (track_pt * dpart)/jet_pt;
+          sum_part_pt_pt90 += track_pt;
+          sum_part_pt2_pt90 += TMath::Power( track_pt, 2 );
+          }
+
+//#############################################################################################
+      if ( counter_part <= jet_n85 )        /// N85
+          {
+          fH15all_n85->Fill ( dpart, track_pt ); // p_{T} track vs the Distance R from Jet - 80% of particles
+          fH15all_bin_n85->Fill ( dpart, track_pt ); // p_{T} track vs the Distance R from Jet - 80% of particles
+          fH20all_n85->Fill ( dpart );      //  Distribution of R in leading jet
+
+          // computing components for g and ptD in the jet tracks loop
+          g_n85 += (track_pt * dpart)/jet_pt;
+          sum_part_pt_n85 += track_pt;
+          sum_part_pt2_n85 += TMath::Power( track_pt, 2 );
+          }
+
+      if ( counter_pt <= jet_pt85 )        /// PT85
+          {
+          fH15all_pt85->Fill ( dpart, track_pt ); //  p_{T} track vs the Distance R from Jet - 80% of pt
+          fH15all_bin_pt85->Fill ( dpart, track_pt ); //  p_{T} track vs the Distance R from Jet - 80% of pt
+          fH20all_pt85->Fill ( dpart );               //  Distribution of R in leading jet
+
+          // computing components for g and ptD in the jet tracks loop
+          g_pt85 += (track_pt * dpart)/jet_pt;
+          sum_part_pt_pt85 += track_pt;
+          sum_part_pt2_pt85 += TMath::Power( track_pt, 2 );
+          }
+
+//#############################################################################################
+      if ( counter_part <= jet_n80 )        /// N80
           {
           fH15all_n80->Fill ( dpart, track_pt ); // p_{T} track vs the Distance R from Jet - 80% of particles
           fH15all_bin_n80->Fill ( dpart, track_pt ); // p_{T} track vs the Distance R from Jet - 80% of particles
           fH20all_n80->Fill ( dpart );      //  Distribution of R in leading jet
           fH24all->Fill ( jet_pt, dpart ); //  Jet1 Size vs P_{T} - all jets - 80% of particles
+
+          // computing components for g and ptD in the jet tracks loop
+          g_n80 += (track_pt * dpart)/jet_pt;
+          sum_part_pt_n80 += track_pt;
+          sum_part_pt2_n80 += TMath::Power( track_pt, 2 );
           }
 
-      // fill histograms for particles that have first 80% of pt
-      if ( counter_pt <= jet_pt80 )
+      if ( counter_pt <= jet_pt80 )         /// PT80
           {
           fH15all_pt80->Fill ( dpart, track_pt ); //  p_{T} track vs the Distance R from Jet - 80% of pt
           fH15all_bin_pt80->Fill ( dpart, track_pt ); //  p_{T} track vs the Distance R from Jet - 80% of pt
           fH20all_pt80->Fill ( dpart );               //  Distribution of R in leading jet
           fH25all->Fill ( jet_pt, dpart );             //  Jet1 Size vs P_{T} - all jets - 80% of Pt
+
+          // computing components for g and ptD in the jet tracks loop
+          g_pt80 += (track_pt * dpart)/jet_pt;
+          sum_part_pt_pt80 += track_pt;
+          sum_part_pt2_pt80 += TMath::Power( track_pt, 2 );
           }
 
-      ++counter_part; counter_pt += track_pt; 
+//#############################################################################################
+      if ( counter_part <= jet_n75 )        /// N75
+          {
+          fH15all_n75->Fill ( dpart, track_pt ); // p_{T} track vs the Distance R from Jet - 80% of particles
+          fH15all_bin_n75->Fill ( dpart, track_pt ); // p_{T} track vs the Distance R from Jet - 80% of particles
+          fH20all_n75->Fill ( dpart );      //  Distribution of R in leading jet
+
+          // computing components for g and ptD in the jet tracks loop
+          g_n75 += (track_pt * dpart)/jet_pt;
+          sum_part_pt_n75 += track_pt;
+          sum_part_pt2_n75 += TMath::Power( track_pt, 2 );
+          }
+
+      if ( counter_pt <= jet_pt75 )         /// PT75
+          {
+          fH15all_pt75->Fill ( dpart, track_pt ); //  p_{T} track vs the Distance R from Jet - 80% of pt
+          fH15all_bin_pt75->Fill ( dpart, track_pt ); //  p_{T} track vs the Distance R from Jet - 80% of pt
+          fH20all_pt75->Fill ( dpart );               //  Distribution of R in leading jet
+
+          // computing components for g and ptD in the jet tracks loop
+          g_pt75 += (track_pt * dpart)/jet_pt;
+          sum_part_pt_pt75 += track_pt;
+          sum_part_pt2_pt75 += TMath::Power( track_pt, 2 );
+          }
+
+//#############################################################################################
+      if ( counter_part <= jet_n70 )       /// N70
+          {
+          fH15all_n70->Fill ( dpart, track_pt ); // p_{T} track vs the Distance R from Jet - 80% of particles
+          fH15all_bin_n70->Fill ( dpart, track_pt ); // p_{T} track vs the Distance R from Jet - 80% of particles
+          fH20all_n80->Fill ( dpart );      //  Distribution of R in leading jet
+
+          // computing components for g and ptD in the jet tracks loop
+          g_n70 += (track_pt * dpart)/jet_pt;
+          sum_part_pt_n70 += track_pt;
+          sum_part_pt2_n70 += TMath::Power( track_pt, 2 );
+          }
+
+      if ( counter_pt <= jet_pt70 )        /// PT70
+          {
+          fH15all_pt70->Fill ( dpart, track_pt ); //  p_{T} track vs the Distance R from Jet - 80% of pt
+          fH15all_bin_pt70->Fill ( dpart, track_pt ); //  p_{T} track vs the Distance R from Jet - 80% of pt
+          fH20all_pt70->Fill ( dpart );               //  Distribution of R in leading jet
+
+          // computing components for g and ptD in the jet tracks loop
+          g_pt70 += (track_pt * dpart)/jet_pt;
+          sum_part_pt_pt70 += track_pt;
+          sum_part_pt2_pt70 += TMath::Power( track_pt, 2 );
+          }
+      ++counter_part; counter_pt += track_pt;
       } // end of loop over jet tracks
+
+    fHg->Fill     ( g_tot );
+    fHg_n70->Fill ( g_n70 );    fHg_pt70->Fill ( g_pt70 );
+    fHg_n75->Fill ( g_n75 );    fHg_pt75->Fill ( g_pt75 );
+    fHg_n80->Fill ( g_n80 );    fHg_pt80->Fill ( g_pt80 );
+    fHg_n85->Fill ( g_n85 );    fHg_pt85->Fill ( g_pt85 );
+    fHg_n90->Fill ( g_n90 );    fHg_pt90->Fill ( g_pt90 );
+
+    fHptd->Fill( TMath::Sqrt(sum_part_pt2_tot)/sum_part_pt_tot );
+
+    fHptd->Fill( TMath::Sqrt(sum_part_pt2_n70)/sum_part_pt_n70 );
+    fHptd->Fill( TMath::Sqrt(sum_part_pt2_n75)/sum_part_pt_n75 );
+    fHptd->Fill( TMath::Sqrt(sum_part_pt2_n80)/sum_part_pt_n80 );
+    fHptd->Fill( TMath::Sqrt(sum_part_pt2_n85)/sum_part_pt_n85 );
+    fHptd->Fill( TMath::Sqrt(sum_part_pt2_n90)/sum_part_pt_n90 );
+
+    fHptd->Fill( TMath::Sqrt(sum_part_pt2_pt70)/sum_part_pt_pt70 );
+    fHptd->Fill( TMath::Sqrt(sum_part_pt2_pt75)/sum_part_pt_pt75 );
+    fHptd->Fill( TMath::Sqrt(sum_part_pt2_pt80)/sum_part_pt_pt80 );
+    fHptd->Fill( TMath::Sqrt(sum_part_pt2_pt85)/sum_part_pt_pt85 );
+    fHptd->Fill( TMath::Sqrt(sum_part_pt2_pt90)/sum_part_pt_pt90 );
 
     jet = fJetsCont->GetNextAcceptJet();
     } // end of loop over jets
 
   jet = NULL; track = NULL;
 
-// ************************************************************** 
+// **************************************************************
 //                          LEADING JETS
 // **************************************************************
   AliEmcalJet* jet1 = fJetsCont->GetLeadingJet(); // internaly checked for AcceptedJet
@@ -335,7 +601,7 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
     }
 
   //vector of sorted indexes of particles in leading jet
-  std::vector<Int_t> jet1_sorted_idxvec();
+  std::vector< int > jet1_sorted_idxvec;
 
   if (jet1)
     {
@@ -397,13 +663,13 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
             fH25->Fill ( jet1_pt, dpart ); //  Jet1 Size vs P_{T}(jet1) - 80% of Pt
             }
 
-        ++counter_part; counter_pt += track_pt; 
+        ++counter_part; counter_pt += track_pt;
         } // end of loop over jet1 tracks
 
     } // end of jet1 (leading jet) processing
 
 
-  track = NULL; jet1 = NULL; 
+  track = NULL; jet1 = NULL;
 
   // post data at every processing
   PostData ( 1, fOutput ); // Post data for ALL output slots > 0 here.
@@ -608,9 +874,6 @@ void AliAnalysisTaskEmcalJetCDF::UserCreateOutputObjects()
   fH15_pt80->SetMarkerStyle ( kFullCircle );
   fOutput->Add ( fH15_pt80 );
 
-
-
-
   fH15all = new TProfile ( "histo15all", "<p_{T}> track in dR(jet1)", h15_nbin, h15_xlow, h15_xhigh );
   fH15all->SetStats ( kTRUE );
   fH15all->GetXaxis()->SetTitle ( "R" );
@@ -694,7 +957,7 @@ void AliAnalysisTaskEmcalJetCDF::UserCreateOutputObjects()
   fH15all_bin_pt80->GetXaxis()->SetTitleColor ( 1 );
   fH15all_bin_pt80->SetMarkerStyle ( kFullCircle );
   fOutput->Add ( fH15all_bin_pt80 );
- 
+
   //____________________________________________________________________________________
   Int_t h20_nbin = 100;
   Double_t h20_binwidth = 0.01;
@@ -802,7 +1065,196 @@ void AliAnalysisTaskEmcalJetCDF::UserCreateOutputObjects()
   fH25all->GetXaxis()->SetTitleColor ( 1 );
   fH25all->SetMarkerStyle ( kFullCircle );
   fOutput->Add ( fH25all );
-  
+
+//=============================================================
+  Int_t hg_nbin = 100;
+  Double_t hg_binwidth = 0.01;
+  Double_t hg_low = 0.;
+  Double_t hg_high = hg_low + hg_binwidth * hg_nbin;
+
+  fHg = new TH1D ( "histo_g", "dN/dg", hg_nbin, hg_low, hg_high );
+  fHg->SetStats ( kTRUE );
+  fHg->GetXaxis()->SetTitle ( "g" );
+  fHg->GetYaxis()->SetTitle ( "1/N_{jets} dN/dg" );
+  fHg->GetXaxis()->SetTitleColor ( 1 );
+  fHg->SetMarkerStyle ( kFullCircle );
+  fOutput->Add ( fHg );
+
+  fHg_n90 = new TH1D ( "histo_g_n90", "dN/dg", hg_nbin, hg_low, hg_high );
+  fHg_n90->SetStats ( kTRUE );
+  fHg_n90->GetXaxis()->SetTitle ( "g" );
+  fHg_n90->GetYaxis()->SetTitle ( "1/N_{jets} dN/dg" );
+  fHg_n90->GetXaxis()->SetTitleColor ( 1 );
+  fHg_n90->SetMarkerStyle ( kFullCircle );
+  fOutput->Add ( fHg_n90 );
+
+  fHg_n85 = new TH1D ( "histo_g_n85", "dN/dg", hg_nbin, hg_low, hg_high );
+  fHg_n85->SetStats ( kTRUE );
+  fHg_n85->GetXaxis()->SetTitle ( "g" );
+  fHg_n85->GetYaxis()->SetTitle ( "1/N_{jets} dN/dg" );
+  fHg_n85->GetXaxis()->SetTitleColor ( 1 );
+  fHg_n85->SetMarkerStyle ( kFullCircle );
+  fOutput->Add ( fHg_n85 );
+
+  fHg_n80 = new TH1D ( "histo_g_n80", "dN/dg", hg_nbin, hg_low, hg_high );
+  fHg_n80->SetStats ( kTRUE );
+  fHg_n80->GetXaxis()->SetTitle ( "g" );
+  fHg_n80->GetYaxis()->SetTitle ( "1/N_{jets} dN/dg" );
+  fHg_n80->GetXaxis()->SetTitleColor ( 1 );
+  fHg_n80->SetMarkerStyle ( kFullCircle );
+  fOutput->Add ( fHg_n80 );
+
+  fHg_n75 = new TH1D ( "histo_g_n75", "dN/dg", hg_nbin, hg_low, hg_high );
+  fHg_n75->SetStats ( kTRUE );
+  fHg_n75->GetXaxis()->SetTitle ( "g" );
+  fHg_n75->GetYaxis()->SetTitle ( "1/N_{jets} dN/dg" );
+  fHg_n75->GetXaxis()->SetTitleColor ( 1 );
+  fHg_n75->SetMarkerStyle ( kFullCircle );
+  fOutput->Add ( fHg_n75 );
+
+  fHg_n70 = new TH1D ( "histo_g_n70", "dN/dg", hg_nbin, hg_low, hg_high );
+  fHg_n70->SetStats ( kTRUE );
+  fHg_n70->GetXaxis()->SetTitle ( "g" );
+  fHg_n70->GetYaxis()->SetTitle ( "1/N_{jets} dN/dg" );
+  fHg_n70->GetXaxis()->SetTitleColor ( 1 );
+  fHg_n70->SetMarkerStyle ( kFullCircle );
+  fOutput->Add ( fHg_n70 );
+
+  fHg_pt90 = new TH1D ( "histo_g_pt90", "dN/dg", hg_nbin, hg_low, hg_high );
+  fHg_pt90->SetStats ( kTRUE );
+  fHg_pt90->GetXaxis()->SetTitle ( "g" );
+  fHg_pt90->GetYaxis()->SetTitle ( "1/N_{jets} dN/dg" );
+  fHg_pt90->GetXaxis()->SetTitleColor ( 1 );
+  fHg_pt90->SetMarkerStyle ( kFullCircle );
+  fOutput->Add ( fHg_pt90 );
+
+  fHg_pt85 = new TH1D ( "histo_g_pt85", "dN/dg", hg_nbin, hg_low, hg_high );
+  fHg_pt85->SetStats ( kTRUE );
+  fHg_pt85->GetXaxis()->SetTitle ( "g" );
+  fHg_pt85->GetYaxis()->SetTitle ( "1/N_{jets} dN/dg" );
+  fHg_pt85->GetXaxis()->SetTitleColor ( 1 );
+  fHg_pt85->SetMarkerStyle ( kFullCircle );
+  fOutput->Add ( fHg_pt85 );
+
+  fHg_pt80 = new TH1D ( "histo_g_pt80", "dN/dg", hg_nbin, hg_low, hg_high );
+  fHg_pt80->SetStats ( kTRUE );
+  fHg_pt80->GetXaxis()->SetTitle ( "g" );
+  fHg_pt80->GetYaxis()->SetTitle ( "1/N_{jets} dN/dg" );
+  fHg_pt80->GetXaxis()->SetTitleColor ( 1 );
+  fHg_pt80->SetMarkerStyle ( kFullCircle );
+  fOutput->Add ( fHg_pt80 );
+
+  fHg_pt75 = new TH1D ( "histo_g_pt75", "dN/dg", hg_nbin, hg_low, hg_high );
+  fHg_pt75->SetStats ( kTRUE );
+  fHg_pt75->GetXaxis()->SetTitle ( "g" );
+  fHg_pt75->GetYaxis()->SetTitle ( "1/N_{jets} dN/dg" );
+  fHg_pt75->GetXaxis()->SetTitleColor ( 1 );
+  fHg_pt75->SetMarkerStyle ( kFullCircle );
+  fOutput->Add ( fHg_pt75 );
+
+  fHg_pt70 = new TH1D ( "histo_g_pt70", "dN/dg", hg_nbin, hg_low, hg_high );
+  fHg_pt70->SetStats ( kTRUE );
+  fHg_pt70->GetXaxis()->SetTitle ( "g" );
+  fHg_pt70->GetYaxis()->SetTitle ( "1/N_{jets} dN/dg" );
+  fHg_pt70->GetXaxis()->SetTitleColor ( 1 );
+  fHg_pt70->SetMarkerStyle ( kFullCircle );
+  fOutput->Add ( fHg_pt70 );
+
+
+//=============================================================
+  Int_t hptd_nbin = 100;
+  Double_t hptd_binwidth = 0.01;
+  Double_t hptd_low = 0.;
+  Double_t hptd_high = hptd_low + hptd_binwidth * hptd_nbin;
+
+  fHptd = new TH1D ( "histo_g", "dN/dg", hptd_nbin, hptd_low, hptd_high );
+  fHptd->SetStats ( kTRUE );
+  fHptd->GetXaxis()->SetTitle ( "g" );
+  fHptd->GetYaxis()->SetTitle ( "1/N_{jets} dN/dg" );
+  fHptd->GetXaxis()->SetTitleColor ( 1 );
+  fHptd->SetMarkerStyle ( kFullCircle );
+  fOutput->Add ( fHptd );
+
+  fHptd_n90 = new TH1D ( "histo_ptd_n90", "dN/dg", hptd_nbin, hptd_low, hptd_high );
+  fHptd_n90->SetStats ( kTRUE );
+  fHptd_n90->GetXaxis()->SetTitle ( "g" );
+  fHptd_n90->GetYaxis()->SetTitle ( "1/N_{jets} dN/dg" );
+  fHptd_n90->GetXaxis()->SetTitleColor ( 1 );
+  fHptd_n90->SetMarkerStyle ( kFullCircle );
+  fOutput->Add ( fHptd_n90 );
+
+  fHptd_n85 = new TH1D ( "histo_ptd_n85", "dN/dg", hptd_nbin, hptd_low, hptd_high );
+  fHptd_n85->SetStats ( kTRUE );
+  fHptd_n85->GetXaxis()->SetTitle ( "g" );
+  fHptd_n85->GetYaxis()->SetTitle ( "1/N_{jets} dN/dg" );
+  fHptd_n85->GetXaxis()->SetTitleColor ( 1 );
+  fHptd_n85->SetMarkerStyle ( kFullCircle );
+  fOutput->Add ( fHptd_n85 );
+
+  fHptd_n80 = new TH1D ( "histo_ptd_n80", "dN/dg", hptd_nbin, hptd_low, hptd_high );
+  fHptd_n80->SetStats ( kTRUE );
+  fHptd_n80->GetXaxis()->SetTitle ( "g" );
+  fHptd_n80->GetYaxis()->SetTitle ( "1/N_{jets} dN/dg" );
+  fHptd_n80->GetXaxis()->SetTitleColor ( 1 );
+  fHptd_n80->SetMarkerStyle ( kFullCircle );
+  fOutput->Add ( fHptd_n80 );
+
+  fHptd_n75 = new TH1D ( "histo_ptd_n75", "dN/dg", hptd_nbin, hptd_low, hptd_high );
+  fHptd_n75->SetStats ( kTRUE );
+  fHptd_n75->GetXaxis()->SetTitle ( "g" );
+  fHptd_n75->GetYaxis()->SetTitle ( "1/N_{jets} dN/dg" );
+  fHptd_n75->GetXaxis()->SetTitleColor ( 1 );
+  fHptd_n75->SetMarkerStyle ( kFullCircle );
+  fOutput->Add ( fHptd_n75 );
+
+  fHptd_n70 = new TH1D ( "histo_ptd_n70", "dN/dg", hptd_nbin, hptd_low, hptd_high );
+  fHptd_n70->SetStats ( kTRUE );
+  fHptd_n70->GetXaxis()->SetTitle ( "g" );
+  fHptd_n70->GetYaxis()->SetTitle ( "1/N_{jets} dN/dg" );
+  fHptd_n70->GetXaxis()->SetTitleColor ( 1 );
+  fHptd_n70->SetMarkerStyle ( kFullCircle );
+  fOutput->Add ( fHptd_n70 );
+
+  fHptd_pt90 = new TH1D ( "histo_ptd_pt90", "dN/dg", hptd_nbin, hptd_low, hptd_high );
+  fHptd_pt90->SetStats ( kTRUE );
+  fHptd_pt90->GetXaxis()->SetTitle ( "g" );
+  fHptd_pt90->GetYaxis()->SetTitle ( "1/N_{jets} dN/dg" );
+  fHptd_pt90->GetXaxis()->SetTitleColor ( 1 );
+  fHptd_pt90->SetMarkerStyle ( kFullCircle );
+  fOutput->Add ( fHptd_pt90 );
+
+  fHptd_pt85 = new TH1D ( "histo_ptd_pt85", "dN/dg", hptd_nbin, hptd_low, hptd_high );
+  fHptd_pt85->SetStats ( kTRUE );
+  fHptd_pt85->GetXaxis()->SetTitle ( "g" );
+  fHptd_pt85->GetYaxis()->SetTitle ( "1/N_{jets} dN/dg" );
+  fHptd_pt85->GetXaxis()->SetTitleColor ( 1 );
+  fHptd_pt85->SetMarkerStyle ( kFullCircle );
+  fOutput->Add ( fHptd_pt85 );
+
+  fHptd_pt80 = new TH1D ( "histo_ptd_pt80", "dN/dg", hptd_nbin, hptd_low, hptd_high );
+  fHptd_pt80->SetStats ( kTRUE );
+  fHptd_pt80->GetXaxis()->SetTitle ( "g" );
+  fHptd_pt80->GetYaxis()->SetTitle ( "1/N_{jets} dN/dg" );
+  fHptd_pt80->GetXaxis()->SetTitleColor ( 1 );
+  fHptd_pt80->SetMarkerStyle ( kFullCircle );
+  fOutput->Add ( fHptd_pt80 );
+
+  fHptd_pt75 = new TH1D ( "histo_ptd_pt75", "dN/dg", hptd_nbin, hptd_low, hptd_high );
+  fHptd_pt75->SetStats ( kTRUE );
+  fHptd_pt75->GetXaxis()->SetTitle ( "g" );
+  fHptd_pt75->GetYaxis()->SetTitle ( "1/N_{jets} dN/dg" );
+  fHptd_pt75->GetXaxis()->SetTitleColor ( 1 );
+  fHptd_pt75->SetMarkerStyle ( kFullCircle );
+  fOutput->Add ( fHptd_pt75 );
+
+  fHptd_pt70 = new TH1D ( "histo_ptd_pt70", "dN/dg", hptd_nbin, hptd_low, hptd_high );
+  fHptd_pt70->SetStats ( kTRUE );
+  fHptd_pt70->GetXaxis()->SetTitle ( "g" );
+  fHptd_pt70->GetYaxis()->SetTitle ( "1/N_{jets} dN/dg" );
+  fHptd_pt70->GetXaxis()->SetTitleColor ( 1 );
+  fHptd_pt70->SetMarkerStyle ( kFullCircle );
+  fOutput->Add ( fHptd_pt70 );
+
 
   // =========== Switch on Sumw2 for all histos ===========
   for ( Int_t i = 0; i < fOutput->GetEntries(); ++i )
