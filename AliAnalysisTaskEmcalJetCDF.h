@@ -56,13 +56,12 @@ class AliAnalysisTaskEmcalJetCDF : public AliAnalysisTaskEmcalJet
     Int_t                       GetProcessJetCont () {return idx_jetcont;}
 
   protected:
+    void                        ExecOnce();
+    Bool_t                      Run() ;
 
     /// Filling of histograms
     /// \return kTRUE if filling is succesful
     Bool_t                      FillHistograms()   ;
-
-    void                        ExecOnce();
-    Bool_t                      Run() ;
 
     /// Sorting of tracks in the event by pt (descending)
     /// \param index of jet container
@@ -273,8 +272,8 @@ class AliAnalysisTaskEmcalJetCDF : public AliAnalysisTaskEmcalJet
       bool operator () ( const ptidx_pair &p1, const ptidx_pair &p2 )  { return p1.first > p2.first ; }
       };
 
-    AliAnalysisTaskEmcalJetCDF ( const AliAnalysisTaskEmcalJetCDF & );           // not implemented
-    AliAnalysisTaskEmcalJetCDF &operator= ( const AliAnalysisTaskEmcalJetCDF & ); // not implemented
+    AliAnalysisTaskEmcalJetCDF ( const AliAnalysisTaskEmcalJetCDF& );           // not implemented
+    AliAnalysisTaskEmcalJetCDF &operator= ( const AliAnalysisTaskEmcalJetCDF& ); // not implemented
 
     /// \cond CLASSIMP
     ClassDef ( AliAnalysisTaskEmcalJetCDF, 3 );
