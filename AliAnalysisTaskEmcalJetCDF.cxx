@@ -955,8 +955,24 @@ void AliAnalysisTaskEmcalJetCDF::UserCreateOutputObjects()
   fH15all->SetMarkerStyle ( kFullCircle );
   fOutput->Add ( fH15all );
 
-  fH15all_n80 = new TProfile ( "histo15all_n80", "<p_{T}> track in dR(jet1) - 80% of particles", h15_nbin,
-                            h15_xlow, h15_xhigh );
+//=====================================================================================
+  fH15all_n70 = new TProfile ( "histo15all_n70", "<p_{T}> track in dR(jet1) - 70% of particles", h15_nbin, h15_xlow, h15_xhigh );
+  fH15all_n70->SetStats ( kTRUE );
+  fH15all_n70->GetXaxis()->SetTitle ( "R" );
+  fH15all_n70->GetYaxis()->SetTitle ( "<p_{T}> track" );
+  fH15all_n70->GetXaxis()->SetTitleColor ( 1 );
+  fH15all_n70->SetMarkerStyle ( kFullCircle );
+  fOutput->Add ( fH15all_n70 );
+
+  fH15all_n75 = new TProfile ( "histo15all_n75", "<p_{T}> track in dR(jet1) - 75% of particles", h15_nbin, h15_xlow, h15_xhigh );
+  fH15all_n75->SetStats ( kTRUE );
+  fH15all_n75->GetXaxis()->SetTitle ( "R" );
+  fH15all_n75->GetYaxis()->SetTitle ( "<p_{T}> track" );
+  fH15all_n75->GetXaxis()->SetTitleColor ( 1 );
+  fH15all_n75->SetMarkerStyle ( kFullCircle );
+  fOutput->Add ( fH15all_n75 );
+
+  fH15all_n80 = new TProfile ( "histo15all_n80", "<p_{T}> track in dR(jet1) - 80% of particles", h15_nbin, h15_xlow, h15_xhigh );
   fH15all_n80->SetStats ( kTRUE );
   fH15all_n80->GetXaxis()->SetTitle ( "R" );
   fH15all_n80->GetYaxis()->SetTitle ( "<p_{T}> track" );
@@ -964,8 +980,40 @@ void AliAnalysisTaskEmcalJetCDF::UserCreateOutputObjects()
   fH15all_n80->SetMarkerStyle ( kFullCircle );
   fOutput->Add ( fH15all_n80 );
 
-  fH15all_pt80 = new TProfile ( "histo15all_pt80", "<p_{T}> track in dR(jet1) - 80% of Pt", h15_nbin, h15_xlow,
-                             h15_xhigh );
+  fH15all_n85 = new TProfile ( "histo15all_n85", "<p_{T}> track in dR(jet1) - 85% of particles", h15_nbin, h15_xlow, h15_xhigh );
+  fH15all_n85->SetStats ( kTRUE );
+  fH15all_n85->GetXaxis()->SetTitle ( "R" );
+  fH15all_n85->GetYaxis()->SetTitle ( "<p_{T}> track" );
+  fH15all_n85->GetXaxis()->SetTitleColor ( 1 );
+  fH15all_n85->SetMarkerStyle ( kFullCircle );
+  fOutput->Add ( fH15all_n85 );
+
+  fH15all_n90 = new TProfile ( "histo15all_n90", "<p_{T}> track in dR(jet1) - 90% of particles", h15_nbin, h15_xlow, h15_xhigh );
+  fH15all_n90->SetStats ( kTRUE );
+  fH15all_n90->GetXaxis()->SetTitle ( "R" );
+  fH15all_n90->GetYaxis()->SetTitle ( "<p_{T}> track" );
+  fH15all_n90->GetXaxis()->SetTitleColor ( 1 );
+  fH15all_n90->SetMarkerStyle ( kFullCircle );
+  fOutput->Add ( fH15all_n90 );
+
+//=====================================================================================
+  fH15all_pt70 = new TProfile ( "histo15all_pt70", "<p_{T}> track in dR(jet1) - 70% of Pt", h15_nbin, h15_xlow, h15_xhigh );
+  fH15all_pt70->SetStats ( kTRUE );
+  fH15all_pt70->GetXaxis()->SetTitle ( "R" );
+  fH15all_pt70->GetYaxis()->SetTitle ( "<p_{T}> track" );
+  fH15all_pt70->GetXaxis()->SetTitleColor ( 1 );
+  fH15all_pt70->SetMarkerStyle ( kFullCircle );
+  fOutput->Add ( fH15all_pt70 );
+
+  fH15all_pt75 = new TProfile ( "histo15all_pt75", "<p_{T}> track in dR(jet1) - 75% of Pt", h15_nbin, h15_xlow, h15_xhigh );
+  fH15all_pt75->SetStats ( kTRUE );
+  fH15all_pt75->GetXaxis()->SetTitle ( "R" );
+  fH15all_pt75->GetYaxis()->SetTitle ( "<p_{T}> track" );
+  fH15all_pt75->GetXaxis()->SetTitleColor ( 1 );
+  fH15all_pt75->SetMarkerStyle ( kFullCircle );
+  fOutput->Add ( fH15all_pt75 );
+
+  fH15all_pt80 = new TProfile ( "histo15all_pt80", "<p_{T}> track in dR(jet1) - 80% of Pt", h15_nbin, h15_xlow, h15_xhigh );
   fH15all_pt80->SetStats ( kTRUE );
   fH15all_pt80->GetXaxis()->SetTitle ( "R" );
   fH15all_pt80->GetYaxis()->SetTitle ( "<p_{T}> track" );
@@ -973,6 +1021,21 @@ void AliAnalysisTaskEmcalJetCDF::UserCreateOutputObjects()
   fH15all_pt80->SetMarkerStyle ( kFullCircle );
   fOutput->Add ( fH15all_pt80 );
 
+  fH15all_pt85 = new TProfile ( "histo15all_pt85", "<p_{T}> track in dR(jet1) - 85% of Pt", h15_nbin, h15_xlow, h15_xhigh );
+  fH15all_pt85->SetStats ( kTRUE );
+  fH15all_pt85->GetXaxis()->SetTitle ( "R" );
+  fH15all_pt85->GetYaxis()->SetTitle ( "<p_{T}> track" );
+  fH15all_pt85->GetXaxis()->SetTitleColor ( 1 );
+  fH15all_pt85->SetMarkerStyle ( kFullCircle );
+  fOutput->Add ( fH15all_pt85 );
+
+  fH15all_pt90 = new TProfile ( "histo15all_pt90", "<p_{T}> track in dR(jet1) - 90% of Pt", h15_nbin, h15_xlow, h15_xhigh );
+  fH15all_pt90->SetStats ( kTRUE );
+  fH15all_pt90->GetXaxis()->SetTitle ( "R" );
+  fH15all_pt90->GetYaxis()->SetTitle ( "<p_{T}> track" );
+  fH15all_pt90->GetXaxis()->SetTitleColor ( 1 );
+  fH15all_pt90->SetMarkerStyle ( kFullCircle );
+  fOutput->Add ( fH15all_pt90 );
 
 //____________________________________________________________________________________
   fH15_bin = new TH1D ( "histo15_bin", "p_{T} SUM (track) in dR(jet1)", h15_nbin, h15_xlow, h15_xhigh );
