@@ -129,8 +129,8 @@ AliAnalysisTaskEmcalJetCDF *AddTaskEmcalJetCDF ( AliEmcalJetTask *jetFinderTask,
   if ( !jetFinderTask->InheritsFrom ( AliEmcalJetTask::Class() ) )
     { AliError("AddTaskEmcalJetSample :: task is not/ does not inherits from AliEmcalJetTask"); }
 
-  const char *ntracks            = jetFinderTask->GetTracksName();
-  const char *nclusters          = jetFinderTask->GetClusName();
+  const char *ntracks            = jetFinderTask->GetParticleContainer(0)->GetName();
+  const char *nclusters          = jetFinderTask->GetParticleContainer(0)->GetName();
   const char *njets              = jetFinderTask->GetJetsName();
   Double_t    jetradius          = jetFinderTask->GetRadius();
 
@@ -162,8 +162,8 @@ AliAnalysisTaskEmcalJetCDF *AddTaskEmcalJetCDF ( const char* taskname,
   AliEmcalJetTask* jf = dynamic_cast<AliEmcalJetTask*>(mgr->GetTask(taskname));
   if (!jf) { AliError("AddTaskEmcalJetCDF :: task is not EmcalJetTask");}
 
-  const char *ntracks            = jf->GetTracksName();
-  const char *nclusters          = jf->GetClusName();
+  const char *ntracks            = jf->GetParticleContainer(0)->GetName();
+  const char *nclusters          = jf->GetParticleContainer(0)->GetName();
   const char *njets              = jf->GetJetsName();
   Double_t    jetradius          = jf->GetRadius();
 
