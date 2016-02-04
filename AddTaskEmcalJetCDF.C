@@ -20,8 +20,8 @@
 /// \param const char *taskname
 /// \return AliAnalysisTaskEmcalJetCDF* task
 AliAnalysisTaskEmcalJetCDF* AddTaskEmcalJetCDF (
-  const char *ntracks            = "Tracks",
-  const char *nclusters          = "CaloClusters",
+  const char *ntracks            = "usedefault",
+  const char *nclusters          = "usedefault",
   const char *njets              = "Jets",
   const char *nrho               = "",
   Double_t    jetradius          = 0.2,
@@ -34,6 +34,9 @@ AliAnalysisTaskEmcalJetCDF* AddTaskEmcalJetCDF (
 //   Int_t       nCentBins          = 1,
 )
   {
+
+//   const char* ncells             = "usedefault",
+
   // Get the pointer to the existing analysis manager via the static access method.
   //==============================================================================
   AliAnalysisManager *mgr = AliAnalysisManager::GetAnalysisManager();
@@ -42,14 +45,42 @@ AliAnalysisTaskEmcalJetCDF* AddTaskEmcalJetCDF (
 
   // Check the analysis type using the event handlers connected to the analysis manager.
   //==============================================================================
-  if ( !mgr->GetInputEventHandler() ) { ::Error ( "AddTaskEmcalJetCDF", "This task requires an input event handler" ); return NULL; }
+  AliVEventHandler* handler = mgr->GetInputEventHandler();
+  if (!handler) { ::Error ( "AddTaskEmcalJetCDF", "This task requires an input event handler" ); return NULL; }
+
+  enum EDataType_t { kUnknown, kESD, kAOD };
+
+  EDataType_t dataType = kUnknown;
+
+  if (handler->InheritsFrom("AliESDInputHandler")) { dataType = kESD; }
+  else
+  if (handler->InheritsFrom("AliAODInputHandler")) { dataType = kAOD; }
+
 
   //-------------------------------------------------------
   // Init the task and do settings
   //-------------------------------------------------------
 
-  TString name ( taskname ); TString tracks ( ntracks );
+  TString name ( taskname ); TString tracks ( ntracks );  //TString cellName(ncells);
   TString clusters ( nclusters ); TString jets ( njets );  TString rho ( nrho );
+
+  if (tracks.EqualTo("usedefault"))
+    {
+    if (dataType == kESD) { tracks = "Tracks"; }
+    else { tracks = "tracks"; }
+    }
+
+  if (clusters.EqualTo("usedefault"))
+    {
+    if (dataType == kESD) { clusters = "CaloClusters"; }
+    else { clusters = "caloClusters"; }
+    }
+
+//   if (cellName.EqualTo ("usedefault"))
+//     {
+//     if (dataType == kESD) { cellName = "EMCALCells"; }
+//     else cellName = "emcalCells"; }
+//     }
 
   TString acctype = type; acctype.ToUpper();
   if ( acctype.Contains ("TPC") )   { acctype = "TPC"; }
@@ -69,14 +100,16 @@ AliAnalysisTaskEmcalJetCDF* AddTaskEmcalJetCDF (
   jetTask->SetCentRange ( 0., 100. );
   jetTask->SetNCentBins ( 1 );
 
-  AliParticleContainer *trackCont  = jetTask->AddParticleContainer ( ntracks );
-  trackCont->SetClassName ( "AliVTrack" );
+//   jetTask->SetVzRange(-10,10);
+//   jetTask->SetCaloCellsName(cellName);
 
+  AliParticleContainer *trackCont  = jetTask->AddParticleContainer ( ntracks );
   AliClusterContainer *clusterCont = jetTask->AddClusterContainer ( nclusters );
-//     clusterCont->SetClassName("AliVCluster");
+
+//   trackCont->SetClassName ( "AliVTrack" );
+//  clusterCont->SetClassName("AliVCluster");
 
   AliJetContainer *jetCont = jetTask->AddJetContainer ( njets, acctype, jetradius );
-
   if ( jetCont )
       {
       if ( !rho.IsNull() ) { jetCont->SetRhoName ( nrho ); }
@@ -101,7 +134,7 @@ AliAnalysisTaskEmcalJetCDF* AddTaskEmcalJetCDF (
   AliAnalysisDataContainer *cinput1  = mgr->GetCommonInputContainer()  ;
   AliAnalysisDataContainer *coutput1 = mgr->CreateContainer ( contname.Data(), TList::Class(), AliAnalysisManager::kOutputContainer, outfile.Data() );
 
-  mgr->ConnectInput ( jetTask, 0,  cinput1 );
+  mgr->ConnectInput  ( jetTask, 0,  cinput1 );
   mgr->ConnectOutput ( jetTask, 1, coutput1 );
 
   return jetTask;
