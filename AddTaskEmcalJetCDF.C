@@ -1,36 +1,41 @@
 /// \file AddTaskEmcalJetCDF.C
 /// \brief Adds a AliAnalysisTaskEmcalJetCDF analysis task and coresponding containers
 ///
-/// Analysis of leading jets distribution of pt and multiplicity, R distribution
-/// N80 and Pt80 and Toward, Transverse, Away UE histos
+/// Analysis of jets (all and leading) distribution of pt and multiplicity, R distribution, N{70,75,80,85,90} and Pt{70,75,80,85,90}
 ///
 /// \author Adrian SEVCENCO <Adrian.Sevcenco@cern.ch>, Institute of Space Science, Romania
 /// \date Mar 19, 2015
 
 /// Add a AliAnalysisTaskEmcalJetCDF task - detailed signature
-/// \param const char *ntracks
-/// \param const char *nclusters
-/// \param const char *njets
-/// \param const char *nrho
-/// \param Double_t jetradius
-/// \param Double_t jetptcut
+/// \param AliJetContainer::EJetType_t jet_type : enum value for jet types (defined in AliJetContainer.h)
+/// \param AliJetContainer::EJetAlgo_t jetalgo : enum value for jet reconstruction algorithms (defined in AliJetContainer.h)
+/// \param AliJetContainer::ERecoScheme_t recomb : recombination scheme used for jet reconstruction (defined in AliJetContainer.h)
+/// \param Double_t r : radius for jet reconstruction
+/// \param const char* ntracks : name of tracks collection
+/// \param const char* nclusters : name of clusters collection
+/// \param const char* nrho : name of rho
+/// \param Double_t jetptcut : minim pt of jets from AliJetContainer
+/// \param Double_t jetptcutmax : maxim pt of jets from AliJetContainer
 /// \param Double_t jetareacut
-/// \param const char *type ; either TPC, EMCAL or USER
-/// \param Int_t leadhadtype ; 0 = charged, 1 = neutral, 2 = both
-/// \param const char *taskname
+/// \param AliJetContainer::JetAcceptanceType acceptance : acceptance type (defined in AliJetContainer.h)
+/// \param Int_t leadhadtype : 0 = charged, 1 = neutral, 2 = both
+/// \param const char* taskname
 /// \return AliAnalysisTaskEmcalJetCDF* task
 AliAnalysisTaskEmcalJetCDF* AddTaskEmcalJetCDF (
-  AliEmcalJetTask* jf_task,
-  const char *ntracks            = "usedefault",
-  const char *nclusters          = "usedefault",
-  const char *njets              = "Jets",
-  const char *nrho               = "",
-  Double_t    jetptcut           = 1.,
-  Double_t    jetptcutmax        = 250.,
-  Double_t    jetareacut         = 0.001,
+  AliJetContainer::EJetType_t jettype_t    = AliJetContainer::kChargedJet,
+  AliJetContainer::EJetAlgo_t jetalgo_t    = AliJetContainer::antikt_algorithm,
+  AliJetContainer::ERecoScheme_t recomb_t  = AliJetContainer::pt_scheme,
+  Double_t    radius                       = 0.4,
+  const char* ntracks                      = "usedefault",
+  const char* nclusters                    = "usedefault",
+  const char* nrho                         = "",
+  Double_t    jetptcut                     = 1.,
+  Double_t    jetptcutmax                  = 500.,
+  Double_t    jetareacut                   = 0.001,
   AliJetContainer::JetAcceptanceType acceptance = AliJetContainer::kTPCfid,
-  Int_t       leadhadtype        = 0,          // AliJetContainer :: Int_t fLeadingHadronType;  0 = charged, 1 = neutral, 2 = both
-  const char *taskname           = "CDF"
+  Int_t       leadhadtype                  = 0,          // AliJetContainer :: Int_t fLeadingHadronType;  0 = charged, 1 = neutral, 2 = both
+  const char* taskname                     = "CDF",
+  Bool_t      debug                        = kFALSE
 )
   {
 //   const char* ncells             = "usedefault",
@@ -46,20 +51,11 @@ AliAnalysisTaskEmcalJetCDF* AddTaskEmcalJetCDF (
   AliVEventHandler* handler = mgr->GetInputEventHandler();
   if (!handler) { ::Error ( "AddTaskEmcalJetCDF", "This task requires an input event handler" ); return NULL; }
 
-  if ( (!jf_task) && (!jf_task->InheritsFrom ( "AliEmcalJetTask")) ) { ::Error ( "AddTaskEmcalJetCDF", "Invalid AliEmcalJetTask* pointer"); return NULL; }
-
-  enum EDataType_t { kUnknown, kESD, kAOD };
-
-  EDataType_t dataType = kUnknown;
+  enum EDataType_t { kUnknown, kESD, kAOD }; EDataType_t dataType = kUnknown;
 
   if (handler->InheritsFrom("AliESDInputHandler")) { dataType = kESD; }
   else
   if (handler->InheritsFrom("AliAODInputHandler")) { dataType = kAOD; }
-
-  AliJetContainer::EJetType_t       jettype_t = jf_task->GetJetType();
-  AliJetContainer::ERecoScheme_t     recomb_t = jf_task->GetRecombScheme();
-  AliJetContainer::EJetAlgo_t       jetalgo_t = AliJetContainer::antikt_algorithm;
-  Double_t                             radius = jf_task->GetRadius();
 
   //-------------------------------------------------------
   // Init the task and do settings
@@ -69,7 +65,6 @@ AliAnalysisTaskEmcalJetCDF* AddTaskEmcalJetCDF (
   TString tracks ( ntracks );
   TString clusters ( nclusters );
 //TString cellName(ncells);
-  TString jets ( njets );
   TString rho ( nrho );
 
   if ( tracks.EqualTo("usedefault") )
@@ -96,15 +91,18 @@ AliAnalysisTaskEmcalJetCDF* AddTaskEmcalJetCDF (
 //     else cellName = "emcalCells"; }
 //     }
 
-  TString acctype = "acc"; acctype += TString::Itoa(acceptance,10);
+  TString acctype ("acc"); acctype += TString::Itoa(acceptance,10);
   if ( jetptcut < 1. ) { jetptcut = 1.; }
 
-  TString jetstr = "jpt";
+  TString jetstr ("jpt");
   jetstr += ( ULong_t ) ( jetptcut * 1000 );
 
-  if ( !jets.IsNull() )    { name += "_" + jets + "_" + jetstr; }
+  if ( !name.IsNull() ) { name += "_"; }
+  name += jetstr;
   if ( !rho.IsNull() )     { name += "_" + rho; }
   if ( !acctype.IsNull() ) { name += "_" + acctype; }
+
+  if (debug) { cout << "AliAnalysisTaskEmcalJetCDF :: Name of CDF task is : " << name.Data() << endl;}
 
   AliAnalysisTaskEmcalJetCDF* jetTask = new AliAnalysisTaskEmcalJetCDF ( name );
   jetTask->SetVzRange(-10,10);
@@ -129,27 +127,24 @@ AliAnalysisTaskEmcalJetCDF* AddTaskEmcalJetCDF (
   AliParticleContainer* partCont  = jetTask->GetParticleContainer(0);
   if (partCont) { partCont->SetParticlePtCut(0.15); }
 
-  AliClusterContainer* clusterCont = NULL;
-  if ( !clusters.IsNull() )
+  AliClusterContainer* clusterCont = jetTask->AddClusterContainer( clusters.Data() );
+  if (clusterCont)
     {
-    clusterCont = jetTask->AddClusterContainer ( clusters.Data() );
     clusterCont->SetClusECut(0.);
     clusterCont->SetClusPtCut(0.);
     clusterCont->SetClusHadCorrEnergyCut(0.30);
     clusterCont->SetDefaultClusterEnergy(AliVCluster::kHadCorr);
     }
 
-  AliJetContainer *jetCont = jetTask->AddJetContainer(
-                              jettype_t,
-                              jetalgo_t,
-                              recomb_t,
-                              radius,
-                              acceptance,
-                              partCont,
-                              clusterCont,
-                              name);
-
+  AliJetContainer* jetCont = jetTask->AddJetContainer( jettype_t, jetalgo_t, recomb_t, radius, acceptance, "Jet");
   if ( !jetCont ) { std::cout << "AddTaskEmcalJetCDF.C :: could not add jetCont" << std::endl; return NULL; }
+
+  if (debug)
+    {
+    std::cout << "AliAnalysisTaskEmcalJetCDF :: task name : " << name.Data() << std::endl;
+    jetCont->PrintCuts();
+    std::cout << "AliAnalysisTaskEmcalJetCDF :: Jet radius : " << jetCont->GetJetRadius() << std::endl;
+    }
 
   if ( !rho.IsNull() ) { jetCont->SetRhoName ( nrho ); }
   jetCont->SetPercAreaCut ( jetareacut );
@@ -177,28 +172,74 @@ AliAnalysisTaskEmcalJetCDF* AddTaskEmcalJetCDF (
   return jetTask;
   }
 
+/// Add a AliAnalysisTaskEmcalJetCDF task - use AliEmcalJetTask*
+/// \param AliEmcalJetTask* jf_task : pointer to jet finder that will provide jettype, jetalgo, recomb and radius information
+/// \param const char* ntracks : name of tracks collection
+/// \param const char* nclusters : name of clusters collection
+/// \param const char* nrho : name of rho
+/// \param Double_t jetptcut : minim pt of jets from AliJetContainer
+/// \param Double_t jetptcutmax : maxim pt of jets from AliJetContainer
+/// \param Double_t jetareacut
+/// \param AliJetContainer::JetAcceptanceType acceptance : acceptance type (defined in AliJetContainer.h)
+/// \param Int_t leadhadtype : 0 = charged, 1 = neutral, 2 = both
+/// \param const char* taskname
+/// \return AliAnalysisTaskEmcalJetCDF* task
+AliAnalysisTaskEmcalJetCDF* AddTaskEmcalJetCDF (
+  AliEmcalJetTask* jf_task,
+  const char* ntracks            = "usedefault",
+  const char* nclusters          = "usedefault",
+  const char* nrho               = "",
+  Double_t    jetptcut           = 1.,
+  Double_t    jetptcutmax        = 250.,
+  Double_t    jetareacut         = 0.001,
+  AliJetContainer::JetAcceptanceType acceptance = AliJetContainer::kTPCfid,
+  Int_t       leadhadtype        = 0,          // AliJetContainer :: Int_t fLeadingHadronType;  0 = charged, 1 = neutral, 2 = both
+  const char* taskname           = "CDF"
+)
+  {
+  if ( (!jf_task) && (!jf_task->InheritsFrom ( "AliEmcalJetTask")) ) { ::Error ( "AddTaskEmcalJetCDF", "Invalid AliEmcalJetTask* pointer"); return NULL; }
+
+  AliJetContainer::EJetType_t       jettype_t = jf_task->GetJetType();
+  AliJetContainer::ERecoScheme_t     recomb_t = jf_task->GetRecombScheme();
+  AliJetContainer::EJetAlgo_t       jetalgo_t = jf_task->GetJetAlgo();
+  Double_t                             radius = jf_task->GetRadius();
+
+  return AddTaskEmcalJetCDF ( jettype_t, jetalgo_t, recomb_t, radius, ntracks, nclusters, nrho, jetptcut, jetptcutmax, jetareacut, acceptance, leadhadtype, taskname);
+  }
+
+/// Add a AliAnalysisTaskEmcalJetCDF task - use const char* name of jet finder
+/// \param const char* taskname : name of jet finder that will provide jettype, jetalgo, recomb and radius information
+/// \param const char* ntracks : name of tracks collection
+/// \param const char* nclusters : name of clusters collection
+/// \param const char* nrho : name of rho
+/// \param Double_t jetptcut : minim pt of jets from AliJetContainer
+/// \param Double_t jetptcutmax : maxim pt of jets from AliJetContainer
+/// \param Double_t jetareacut
+/// \param AliJetContainer::JetAcceptanceType acceptance : acceptance type (defined in AliJetContainer.h)
+/// \param Int_t leadhadtype : 0 = charged, 1 = neutral, 2 = both
+/// \param const char* taskname
+/// \return AliAnalysisTaskEmcalJetCDF* task
 AliAnalysisTaskEmcalJetCDF* AddTaskEmcalJetCDF (
   const char* taskname,
-  const char *ntracks            = "usedefault",
-  const char *nclusters          = "usedefault",
-  const char *njets              = "Jets",
-  const char *nrho               = "",
+  const char* ntracks            = "usedefault",
+  const char* nclusters          = "usedefault",
+  const char* nrho               = "",
   Double_t    jetradius          = 0.2,
   Double_t    jetptcut           = 1.,
   Double_t    jetptcutmax        = 250.,
   Double_t    jetareacut         = 0.001,
-  AliJetContainer::JetAcceptanceType type = AliJetContainer::kTPCfid,
+  AliJetContainer::JetAcceptanceType acceptance = AliJetContainer::kTPCfid,
   Int_t       leadhadtype        = 0,          // AliJetContainer :: Int_t fLeadingHadronType;  0 = charged, 1 = neutral, 2 = both
-  const char *taskname           = "CDF"
+  const char* taskname           = "CDF"
 )
   {
   AliAnalysisManager* mgr = AliAnalysisManager::GetAnalysisManager();
-  if (!mgr) { ::Error("AddTaskEmcalJetCDF", "No analysis manager to connect to."); }
+  if (!mgr) { ::Error("AddTaskEmcalJetCDF", "No analysis manager to connect to."); return NULL;}
 
   AliEmcalJetTask* jf = dynamic_cast<AliEmcalJetTask*>(mgr->GetTask(taskname));
-  if (!jf) { AliError("AddTaskEmcalJetCDF :: task is not EmcalJetTask");}
+  if (!jf) { AliError("AddTaskEmcalJetCDF :: task is not EmcalJetTask"); return NULL;}
 
-  return AddTaskEmcalJetCDF ( jf, ntracks, nclusters, njets, nrho, jetptcut, jetptcutmax, jetareacut, type, leadhadtype, taskname);
+  return AddTaskEmcalJetCDF ( jf, ntracks, nclusters, nrho, jetptcut, jetptcutmax, jetareacut, acceptance, leadhadtype, taskname);
   }
 
 // kate: indent-mode none; indent-width 2; replace-tabs on;
