@@ -658,11 +658,11 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
         fH8->Fill   ( jet1->GetZ  ( track ) );  // Momentum distribution for leading jet (FF)
         fH8xi->Fill ( jet1->GetXi ( track ) );  // Momentum distribution for leading jet (FF) xi
 
-        Double_t z_p = Z_ptot(jet,track);
+        Double_t z_p = Z_ptot(jet1, track);
         fH8_p->Fill   ( z_p );  // Momentum distribution for jets (FF)
         fH8xi_p->Fill ( Xi (z_p)  );  // Momentum distribution for jets (FF) xi
 
-        Double_t z_pt = Z_pt(jet,track);
+        Double_t z_pt = Z_pt(jet1, track);
         fH8_pt->Fill   ( z_pt );  // Momentum distribution for jets (FF)
         fH8xi_pt->Fill ( Xi (z_pt) );  // Momentum distribution for jets (FF) xi
 
