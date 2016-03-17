@@ -106,7 +106,7 @@ AliAnalysisTaskEmcalJetCDF* AddTaskEmcalJetCDF (
   AliAnalysisDataContainer *cinput1  = mgr->GetCommonInputContainer();
 
   TString contname = name + "_histos";
-  TString outfile = AliAnalysisManager::GetCommonFileName();
+  TString outfile ("CDFhistos.root");
   AliAnalysisDataContainer *coutput1 = mgr->CreateContainer ( contname.Data(), TList::Class(), AliAnalysisManager::kOutputContainer, outfile.Data() );
 
   mgr->ConnectInput  ( cdfTask, 0,  cinput1 );
