@@ -316,7 +316,7 @@ class AliAnalysisTaskEmcalJetCDF : public AliAnalysisTaskEmcalJet
     AliAnalysisTaskEmcalJetCDF &operator= ( const AliAnalysisTaskEmcalJetCDF& ); // not implemented
 
     /// \cond CLASSIMP
-    ClassDef ( AliAnalysisTaskEmcalJetCDF, 3 );
+    ClassDef ( AliAnalysisTaskEmcalJetCDF, 4 );
     /// \endcond
 
   };
