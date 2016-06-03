@@ -1,50 +1,69 @@
+/**************************************************************************
+ * Copyright(c) 1998-2016, ALICE Experiment at CERN, All rights reserved. *
+ *                                                                        *
+ * Author: The ALICE Off-line Project.                                    *
+ * Contributors are mentioned in the code where appropriate.              *
+ *                                                                        *
+ * Permission to use, copy, modify and distribute this software and its   *
+ * documentation strictly for non-commercial purposes is hereby granted   *
+ * without fee, provided that the above copyright notice appears in all   *
+ * copies and that both the copyright notice and this permission notice   *
+ * appear in the supporting documentation. The authors make no claims     *
+ * about the suitability of this software for any purpose. It is          *
+ * provided "as is" without express or implied warranty.                  *
+ **************************************************************************/
+
 #include <cmath>
 
-#include <Rtypes.h>
-#include <TMath.h>
-#include <TMathBase.h>
 #include <TClonesArray.h>
-#include <TArray.h>
-#include <TArrayI.h>
-
-#include <TAxis.h>
 #include <TH1.h>
+#include <TH1F.h>
 #include <TH1D.h>
 #include <TProfile.h>
-#include <TSeqCollection.h>
-#include <TCollection.h>
-#include <TList.h>
-#include <TLorentzVector.h>
-#include <TVector2.h>
-#include <TAttMarker.h>
 
 #include <AliVCluster.h>
-#include <AliAODCaloCluster.h>
-#include <AliESDCaloCluster.h>
-#include <AliVTrack.h>
-#include <AliEmcalJet.h>
-#include <AliVEvent.h>
-#include <AliRhoParameter.h>
-#include <AliLog.h>
-#include <AliJetContainer.h>
-#include <AliParticleContainer.h>
-#include <AliClusterContainer.h>
-#include <AliVEvent.h>
 #include <AliVParticle.h>
 #include <AliLog.h>
 
-#include "AliAnalysisTaskEmcalJetCDF.h"
+#include "AliTLorentzVector.h"
+#include "AliEmcalJet.h"
+#include "AliRhoParameter.h"
+#include "AliJetContainer.h"
+#include "AliParticleContainer.h"
+#include "AliClusterContainer.h"
 
-using std::cout;
-using std::endl;
+#include "AliEmcalList.h"
+
+
+// #include <Rtypes.h>
+// #include <TMath.h>
+// #include <TMathBase.h>
+// #include <TArray.h>
+// #include <TArrayI.h>
+//
+// #include <TAxis.h>
+// #include <TSeqCollection.h>
+// #include <TCollection.h>
+// #include <TLorentzVector.h>
+// #include <TVector2.h>
+// #include <TAttMarker.h>
+//
+// #include <AliAODCaloCluster.h>
+// #include <AliESDCaloCluster.h>
+// #include <AliVTrack.h>
+// #include <AliVEvent.h>
+
+#include "AliAnalysisTaskEmcalJetCDF.h"
 
 /// \cond CLASSIMP
 ClassImp ( AliAnalysisTaskEmcalJetCDF );
 /// \endcond
 
-//________________________________________________________________________
-AliAnalysisTaskEmcalJetCDF::AliAnalysisTaskEmcalJetCDF()
-  : AliAnalysisTaskEmcalJet ( "AliAnalysisTaskEmcalJetCDF", kTRUE ),
+/**
+ * Default constructor. Needed by ROOT I/O
+ */
+AliAnalysisTaskEmcalJetCDF::AliAnalysisTaskEmcalJetCDF() :
+    AliAnalysisTaskEmcalJet (),
     fH1( NULL ),
     fH2( NULL ),
     fH3( NULL ),
@@ -131,16 +150,19 @@ AliAnalysisTaskEmcalJetCDF::AliAnalysisTaskEmcalJetCDF()
     fNJets_accepted ( 0 ),
     fNaccPart ( 0 ),
     fNaccClus ( 0 ),
-    fHistManager("AliAnalysisTaskEmcalJetCDF")
+    fHistManager()
   {
   // Default constructor.
   fDebug = AliLog::GetGlobalDebugLevel();
-  // SetMakeGeneralHistograms ( kTRUE );
   }
 
-//________________________________________________________________________
-AliAnalysisTaskEmcalJetCDF::AliAnalysisTaskEmcalJetCDF ( const char *name )
-  : AliAnalysisTaskEmcalJet ( name, kTRUE ),
+/**
+ * Standard constructor. Should be used by the user.
+ *
+ * @param[in] name Name of the task
+ */
+AliAnalysisTaskEmcalJetCDF::AliAnalysisTaskEmcalJetCDF ( const char *name ) :
+    AliAnalysisTaskEmcalJet ( name, kTRUE ),
     fH1( NULL ),
     fH2( NULL ),
     fH3( NULL ),
@@ -227,14 +249,14 @@ AliAnalysisTaskEmcalJetCDF::AliAnalysisTaskEmcalJetCDF ( const char *name )
     fNJets_accepted ( 0 ),
     fNaccPart ( 0 ),
     fNaccClus ( 0 ),
-    fHistManager("AliAnalysisTaskEmcalJetCDF")
+    fHistManager(name)
   {
   // Standard constructor.
   fDebug = AliLog::GetGlobalDebugLevel();
-  // SetMakeGeneralHistograms ( kTRUE );
+  SetMakeGeneralHistograms ( kTRUE );
   }
 
-//________________________________________________________________________
+/// Destructor
 AliAnalysisTaskEmcalJetCDF::~AliAnalysisTaskEmcalJetCDF()
   {
   // Destructor.
@@ -247,10 +269,15 @@ AliAnalysisTaskEmcalJetCDF::~AliAnalysisTaskEmcalJetCDF()
 
   }
 
-//________________________________________________________________________
+/**
+ * Run analysis code here, if needed.
+ * It will be executed before FillHistograms().
+ * If this function return kFALSE, FillHistograms() will *not*
+ * be executed for the current event
+ * @return Always kTRUE
+ */
 Bool_t AliAnalysisTaskEmcalJetCDF::Run()
   {
-  // Run analysis code here, if needed. It will be executed before FillHistograms().
   return ProcessJetContainer(idx_jetcont);
   }
 
@@ -763,1058 +790,618 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
 void AliAnalysisTaskEmcalJetCDF::UserCreateOutputObjects()
   {
   // Create user output.
-
   AliAnalysisTaskEmcalJet::UserCreateOutputObjects();
 
-  //  Histograms
-  fOutput->SetOwner ( kTRUE );
-
-  // Create the list of histograms. Only the list is owned.
-
-  //____________________________________________________________________________________
-  Int_t h1_nbin = 300;
-  Double_t h1_binwidth = 1;
-  Double_t h1_low = 0;
-  Double_t h1_high = h1_low + h1_binwidth * h1_nbin; // 1GeV/bin
-  fH1 = new TH1D ( "histo1", "p_{T} distribution of jets (accepted)", h1_nbin, h1_low, h1_high );
-  fH1->SetStats ( kTRUE );
-  fH1->GetXaxis()->SetTitle ( "p_{T,jet} in GeV/c" );
-  fH1->GetYaxis()->SetTitle ( "Jets" );
-  fH1->GetXaxis()->SetTitleColor ( 1 );
-  fH1->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH1 );
-
-  Int_t h2_nbin = 200;
-  Double_t h2_binwidth = 0.01;
-  Double_t h2_low = -1;
-  Double_t h2_high = h2_low + h2_binwidth * h2_nbin;
-  fH2 = new TH1D ( "histo2", "#eta distribution of jets (accepted)", h2_nbin, h2_low,
-                   h2_high ); // 1 unit of rapidity / 100 bin
-  fH2->SetStats ( kTRUE );
-  fH2->GetXaxis()->SetTitle ( "#eta_{jet}" );
-  fH2->GetYaxis()->SetTitle ( "Jets" );
-  fH2->GetXaxis()->SetTitleColor ( 1 );
-  fH2->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH2 );
-
-  Int_t h3_nbin = 126;
-  Double_t h3_binwidth = 0.05;
-  Double_t h3_low = 0.;
-  Double_t h3_high = h3_low + h3_binwidth * h3_nbin;
-  fH3 = new TH1D ( "histo3", "#phi distribution of jets (accepted)", h3_nbin, h3_low, h3_high );
-  fH3->SetStats ( kTRUE );
-  fH3->GetXaxis()->SetTitle ( "#phi_{jet}" );
-  fH3->GetYaxis()->SetTitle ( "Jets" );
-  fH3->GetXaxis()->SetTitleColor ( 1 );
-  fH3->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH3 );
-
-  //____________________________________________________________________________________
-  Int_t h4_nbin = 100;
-  Double_t h4_binwidth = 1;
-  Double_t h4_low = 0;
-  Double_t h4_high = h4_low + h4_binwidth * h4_nbin;
-  fH4 = new TH1D ( "histo4", "Multiplicity of jets (accepted) - charged tracks", h4_nbin, h4_low, h4_high ); // 1 unit of multiplicity /bin
-  fH4->SetStats ( kTRUE );
-  fH4->GetXaxis()->SetTitle ( "N_{tracks}(jet)" );
-  fH4->GetYaxis()->SetTitle ( "Jets" );
-  fH4->GetXaxis()->SetTitleColor ( 1 );
-  fH4->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH4 );
-
-  fH4c = new TH1D ( "histo4c", "Multiplicity of jets (accepted) - all constituents", h4_nbin, h4_low, h4_high ); // 1 unit of multiplicity /bin
-  fH4c->SetStats ( kTRUE );
-  fH4c->GetXaxis()->SetTitle ( "N_{tracks}(jet)" );
-  fH4c->GetYaxis()->SetTitle ( "Jets" );
-  fH4c->GetXaxis()->SetTitleColor ( 1 );
-  fH4c->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH4c );
-
-  //____________________________________________________________________________________
-  Int_t h5_nbin = 100;
-  Double_t h5_binwidth = 1;
-  Double_t h5_low = 0;
-  Double_t h5_high = h5_low + h5_binwidth * h5_nbin;
-  fH5 = new TH1D ( "histo5", "Distribution of jets in events", h5_nbin, h5_low, h5_high );
-  fH5->SetStats ( kTRUE );
-  fH5->GetXaxis()->SetTitle ( "N_{jets}" );
-  fH5->GetYaxis()->SetTitle ( "Events" );
-  fH5->GetXaxis()->SetTitleColor ( 1 );
-  fH5->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH5 );
-
-  //____________________________________________________________________________________
-  Int_t h6_nbin = 100;
-  Double_t h6_binwidth = 1;
-  Double_t h6_low = 0;
-  Double_t h6_high = h6_low + h6_binwidth * h6_nbin;
-  fH6 = new TH1D ( "histo6", "Jet1 Multiplicity Distribution - charged tracks", h6_nbin, h6_low, h6_high );
-  fH6->SetStats ( kTRUE );
-  fH6->GetXaxis()->SetTitle ( "N_{tracks}(jet1)" );
-  fH6->GetYaxis()->SetTitle ( "1/N_{jet1}" );
-  fH6->GetXaxis()->SetTitleColor ( 1 );
-  fH6->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH6 );
-
-  fH6c = new TH1D ( "histo6c", "Jet1 Multiplicity Distribution - all constituents", h6_nbin, h6_low, h6_high );
-  fH6c->SetStats ( kTRUE );
-  fH6c->GetXaxis()->SetTitle ( "N_{tracks}(jet1)" );
-  fH6c->GetYaxis()->SetTitle ( "1/N_{jet1}" );
-  fH6c->GetXaxis()->SetTitleColor ( 1 );
-  fH6c->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH6c );
-
-  //____________________________________________________________________________________
-  Int_t h7_nbin = 400;
-  Double_t h7_binwidth = 1;
-  Double_t h7_xlow = 0;
-  Double_t h7_xhigh = h7_xlow + h7_binwidth * h7_nbin;
-  fH7 = new TProfile ( "histo7", "N(jet1) vs P_{T} - jet1", h7_nbin, h7_xlow, h7_xhigh );
-  fH7->SetStats ( kTRUE );
-  fH7->GetXaxis()->SetTitle ( "p_{T}(jet1) (GeV/c)" );
-  fH7->GetYaxis()->SetTitle ( "<N_{tracks}(jet1)> in 1 GeV/c bin" );
-  fH7->GetXaxis()->SetTitleColor ( 1 );
-  fH7->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH7 );
-
-  fH7all = new TProfile ( "histo7all", "N(jet1) vs P_{T} - all jets", h7_nbin, h7_xlow, h7_xhigh );
-  fH7all->SetStats ( kTRUE );
-  fH7all->GetXaxis()->SetTitle ( "p_{T}(jet) (GeV/c)" );
-  fH7all->GetYaxis()->SetTitle ( "<N_{tracks}(jet1)> in 1 GeV/c bin" );
-  fH7all->GetXaxis()->SetTitleColor ( 1 );
-  fH7all->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH7all );
-
-//__________________________________________________________________________________________________
-  Int_t h8_nbin = 101;
-  Double_t h8_binwidth = 0.01;
-  Double_t h8_low = 0;
-  Double_t h8_high = h8_low + h8_binwidth * h8_nbin;
-//########################################################
-  // Standard implementation of Z
-  fH8 = new TH1D ( "histo8", "Momentum distribution for jet1 (FF)", h8_nbin, h8_low, h8_high );
-  fH8->SetStats ( kTRUE );
-  fH8->GetXaxis()->SetTitle ( "z" );
-  fH8->GetYaxis()->SetTitle ( "F(Z) = 1/N_{jets1} dN/dz" );
-  fH8->GetXaxis()->SetTitleColor ( 1 );
-  fH8->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH8 );
-
-  fH8_all = new TH1D ( "histo8_all", "Momentum distribution for jets (FF)", h8_nbin, h8_low, h8_high );
-  fH8_all->SetStats ( kTRUE );
-  fH8_all->GetXaxis()->SetTitle ( "z" );
-  fH8_all->GetYaxis()->SetTitle ( "F(Z) = 1/N_{jets} dN/dz" );
-  fH8_all->GetXaxis()->SetTitleColor ( 1 );
-  fH8_all->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH8_all );
-//########################################################
-  // P_tot implementation of Z
-  fH8_p = new TH1D ( "histo8_p", "Momentum distribution for jet1 (FF) - P_tot", h8_nbin, h8_low, h8_high );
-  fH8_p->SetStats ( kTRUE );
-  fH8_p->GetXaxis()->SetTitle ( "z = p_{track}/p_{jet1}" );
-  fH8_p->GetYaxis()->SetTitle ( "F(Z) = 1/N_{jets1} dN/dz" );
-  fH8_p->GetXaxis()->SetTitleColor ( 1 );
-  fH8_p->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH8_p );
-
-  fH8_all_p = new TH1D ( "histo8_all_p", "Momentum distribution for jets (FF) - P_tot", h8_nbin, h8_low, h8_high );
-  fH8_all_p->SetStats ( kTRUE );
-  fH8_all_p->GetXaxis()->SetTitle ( "z = p_{track}/p_{jet}" );
-  fH8_all_p->GetYaxis()->SetTitle ( "F(Z) = 1/N_{jets1} dN/dz" );
-  fH8_all_p->GetXaxis()->SetTitleColor ( 1 );
-  fH8_all_p->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH8_all_p );
-//########################################################
-  // Pt implementation of Z
-  fH8_pt = new TH1D ( "histo8_pt", "Momentum distribution for jet1 (FF) - Pt", h8_nbin, h8_low, h8_high );
-  fH8_pt->SetStats ( kTRUE );
-  fH8_pt->GetXaxis()->SetTitle ( "z = p_{T,track}/p_{T,jet1}" );
-  fH8_pt->GetYaxis()->SetTitle ( "F(Z) = 1/N_{jets1} dN/dz" );
-  fH8_pt->GetXaxis()->SetTitleColor ( 1 );
-  fH8_pt->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH8_pt );
-
-  fH8_all_pt = new TH1D ( "histo8_all_pt", "Momentum distribution for jets (FF) - Pt", h8_nbin, h8_low, h8_high );
-  fH8_all_pt->SetStats ( kTRUE );
-  fH8_all_pt->GetXaxis()->SetTitle ( "z = p_{T,track}/p_{T,jet1}" );
-  fH8_all_pt->GetYaxis()->SetTitle ( "F(Z) = 1/N_{jets} dN/dz" );
-  fH8_all_pt->GetXaxis()->SetTitleColor ( 1 );
-  fH8_all_pt->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH8_all_pt );
-//########################################################
-
-//__________________________________________________________________________________________________
-  Int_t h8xi_nbin = 300;
-  Double_t h8xi_binwidth = 0.05;
-  Double_t h8xi_low = 0;
-  Double_t h8xi_high = h8xi_low + h8xi_binwidth * h8xi_nbin;
-
-//########################################################
-  fH8xi = new TH1D ( "histo8xi", "Momentum distribution for jet1 (FF)", h8xi_nbin, h8xi_low, h8xi_high );
-  fH8xi->SetStats ( kTRUE );
-  fH8xi->GetXaxis()->SetTitle ( "#xi = ln(1/z)" );
-  fH8xi->GetYaxis()->SetTitle ( "D(#xi) = 1/N_{jets1} dN/d#xi" );
-  fH8xi->GetXaxis()->SetTitleColor ( 1 );
-  fH8xi->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH8xi );
-
-  fH8xi_all = new TH1D ( "histo8xi_all", "Momentum distribution for all jets (FF)", h8xi_nbin, h8xi_low, h8xi_high );
-  fH8xi_all->SetStats ( kTRUE );
-  fH8xi_all->GetXaxis()->SetTitle ( "#xi = ln(1/z)" );
-  fH8xi_all->GetYaxis()->SetTitle ( "D(#xi) = 1/N_{jets1} dN/d#xi" );
-  fH8xi_all->GetXaxis()->SetTitleColor ( 1 );
-  fH8xi_all->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH8xi_all );
-
-//########################################################
-  fH8xi_p = new TH1D ( "histo8xi_p", "Momentum distribution for jet1 (FF) - P_tot", h8xi_nbin, h8xi_low, h8xi_high );
-  fH8xi_p->SetStats ( kTRUE );
-  fH8xi_p->GetXaxis()->SetTitle ( "#xi = ln(1/z)" );
-  fH8xi_p->GetYaxis()->SetTitle ( "D(#xi) = 1/N_{jets1} dN/d#xi" );
-  fH8xi_p->GetXaxis()->SetTitleColor ( 1 );
-  fH8xi_p->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH8xi_p );
-
-  fH8xi_all_p = new TH1D ( "histo8xi_all_p", "Momentum distribution for all jets (FF) - P_tot", h8xi_nbin, h8xi_low, h8xi_high );
-  fH8xi_all_p->SetStats ( kTRUE );
-  fH8xi_all_p->GetXaxis()->SetTitle ( "#xi = ln(1/z)" );
-  fH8xi_all_p->GetYaxis()->SetTitle ( "D(#xi) = 1/N_{jets} dN/d#xi" );
-  fH8xi_all_p->GetXaxis()->SetTitleColor ( 1 );
-  fH8xi_all_p->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH8xi_all_p );
-
-//########################################################
-  fH8xi_pt = new TH1D ( "histo8xi_pt", "Momentum distribution for jet1 (FF) - Pt", h8xi_nbin, h8xi_low, h8xi_high );
-  fH8xi_pt->SetStats ( kTRUE );
-  fH8xi_pt->GetXaxis()->SetTitle ( "#xi = ln(1/z)" );
-  fH8xi_pt->GetYaxis()->SetTitle ( "D(#xi) = 1/N_{jets1} dN/d#xi" );
-  fH8xi_pt->GetXaxis()->SetTitleColor ( 1 );
-  fH8xi_pt->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH8xi_pt );
-
-  fH8xi_all_pt = new TH1D ( "histo8xi_all_pt", "Momentum distribution for all jets (FF) - Pt", h8xi_nbin, h8xi_low, h8xi_high );
-  fH8xi_all_pt->SetStats ( kTRUE );
-  fH8xi_all_pt->GetXaxis()->SetTitle ( "#xi = ln(1/z)" );
-  fH8xi_all_pt->GetYaxis()->SetTitle ( "D(#xi) = 1/N_{jets} dN/d#xi" );
-  fH8xi_all_pt->GetXaxis()->SetTitleColor ( 1 );
-  fH8xi_all_pt->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH8xi_all_pt );
-
-//____________________________________________________________________________________
-  Int_t h15_nbin = 100;
-  Double_t h15_binwidth = 0.01;
-  Double_t h15_xlow = 0.;
-  Double_t h15_xhigh = h15_xlow + h15_binwidth * h15_nbin;
-
-  fH15 = new TProfile ( "histo15", "<p_{T}> track in dR(jet1)", h15_nbin, h15_xlow, h15_xhigh );
-  fH15->SetStats ( kTRUE );
-  fH15->GetXaxis()->SetTitle ( "R" );
-  fH15->GetYaxis()->SetTitle ( "<p_{T}> track" );
-  fH15->GetXaxis()->SetTitleColor ( 1 );
-  fH15->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH15 );
-
-//=====================================================================================
-  fH15_n70 = new TProfile ( "histo15_n70", "<p_{T}> track in dR(jet1) - 70% of particles", h15_nbin, h15_xlow, h15_xhigh );
-  fH15_n70->SetStats ( kTRUE );
-  fH15_n70->GetXaxis()->SetTitle ( "R" );
-  fH15_n70->GetYaxis()->SetTitle ( "<p_{T}> track" );
-  fH15_n70->GetXaxis()->SetTitleColor ( 1 );
-  fH15_n70->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH15_n70 );
-
-  fH15_n75 = new TProfile ( "histo15_n75", "<p_{T}> track in dR(jet1) - 75% of particles", h15_nbin, h15_xlow, h15_xhigh );
-  fH15_n75->SetStats ( kTRUE );
-  fH15_n75->GetXaxis()->SetTitle ( "R" );
-  fH15_n75->GetYaxis()->SetTitle ( "<p_{T}> track" );
-  fH15_n75->GetXaxis()->SetTitleColor ( 1 );
-  fH15_n75->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH15_n75 );
-
-  fH15_n80 = new TProfile ( "histo15_n80", "<p_{T}> track in dR(jet1) - 80% of particles", h15_nbin, h15_xlow, h15_xhigh );
-  fH15_n80->SetStats ( kTRUE );
-  fH15_n80->GetXaxis()->SetTitle ( "R" );
-  fH15_n80->GetYaxis()->SetTitle ( "<p_{T}> track" );
-  fH15_n80->GetXaxis()->SetTitleColor ( 1 );
-  fH15_n80->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH15_n80 );
-
-  fH15_n85 = new TProfile ( "histo15_n85", "<p_{T}> track in dR(jet1) - 85% of particles", h15_nbin, h15_xlow, h15_xhigh );
-  fH15_n85->SetStats ( kTRUE );
-  fH15_n85->GetXaxis()->SetTitle ( "R" );
-  fH15_n85->GetYaxis()->SetTitle ( "<p_{T}> track" );
-  fH15_n85->GetXaxis()->SetTitleColor ( 1 );
-  fH15_n85->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH15_n85 );
-
-  fH15_n90 = new TProfile ( "histo15_n90", "<p_{T}> track in dR(jet1) - 90% of particles", h15_nbin, h15_xlow, h15_xhigh );
-  fH15_n90->SetStats ( kTRUE );
-  fH15_n90->GetXaxis()->SetTitle ( "R" );
-  fH15_n90->GetYaxis()->SetTitle ( "<p_{T}> track" );
-  fH15_n90->GetXaxis()->SetTitleColor ( 1 );
-  fH15_n90->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH15_n90 );
-
-
-//=====================================================================================
-  fH15_pt70 = new TProfile ( "histo15_pt70", "<p_{T}> track in dR(jet1) - 70% of Pt", h15_nbin, h15_xlow, h15_xhigh );
-  fH15_pt70->SetStats ( kTRUE );
-  fH15_pt70->GetXaxis()->SetTitle ( "R" );
-  fH15_pt70->GetYaxis()->SetTitle ( "<p_{T}> track" );
-  fH15_pt70->GetXaxis()->SetTitleColor ( 1 );
-  fH15_pt70->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH15_pt70 );
-
-  fH15_pt75 = new TProfile ( "histo15_pt75", "<p_{T}> track in dR(jet1) - 75% of Pt", h15_nbin, h15_xlow, h15_xhigh );
-  fH15_pt75->SetStats ( kTRUE );
-  fH15_pt75->GetXaxis()->SetTitle ( "R" );
-  fH15_pt75->GetYaxis()->SetTitle ( "<p_{T}> track" );
-  fH15_pt75->GetXaxis()->SetTitleColor ( 1 );
-  fH15_pt75->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH15_pt75 );
-
-  fH15_pt80 = new TProfile ( "histo15_pt80", "<p_{T}> track in dR(jet1) - 80% of Pt", h15_nbin, h15_xlow, h15_xhigh );
-  fH15_pt80->SetStats ( kTRUE );
-  fH15_pt80->GetXaxis()->SetTitle ( "R" );
-  fH15_pt80->GetYaxis()->SetTitle ( "<p_{T}> track" );
-  fH15_pt80->GetXaxis()->SetTitleColor ( 1 );
-  fH15_pt80->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH15_pt80 );
-
-  fH15_pt85 = new TProfile ( "histo15_pt85", "<p_{T}> track in dR(jet1) - 85% of Pt", h15_nbin, h15_xlow, h15_xhigh );
-  fH15_pt85->SetStats ( kTRUE );
-  fH15_pt85->GetXaxis()->SetTitle ( "R" );
-  fH15_pt85->GetYaxis()->SetTitle ( "<p_{T}> track" );
-  fH15_pt85->GetXaxis()->SetTitleColor ( 1 );
-  fH15_pt85->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH15_pt85 );
-
-  fH15_pt90 = new TProfile ( "histo15_pt90", "<p_{T}> track in dR(jet1) - 90% of Pt", h15_nbin, h15_xlow, h15_xhigh );
-  fH15_pt90->SetStats ( kTRUE );
-  fH15_pt90->GetXaxis()->SetTitle ( "R" );
-  fH15_pt90->GetYaxis()->SetTitle ( "<p_{T}> track" );
-  fH15_pt90->GetXaxis()->SetTitleColor ( 1 );
-  fH15_pt90->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH15_pt90 );
-
-
-
-//__________________________________________________________________________________________________
-  fH15all = new TProfile ( "histo15all", "<p_{T}> track in dR(jet1)", h15_nbin, h15_xlow, h15_xhigh );
-  fH15all->SetStats ( kTRUE );
-  fH15all->GetXaxis()->SetTitle ( "R" );
-  fH15all->GetYaxis()->SetTitle ( "<p_{T}> track" );
-  fH15all->GetXaxis()->SetTitleColor ( 1 );
-  fH15all->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH15all );
-
-//=====================================================================================
-  fH15all_n70 = new TProfile ( "histo15all_n70", "<p_{T}> track in dR(jet1) - 70% of particles", h15_nbin, h15_xlow, h15_xhigh );
-  fH15all_n70->SetStats ( kTRUE );
-  fH15all_n70->GetXaxis()->SetTitle ( "R" );
-  fH15all_n70->GetYaxis()->SetTitle ( "<p_{T}> track" );
-  fH15all_n70->GetXaxis()->SetTitleColor ( 1 );
-  fH15all_n70->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH15all_n70 );
-
-  fH15all_n75 = new TProfile ( "histo15all_n75", "<p_{T}> track in dR(jet1) - 75% of particles", h15_nbin, h15_xlow, h15_xhigh );
-  fH15all_n75->SetStats ( kTRUE );
-  fH15all_n75->GetXaxis()->SetTitle ( "R" );
-  fH15all_n75->GetYaxis()->SetTitle ( "<p_{T}> track" );
-  fH15all_n75->GetXaxis()->SetTitleColor ( 1 );
-  fH15all_n75->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH15all_n75 );
-
-  fH15all_n80 = new TProfile ( "histo15all_n80", "<p_{T}> track in dR(jet1) - 80% of particles", h15_nbin, h15_xlow, h15_xhigh );
-  fH15all_n80->SetStats ( kTRUE );
-  fH15all_n80->GetXaxis()->SetTitle ( "R" );
-  fH15all_n80->GetYaxis()->SetTitle ( "<p_{T}> track" );
-  fH15all_n80->GetXaxis()->SetTitleColor ( 1 );
-  fH15all_n80->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH15all_n80 );
-
-  fH15all_n85 = new TProfile ( "histo15all_n85", "<p_{T}> track in dR(jet1) - 85% of particles", h15_nbin, h15_xlow, h15_xhigh );
-  fH15all_n85->SetStats ( kTRUE );
-  fH15all_n85->GetXaxis()->SetTitle ( "R" );
-  fH15all_n85->GetYaxis()->SetTitle ( "<p_{T}> track" );
-  fH15all_n85->GetXaxis()->SetTitleColor ( 1 );
-  fH15all_n85->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH15all_n85 );
-
-  fH15all_n90 = new TProfile ( "histo15all_n90", "<p_{T}> track in dR(jet1) - 90% of particles", h15_nbin, h15_xlow, h15_xhigh );
-  fH15all_n90->SetStats ( kTRUE );
-  fH15all_n90->GetXaxis()->SetTitle ( "R" );
-  fH15all_n90->GetYaxis()->SetTitle ( "<p_{T}> track" );
-  fH15all_n90->GetXaxis()->SetTitleColor ( 1 );
-  fH15all_n90->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH15all_n90 );
-
-//=====================================================================================
-  fH15all_pt70 = new TProfile ( "histo15all_pt70", "<p_{T}> track in dR(jet1) - 70% of Pt", h15_nbin, h15_xlow, h15_xhigh );
-  fH15all_pt70->SetStats ( kTRUE );
-  fH15all_pt70->GetXaxis()->SetTitle ( "R" );
-  fH15all_pt70->GetYaxis()->SetTitle ( "<p_{T}> track" );
-  fH15all_pt70->GetXaxis()->SetTitleColor ( 1 );
-  fH15all_pt70->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH15all_pt70 );
-
-  fH15all_pt75 = new TProfile ( "histo15all_pt75", "<p_{T}> track in dR(jet1) - 75% of Pt", h15_nbin, h15_xlow, h15_xhigh );
-  fH15all_pt75->SetStats ( kTRUE );
-  fH15all_pt75->GetXaxis()->SetTitle ( "R" );
-  fH15all_pt75->GetYaxis()->SetTitle ( "<p_{T}> track" );
-  fH15all_pt75->GetXaxis()->SetTitleColor ( 1 );
-  fH15all_pt75->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH15all_pt75 );
-
-  fH15all_pt80 = new TProfile ( "histo15all_pt80", "<p_{T}> track in dR(jet1) - 80% of Pt", h15_nbin, h15_xlow, h15_xhigh );
-  fH15all_pt80->SetStats ( kTRUE );
-  fH15all_pt80->GetXaxis()->SetTitle ( "R" );
-  fH15all_pt80->GetYaxis()->SetTitle ( "<p_{T}> track" );
-  fH15all_pt80->GetXaxis()->SetTitleColor ( 1 );
-  fH15all_pt80->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH15all_pt80 );
-
-  fH15all_pt85 = new TProfile ( "histo15all_pt85", "<p_{T}> track in dR(jet1) - 85% of Pt", h15_nbin, h15_xlow, h15_xhigh );
-  fH15all_pt85->SetStats ( kTRUE );
-  fH15all_pt85->GetXaxis()->SetTitle ( "R" );
-  fH15all_pt85->GetYaxis()->SetTitle ( "<p_{T}> track" );
-  fH15all_pt85->GetXaxis()->SetTitleColor ( 1 );
-  fH15all_pt85->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH15all_pt85 );
-
-  fH15all_pt90 = new TProfile ( "histo15all_pt90", "<p_{T}> track in dR(jet1) - 90% of Pt", h15_nbin, h15_xlow, h15_xhigh );
-  fH15all_pt90->SetStats ( kTRUE );
-  fH15all_pt90->GetXaxis()->SetTitle ( "R" );
-  fH15all_pt90->GetYaxis()->SetTitle ( "<p_{T}> track" );
-  fH15all_pt90->GetXaxis()->SetTitleColor ( 1 );
-  fH15all_pt90->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH15all_pt90 );
-
-//____________________________________________________________________________________
-  fH15_bin = new TH1D ( "histo15_bin", "p_{T} SUM (track) in dR(jet1)", h15_nbin, h15_xlow, h15_xhigh );
-  fH15_bin->SetStats ( kTRUE );
-  fH15_bin->GetXaxis()->SetTitle ( " R" );
-  fH15_bin->GetYaxis()->SetTitle ( "p_{T} SUM (track)" );
-  fH15_bin->GetXaxis()->SetTitleColor ( 1 );
-  fH15_bin->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH15_bin );
-
-
-//=====================================================================================
-  fH15_bin_n70 = new TH1D ( "histo15_bin_n70", "p_{T} SUM (track) in dR(jet1) - 70% of particles", h15_nbin, h15_xlow, h15_xhigh );
-  fH15_bin_n70->SetStats ( kTRUE );
-  fH15_bin_n70->GetXaxis()->SetTitle ( "R" );
-  fH15_bin_n70->GetYaxis()->SetTitle ( "p_{T} SUM (track)" );
-  fH15_bin_n70->GetXaxis()->SetTitleColor ( 1 );
-  fH15_bin_n70->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH15_bin_n70 );
-
-  fH15_bin_n75 = new TH1D ( "histo15_bin_n75", "p_{T} SUM (track) in dR(jet1) - 75% of particles", h15_nbin, h15_xlow, h15_xhigh );
-  fH15_bin_n75->SetStats ( kTRUE );
-  fH15_bin_n75->GetXaxis()->SetTitle ( "R" );
-  fH15_bin_n75->GetYaxis()->SetTitle ( "p_{T} SUM (track)" );
-  fH15_bin_n75->GetXaxis()->SetTitleColor ( 1 );
-  fH15_bin_n75->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH15_bin_n75 );
-
-  fH15_bin_n80 = new TH1D ( "histo15_bin_n80", "p_{T} SUM (track) in dR(jet1) - 80% of particles", h15_nbin, h15_xlow, h15_xhigh );
-  fH15_bin_n80->SetStats ( kTRUE );
-  fH15_bin_n80->GetXaxis()->SetTitle ( "R" );
-  fH15_bin_n80->GetYaxis()->SetTitle ( "p_{T} SUM (track)" );
-  fH15_bin_n80->GetXaxis()->SetTitleColor ( 1 );
-  fH15_bin_n80->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH15_bin_n80 );
-
-  fH15_bin_n85 = new TH1D ( "histo15_bin_n85", "p_{T} SUM (track) in dR(jet1) - 85% of particles", h15_nbin, h15_xlow, h15_xhigh );
-  fH15_bin_n85->SetStats ( kTRUE );
-  fH15_bin_n85->GetXaxis()->SetTitle ( "R" );
-  fH15_bin_n85->GetYaxis()->SetTitle ( "p_{T} SUM (track)" );
-  fH15_bin_n85->GetXaxis()->SetTitleColor ( 1 );
-  fH15_bin_n85->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH15_bin_n85 );
-
-  fH15_bin_n90 = new TH1D ( "histo15_bin_n90", "p_{T} SUM (track) in dR(jet1) - 90% of particles", h15_nbin, h15_xlow, h15_xhigh );
-  fH15_bin_n90->SetStats ( kTRUE );
-  fH15_bin_n90->GetXaxis()->SetTitle ( "R" );
-  fH15_bin_n90->GetYaxis()->SetTitle ( "p_{T} SUM (track)" );
-  fH15_bin_n90->GetXaxis()->SetTitleColor ( 1 );
-  fH15_bin_n90->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH15_bin_n90 );
-
-//=====================================================================================
-  fH15_bin_pt70 = new TH1D ( "histo15_bin_pt70", "p_{T} SUM (track) in dR(jet1) - 70% of Pt", h15_nbin, h15_xlow, h15_xhigh );
-  fH15_bin_pt70->SetStats ( kTRUE );
-  fH15_bin_pt70->GetXaxis()->SetTitle ( "R" );
-  fH15_bin_pt70->GetYaxis()->SetTitle ( "p_{T} SUM (track)" );
-  fH15_bin_pt70->GetXaxis()->SetTitleColor ( 1 );
-  fH15_bin_pt70->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH15_bin_pt70 );
-
-  fH15_bin_pt75 = new TH1D ( "histo15_bin_pt75", "p_{T} SUM (track) in dR(jet1) - 75% of Pt", h15_nbin, h15_xlow, h15_xhigh );
-  fH15_bin_pt75->SetStats ( kTRUE );
-  fH15_bin_pt75->GetXaxis()->SetTitle ( "R" );
-  fH15_bin_pt75->GetYaxis()->SetTitle ( "p_{T} SUM (track)" );
-  fH15_bin_pt75->GetXaxis()->SetTitleColor ( 1 );
-  fH15_bin_pt75->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH15_bin_pt75 );
-
-  fH15_bin_pt80 = new TH1D ( "histo15_bin_pt80", "p_{T} SUM (track) in dR(jet1) - 80% of Pt", h15_nbin, h15_xlow, h15_xhigh );
-  fH15_bin_pt80->SetStats ( kTRUE );
-  fH15_bin_pt80->GetXaxis()->SetTitle ( "R" );
-  fH15_bin_pt80->GetYaxis()->SetTitle ( "p_{T} SUM (track)" );
-  fH15_bin_pt80->GetXaxis()->SetTitleColor ( 1 );
-  fH15_bin_pt80->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH15_bin_pt80 );
-
-  fH15_bin_pt85 = new TH1D ( "histo15_bin_pt85", "p_{T} SUM (track) in dR(jet1) - 85% of Pt", h15_nbin, h15_xlow, h15_xhigh );
-  fH15_bin_pt85->SetStats ( kTRUE );
-  fH15_bin_pt85->GetXaxis()->SetTitle ( "R" );
-  fH15_bin_pt85->GetYaxis()->SetTitle ( "p_{T} SUM (track)" );
-  fH15_bin_pt85->GetXaxis()->SetTitleColor ( 1 );
-  fH15_bin_pt85->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH15_bin_pt85 );
-
-  fH15_bin_pt90 = new TH1D ( "histo15_bin_pt90", "p_{T} SUM (track) in dR(jet1) - 90% of Pt", h15_nbin, h15_xlow, h15_xhigh );
-  fH15_bin_pt90->SetStats ( kTRUE );
-  fH15_bin_pt90->GetXaxis()->SetTitle ( "R" );
-  fH15_bin_pt90->GetYaxis()->SetTitle ( "p_{T} SUM (track)" );
-  fH15_bin_pt90->GetXaxis()->SetTitleColor ( 1 );
-  fH15_bin_pt90->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH15_bin_pt90 );
-
-
-//____________________________________________________________________________________
-  fH15all_bin = new TH1D ( "histo15_bin_all", "p_{T} SUM (track) in dR (jet)", h15_nbin, h15_xlow, h15_xhigh );
-  fH15all_bin->SetStats ( kTRUE );
-  fH15all_bin->GetXaxis()->SetTitle ( "R" );
-  fH15all_bin->GetYaxis()->SetTitle ( "p_{T} SUM (track)" );
-  fH15all_bin->GetXaxis()->SetTitleColor ( 1 );
-  fH15all_bin->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH15all_bin );
-
-//=====================================================================================
-  fH15all_bin_n70 = new TH1D ( "histo15_bin_n70_all", "p_{T} SUM (track) in dR (jet) - 70% of particles", h15_nbin, h15_xlow, h15_xhigh );
-  fH15all_bin_n70->SetStats ( kTRUE );
-  fH15all_bin_n70->GetXaxis()->SetTitle ( "R" );
-  fH15all_bin_n70->GetYaxis()->SetTitle ( "p_{T} SUM (track)" );
-  fH15all_bin_n70->GetXaxis()->SetTitleColor ( 1 );
-  fH15all_bin_n70->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH15all_bin_n70 );
-
-  fH15all_bin_n75 = new TH1D ( "histo15_bin_n75_all", "p_{T} SUM (track) in dR (jet) - 75% of particles", h15_nbin, h15_xlow, h15_xhigh );
-  fH15all_bin_n75->SetStats ( kTRUE );
-  fH15all_bin_n75->GetXaxis()->SetTitle ( "R" );
-  fH15all_bin_n75->GetYaxis()->SetTitle ( "p_{T} SUM (track)" );
-  fH15all_bin_n75->GetXaxis()->SetTitleColor ( 1 );
-  fH15all_bin_n75->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH15all_bin_n75 );
-
-  fH15all_bin_n80 = new TH1D ( "histo15_bin_n80_all", "p_{T} SUM (track) in dR (jet) - 80% of particles", h15_nbin, h15_xlow, h15_xhigh );
-  fH15all_bin_n80->SetStats ( kTRUE );
-  fH15all_bin_n80->GetXaxis()->SetTitle ( "R" );
-  fH15all_bin_n80->GetYaxis()->SetTitle ( "p_{T} SUM (track)" );
-  fH15all_bin_n80->GetXaxis()->SetTitleColor ( 1 );
-  fH15all_bin_n80->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH15all_bin_n80 );
-
-  fH15all_bin_n85 = new TH1D ( "histo15_bin_n85_all", "p_{T} SUM (track) in dR (jet) - 85% of particles", h15_nbin, h15_xlow, h15_xhigh );
-  fH15all_bin_n85->SetStats ( kTRUE );
-  fH15all_bin_n85->GetXaxis()->SetTitle ( "R" );
-  fH15all_bin_n85->GetYaxis()->SetTitle ( "p_{T} SUM (track)" );
-  fH15all_bin_n85->GetXaxis()->SetTitleColor ( 1 );
-  fH15all_bin_n85->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH15all_bin_n85 );
-
-  fH15all_bin_n90 = new TH1D ( "histo15_bin_n90_all", "p_{T} SUM (track) in dR (jet) - 90% of particles", h15_nbin, h15_xlow, h15_xhigh );
-  fH15all_bin_n90->SetStats ( kTRUE );
-  fH15all_bin_n90->GetXaxis()->SetTitle ( "R" );
-  fH15all_bin_n90->GetYaxis()->SetTitle ( "p_{T} SUM (track)" );
-  fH15all_bin_n90->GetXaxis()->SetTitleColor ( 1 );
-  fH15all_bin_n90->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH15all_bin_n90 );
-
-//=====================================================================================
-  fH15all_bin_pt70 = new TH1D ( "histo15_bin_pt70_all", "p_{T} SUM (track) in dR (jet) - 70% of Pt", h15_nbin, h15_xlow, h15_xhigh );
-  fH15all_bin_pt70->SetStats ( kTRUE );
-  fH15all_bin_pt70->GetXaxis()->SetTitle ( "R" );
-  fH15all_bin_pt70->GetYaxis()->SetTitle ( "p_{T} SUM (track)" );
-  fH15all_bin_pt70->GetXaxis()->SetTitleColor ( 1 );
-  fH15all_bin_pt70->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH15all_bin_pt70 );
-
-  fH15all_bin_pt75 = new TH1D ( "histo15_bin_pt75_all", "p_{T} SUM (track) in dR (jet) - 75% of Pt", h15_nbin, h15_xlow, h15_xhigh );
-  fH15all_bin_pt75->SetStats ( kTRUE );
-  fH15all_bin_pt75->GetXaxis()->SetTitle ( "R" );
-  fH15all_bin_pt75->GetYaxis()->SetTitle ( "p_{T} SUM (track)" );
-  fH15all_bin_pt75->GetXaxis()->SetTitleColor ( 1 );
-  fH15all_bin_pt75->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH15all_bin_pt75 );
-
-  fH15all_bin_pt80 = new TH1D ( "histo15_bin_pt80_all", "p_{T} SUM (track) in dR (jet) - 80% of Pt", h15_nbin, h15_xlow, h15_xhigh );
-  fH15all_bin_pt80->SetStats ( kTRUE );
-  fH15all_bin_pt80->GetXaxis()->SetTitle ( "R" );
-  fH15all_bin_pt80->GetYaxis()->SetTitle ( "p_{T} SUM (track)" );
-  fH15all_bin_pt80->GetXaxis()->SetTitleColor ( 1 );
-  fH15all_bin_pt80->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH15all_bin_pt80 );
-
-  fH15all_bin_pt85 = new TH1D ( "histo15_bin_pt85_all", "p_{T} SUM (track) in dR (jet) - 85% of Pt", h15_nbin, h15_xlow, h15_xhigh );
-  fH15all_bin_pt85->SetStats ( kTRUE );
-  fH15all_bin_pt85->GetXaxis()->SetTitle ( "R" );
-  fH15all_bin_pt85->GetYaxis()->SetTitle ( "p_{T} SUM (track)" );
-  fH15all_bin_pt85->GetXaxis()->SetTitleColor ( 1 );
-  fH15all_bin_pt85->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH15all_bin_pt85 );
-
-  fH15all_bin_pt90 = new TH1D ( "histo15_bin_pt90_all", "p_{T} SUM (track) in dR (jet) - 90% of Pt", h15_nbin, h15_xlow, h15_xhigh );
-  fH15all_bin_pt90->SetStats ( kTRUE );
-  fH15all_bin_pt90->GetXaxis()->SetTitle ( "R" );
-  fH15all_bin_pt90->GetYaxis()->SetTitle ( "p_{T} SUM (track)" );
-  fH15all_bin_pt90->GetXaxis()->SetTitleColor ( 1 );
-  fH15all_bin_pt90->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH15all_bin_pt90 );
-
-//____________________________________________________________________________________
-  Int_t h20_nbin = 100;
-  Double_t h20_binwidth = 0.01;
-  Double_t h20_low = 0.;
-  Double_t h20_high = h20_low + h20_binwidth * h20_nbin;
-  fH20 = new TH1D ( "histo20", "dN/dR (jet1)", h20_nbin, h20_low, h20_high );
-  fH20->SetStats ( kTRUE );
-  fH20->GetXaxis()->SetTitle ( "R" );
-  fH20->GetYaxis()->SetTitle ( "dN/dR" );
-  fH20->GetXaxis()->SetTitleColor ( 1 );
-  fH20->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH20 );
-
-//=====================================================================================
-  fH20_n70 = new TH1D ( "histo20_n70", "dN/dR (jet1) - 70% of particles", h20_nbin, h20_low, h20_high );
-  fH20_n70->SetStats ( kTRUE );
-  fH20_n70->GetXaxis()->SetTitle ( "R" );
-  fH20_n70->GetYaxis()->SetTitle ( "dN/dR" );
-  fH20_n70->GetXaxis()->SetTitleColor ( 1 );
-  fH20_n70->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH20_n70 );
-
-  fH20_n75 = new TH1D ( "histo20_n75", "dN/dR (jet1) - 75% of particles", h20_nbin, h20_low, h20_high );
-  fH20_n75->SetStats ( kTRUE );
-  fH20_n75->GetXaxis()->SetTitle ( "R" );
-  fH20_n75->GetYaxis()->SetTitle ( "dN/dR" );
-  fH20_n75->GetXaxis()->SetTitleColor ( 1 );
-  fH20_n75->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH20_n75 );
-
-  fH20_n80 = new TH1D ( "histo20_n80", "dN/dR (jet1) - 80% of particles", h20_nbin, h20_low, h20_high );
-  fH20_n80->SetStats ( kTRUE );
-  fH20_n80->GetXaxis()->SetTitle ( "R" );
-  fH20_n80->GetYaxis()->SetTitle ( "dN/dR" );
-  fH20_n80->GetXaxis()->SetTitleColor ( 1 );
-  fH20_n80->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH20_n80 );
-
-  fH20_n85 = new TH1D ( "histo20_n85", "dN/dR (jet1) - 85% of particles", h20_nbin, h20_low, h20_high );
-  fH20_n85->SetStats ( kTRUE );
-  fH20_n85->GetXaxis()->SetTitle ( "R" );
-  fH20_n85->GetYaxis()->SetTitle ( "dN/dR" );
-  fH20_n85->GetXaxis()->SetTitleColor ( 1 );
-  fH20_n85->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH20_n85 );
-
-  fH20_n90 = new TH1D ( "histo20_n90", "dN/dR (jet1) - 90% of particles", h20_nbin, h20_low, h20_high );
-  fH20_n90->SetStats ( kTRUE );
-  fH20_n90->GetXaxis()->SetTitle ( "R" );
-  fH20_n90->GetYaxis()->SetTitle ( "dN/dR" );
-  fH20_n90->GetXaxis()->SetTitleColor ( 1 );
-  fH20_n90->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH20_n90 );
-
-//=====================================================================================
-  fH20_pt70 = new TH1D ( "histo20_pt70", "dN/dR (jet1) - 70% of Pt", h20_nbin, h20_low, h20_high );
-  fH20_pt70->SetStats ( kTRUE );
-  fH20_pt70->GetXaxis()->SetTitle ( "R" );
-  fH20_pt70->GetYaxis()->SetTitle ( "dN/dR" );
-  fH20_pt70->GetXaxis()->SetTitleColor ( 1 );
-  fH20_pt70->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH20_pt70 );
-
-  fH20_pt75 = new TH1D ( "histo20_pt75", "dN/dR (jet1) - 75% of Pt", h20_nbin, h20_low, h20_high );
-  fH20_pt75->SetStats ( kTRUE );
-  fH20_pt75->GetXaxis()->SetTitle ( "R" );
-  fH20_pt75->GetYaxis()->SetTitle ( "dN/dR" );
-  fH20_pt75->GetXaxis()->SetTitleColor ( 1 );
-  fH20_pt75->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH20_pt75 );
-
-  fH20_pt80 = new TH1D ( "histo20_pt80", "dN/dR (jet1) - 80% of Pt", h20_nbin, h20_low, h20_high );
-  fH20_pt80->SetStats ( kTRUE );
-  fH20_pt80->GetXaxis()->SetTitle ( "R" );
-  fH20_pt80->GetYaxis()->SetTitle ( "dN/dR" );
-  fH20_pt80->GetXaxis()->SetTitleColor ( 1 );
-  fH20_pt80->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH20_pt80 );
-
-  fH20_pt85 = new TH1D ( "histo20_pt85", "dN/dR (jet1) - 85% of Pt", h20_nbin, h20_low, h20_high );
-  fH20_pt85->SetStats ( kTRUE );
-  fH20_pt85->GetXaxis()->SetTitle ( "R" );
-  fH20_pt85->GetYaxis()->SetTitle ( "dN/dR" );
-  fH20_pt85->GetXaxis()->SetTitleColor ( 1 );
-  fH20_pt85->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH20_pt85 );
-
-  fH20_pt90 = new TH1D ( "histo20_pt90", "dN/dR (jet1) - 90% of Pt", h20_nbin, h20_low, h20_high );
-  fH20_pt90->SetStats ( kTRUE );
-  fH20_pt90->GetXaxis()->SetTitle ( "R" );
-  fH20_pt90->GetYaxis()->SetTitle ( "dN/dR" );
-  fH20_pt90->GetXaxis()->SetTitleColor ( 1 );
-  fH20_pt90->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH20_pt90 );
-
-
-//____________________________________________________________________________________
-  fH20all = new TH1D ( "histo20_all", "dN/dR - all jets", h20_nbin, h20_low, h20_high );
-  fH20all->SetStats ( kTRUE );
-  fH20all->GetXaxis()->SetTitle ( "R" );
-  fH20all->GetYaxis()->SetTitle ( "dN/dR" );
-  fH20all->GetXaxis()->SetTitleColor ( 1 );
-  fH20all->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH20all );
-
-
-//=====================================================================================
-  fH20all_n70 = new TH1D ( "histo20_n70_all", "dN/dR - all jets - 70% of particles", h20_nbin, h20_low, h20_high );
-  fH20all_n70->SetStats ( kTRUE );
-  fH20all_n70->GetXaxis()->SetTitle ( "R" );
-  fH20all_n70->GetYaxis()->SetTitle ( "dN/dR" );
-  fH20all_n70->GetXaxis()->SetTitleColor ( 1 );
-  fH20all_n70->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH20all_n70 );
-
-  fH20all_n75 = new TH1D ( "histo20_n75_all", "dN/dR - all jets - 75% of particles", h20_nbin, h20_low, h20_high );
-  fH20all_n75->SetStats ( kTRUE );
-  fH20all_n75->GetXaxis()->SetTitle ( "R" );
-  fH20all_n75->GetYaxis()->SetTitle ( "dN/dR" );
-  fH20all_n75->GetXaxis()->SetTitleColor ( 1 );
-  fH20all_n75->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH20all_n75 );
-
-  fH20all_n80 = new TH1D ( "histo20_n80_all", "dN/dR - all jets - 80% of particles", h20_nbin, h20_low, h20_high );
-  fH20all_n80->SetStats ( kTRUE );
-  fH20all_n80->GetXaxis()->SetTitle ( "R" );
-  fH20all_n80->GetYaxis()->SetTitle ( "dN/dR" );
-  fH20all_n80->GetXaxis()->SetTitleColor ( 1 );
-  fH20all_n80->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH20all_n80 );
-
-  fH20all_n85 = new TH1D ( "histo20_n85_all", "dN/dR - all jets - 85% of particles", h20_nbin, h20_low, h20_high );
-  fH20all_n85->SetStats ( kTRUE );
-  fH20all_n85->GetXaxis()->SetTitle ( "R" );
-  fH20all_n85->GetYaxis()->SetTitle ( "dN/dR" );
-  fH20all_n85->GetXaxis()->SetTitleColor ( 1 );
-  fH20all_n85->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH20all_n85 );
-
-  fH20all_n90 = new TH1D ( "histo20_n90_all", "dN/dR - all jets - 90% of particles", h20_nbin, h20_low, h20_high );
-  fH20all_n90->SetStats ( kTRUE );
-  fH20all_n90->GetXaxis()->SetTitle ( "R" );
-  fH20all_n90->GetYaxis()->SetTitle ( "dN/dR" );
-  fH20all_n90->GetXaxis()->SetTitleColor ( 1 );
-  fH20all_n90->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH20all_n90 );
-
-//=====================================================================================
-  fH20all_pt70 = new TH1D ( "histo20_pt70_all", "dN/dR - all jets - 70% of Pt", h20_nbin, h20_low, h20_high );
-  fH20all_pt70->SetStats ( kTRUE );
-  fH20all_pt70->GetXaxis()->SetTitle ( "R" );
-  fH20all_pt70->GetYaxis()->SetTitle ( "dN/dR" );
-  fH20all_pt70->GetXaxis()->SetTitleColor ( 1 );
-  fH20all_pt70->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH20all_pt70 );
-
-  fH20all_pt75 = new TH1D ( "histo20_pt75_all", "dN/dR - all jets - 75% of Pt", h20_nbin, h20_low, h20_high );
-  fH20all_pt75->SetStats ( kTRUE );
-  fH20all_pt75->GetXaxis()->SetTitle ( "R" );
-  fH20all_pt75->GetYaxis()->SetTitle ( "dN/dR" );
-  fH20all_pt75->GetXaxis()->SetTitleColor ( 1 );
-  fH20all_pt75->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH20all_pt75 );
-
-  fH20all_pt80 = new TH1D ( "histo20_pt80_all", "dN/dR - all jets - 80% of Pt", h20_nbin, h20_low, h20_high );
-  fH20all_pt80->SetStats ( kTRUE );
-  fH20all_pt80->GetXaxis()->SetTitle ( "R" );
-  fH20all_pt80->GetYaxis()->SetTitle ( "dN/dR" );
-  fH20all_pt80->GetXaxis()->SetTitleColor ( 1 );
-  fH20all_pt80->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH20all_pt80 );
-
-  fH20all_pt85 = new TH1D ( "histo20_pt85_all", "dN/dR - all jets - 85% of Pt", h20_nbin, h20_low, h20_high );
-  fH20all_pt85->SetStats ( kTRUE );
-  fH20all_pt85->GetXaxis()->SetTitle ( "R" );
-  fH20all_pt85->GetYaxis()->SetTitle ( "dN/dR" );
-  fH20all_pt85->GetXaxis()->SetTitleColor ( 1 );
-  fH20all_pt85->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH20all_pt85 );
-
-  fH20all_pt90 = new TH1D ( "histo20_pt90_all", "dN/dR - all jets - 90% of Pt", h20_nbin, h20_low, h20_high );
-  fH20all_pt90->SetStats ( kTRUE );
-  fH20all_pt90->GetXaxis()->SetTitle ( "R" );
-  fH20all_pt90->GetYaxis()->SetTitle ( "dN/dR" );
-  fH20all_pt90->GetXaxis()->SetTitleColor ( 1 );
-  fH20all_pt90->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH20all_pt90 );
-
-  //____________________________________________________________________________________
-  Int_t h23_nbin = 400;
-  Double_t h23_binwidth = 1.;
-  Double_t h23_low = 0.;
-  Double_t h23_high = h23_low + h23_binwidth * h23_nbin;
-
-  fH23 = new TProfile ( "histo23", "Jet1 Size vs P_{T}(jet1)", h23_nbin, h23_low, h23_high );
-  fH23->SetStats ( kTRUE );
-  fH23->GetXaxis()->SetTitle ( "p_{T}(jet1) (GeV/c)" );
-  fH23->GetYaxis()->SetTitle ( "<R(jet1)> in 1 GeV/c bin" );
-  fH23->GetXaxis()->SetTitleColor ( 1 );
-  fH23->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH23 );
-
-  fH24 = new TProfile ( "histo24", "Jet1 Size vs P_{T}(jet1) - 80% of particles", h23_nbin, h23_low, h23_high );
-  fH24->SetStats ( kTRUE );
-  fH24->GetXaxis()->SetTitle ( "p_{T}(jet1) (GeV/c)" );
-  fH24->GetYaxis()->SetTitle ( "<R(jet1)> in 1 GeV/c bin" );
-  fH24->GetXaxis()->SetTitleColor ( 1 );
-  fH24->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH24 );
-
-  fH25 = new TProfile ( "histo25", "Jet1 Size vs P_{T}(jet1) - 80% of Pt", h23_nbin, h23_low, h23_high );
-  fH25->SetStats ( kTRUE );
-  fH25->GetXaxis()->SetTitle ( "p_{T}(jet1) (GeV/c)" );
-  fH25->GetYaxis()->SetTitle ( "<R(jet1)> in 1 GeV/c bin" );
-  fH25->GetXaxis()->SetTitleColor ( 1 );
-  fH25->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH25 );
-
-  fH23all = new TProfile ( "histo23all", "Jet1 Size vs P_{T} - all jets", h23_nbin, h23_low, h23_high );
-  fH23all->SetStats ( kTRUE );
-  fH23all->GetXaxis()->SetTitle ( "p_{T}(jet) (GeV/c)" );
-  fH23all->GetYaxis()->SetTitle ( "<R(jet1)> in 1 GeV/c bin" );
-  fH23all->GetXaxis()->SetTitleColor ( 1 );
-  fH23all->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH23all );
-
-  fH24all = new TProfile ( "histo24all", "Jet1 Size vs P_{T}(jet1) - 80% of particles", h23_nbin, h23_low, h23_high );
-  fH24all->SetStats ( kTRUE );
-  fH24all->GetXaxis()->SetTitle ( "p_{T}(jet) (GeV/c)" );
-  fH24all->GetYaxis()->SetTitle ( "<R(jet1)> in 1 GeV/c bin" );
-  fH24all->GetXaxis()->SetTitleColor ( 1 );
-  fH24all->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH24all );
-
-  fH25all = new TProfile ( "histo25all", "Jet1 Size vs P_{T}(jet1) - 80% of Pt", h23_nbin, h23_low, h23_high );
-  fH25all->SetStats ( kTRUE );
-  fH25all->GetXaxis()->SetTitle ( "p_{T}(jet) (GeV/c)" );
-  fH25all->GetYaxis()->SetTitle ( "<R(jet1)> in 1 GeV/c bin" );
-  fH25all->GetXaxis()->SetTitleColor ( 1 );
-  fH25all->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fH25all );
-
-//=============================================================
-  Int_t hg_nbin = 100;
-  Double_t hg_binwidth = 0.01;
-  Double_t hg_low = 0.;
-  Double_t hg_high = hg_low + hg_binwidth * hg_nbin;
-
-  fHg = new TH1D ( "histo_g", "dN/dg", hg_nbin, hg_low, hg_high );
-  fHg->SetStats ( kTRUE );
-  fHg->GetXaxis()->SetTitle ( "g" );
-  fHg->GetYaxis()->SetTitle ( "1/N_{jets} dN/dg" );
-  fHg->GetXaxis()->SetTitleColor ( 1 );
-  fHg->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fHg );
-
-  fHg_n90 = new TH1D ( "histo_g_n90", "dN/dg", hg_nbin, hg_low, hg_high );
-  fHg_n90->SetStats ( kTRUE );
-  fHg_n90->GetXaxis()->SetTitle ( "g" );
-  fHg_n90->GetYaxis()->SetTitle ( "1/N_{jets} dN/dg" );
-  fHg_n90->GetXaxis()->SetTitleColor ( 1 );
-  fHg_n90->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fHg_n90 );
-
-  fHg_n85 = new TH1D ( "histo_g_n85", "dN/dg", hg_nbin, hg_low, hg_high );
-  fHg_n85->SetStats ( kTRUE );
-  fHg_n85->GetXaxis()->SetTitle ( "g" );
-  fHg_n85->GetYaxis()->SetTitle ( "1/N_{jets} dN/dg" );
-  fHg_n85->GetXaxis()->SetTitleColor ( 1 );
-  fHg_n85->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fHg_n85 );
-
-  fHg_n80 = new TH1D ( "histo_g_n80", "dN/dg", hg_nbin, hg_low, hg_high );
-  fHg_n80->SetStats ( kTRUE );
-  fHg_n80->GetXaxis()->SetTitle ( "g" );
-  fHg_n80->GetYaxis()->SetTitle ( "1/N_{jets} dN/dg" );
-  fHg_n80->GetXaxis()->SetTitleColor ( 1 );
-  fHg_n80->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fHg_n80 );
-
-  fHg_n75 = new TH1D ( "histo_g_n75", "dN/dg", hg_nbin, hg_low, hg_high );
-  fHg_n75->SetStats ( kTRUE );
-  fHg_n75->GetXaxis()->SetTitle ( "g" );
-  fHg_n75->GetYaxis()->SetTitle ( "1/N_{jets} dN/dg" );
-  fHg_n75->GetXaxis()->SetTitleColor ( 1 );
-  fHg_n75->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fHg_n75 );
-
-  fHg_n70 = new TH1D ( "histo_g_n70", "dN/dg", hg_nbin, hg_low, hg_high );
-  fHg_n70->SetStats ( kTRUE );
-  fHg_n70->GetXaxis()->SetTitle ( "g" );
-  fHg_n70->GetYaxis()->SetTitle ( "1/N_{jets} dN/dg" );
-  fHg_n70->GetXaxis()->SetTitleColor ( 1 );
-  fHg_n70->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fHg_n70 );
-
-  fHg_pt90 = new TH1D ( "histo_g_pt90", "dN/dg", hg_nbin, hg_low, hg_high );
-  fHg_pt90->SetStats ( kTRUE );
-  fHg_pt90->GetXaxis()->SetTitle ( "g" );
-  fHg_pt90->GetYaxis()->SetTitle ( "1/N_{jets} dN/dg" );
-  fHg_pt90->GetXaxis()->SetTitleColor ( 1 );
-  fHg_pt90->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fHg_pt90 );
-
-  fHg_pt85 = new TH1D ( "histo_g_pt85", "dN/dg", hg_nbin, hg_low, hg_high );
-  fHg_pt85->SetStats ( kTRUE );
-  fHg_pt85->GetXaxis()->SetTitle ( "g" );
-  fHg_pt85->GetYaxis()->SetTitle ( "1/N_{jets} dN/dg" );
-  fHg_pt85->GetXaxis()->SetTitleColor ( 1 );
-  fHg_pt85->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fHg_pt85 );
-
-  fHg_pt80 = new TH1D ( "histo_g_pt80", "dN/dg", hg_nbin, hg_low, hg_high );
-  fHg_pt80->SetStats ( kTRUE );
-  fHg_pt80->GetXaxis()->SetTitle ( "g" );
-  fHg_pt80->GetYaxis()->SetTitle ( "1/N_{jets} dN/dg" );
-  fHg_pt80->GetXaxis()->SetTitleColor ( 1 );
-  fHg_pt80->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fHg_pt80 );
-
-  fHg_pt75 = new TH1D ( "histo_g_pt75", "dN/dg", hg_nbin, hg_low, hg_high );
-  fHg_pt75->SetStats ( kTRUE );
-  fHg_pt75->GetXaxis()->SetTitle ( "g" );
-  fHg_pt75->GetYaxis()->SetTitle ( "1/N_{jets} dN/dg" );
-  fHg_pt75->GetXaxis()->SetTitleColor ( 1 );
-  fHg_pt75->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fHg_pt75 );
-
-  fHg_pt70 = new TH1D ( "histo_g_pt70", "dN/dg", hg_nbin, hg_low, hg_high );
-  fHg_pt70->SetStats ( kTRUE );
-  fHg_pt70->GetXaxis()->SetTitle ( "g" );
-  fHg_pt70->GetYaxis()->SetTitle ( "1/N_{jets} dN/dg" );
-  fHg_pt70->GetXaxis()->SetTitleColor ( 1 );
-  fHg_pt70->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fHg_pt70 );
-
-
-//=============================================================
-  Int_t hptd_nbin = 100;
-  Double_t hptd_binwidth = 0.01;
-  Double_t hptd_low = 0.;
-  Double_t hptd_high = hptd_low + hptd_binwidth * hptd_nbin;
-
-  fHptd = new TH1D ( "histo_g", "dN/dg", hptd_nbin, hptd_low, hptd_high );
-  fHptd->SetStats ( kTRUE );
-  fHptd->GetXaxis()->SetTitle ( "g" );
-  fHptd->GetYaxis()->SetTitle ( "1/N_{jets} dN/dg" );
-  fHptd->GetXaxis()->SetTitleColor ( 1 );
-  fHptd->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fHptd );
-
-  fHptd_n90 = new TH1D ( "histo_ptd_n90", "dN/dg", hptd_nbin, hptd_low, hptd_high );
-  fHptd_n90->SetStats ( kTRUE );
-  fHptd_n90->GetXaxis()->SetTitle ( "g" );
-  fHptd_n90->GetYaxis()->SetTitle ( "1/N_{jets} dN/dg" );
-  fHptd_n90->GetXaxis()->SetTitleColor ( 1 );
-  fHptd_n90->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fHptd_n90 );
-
-  fHptd_n85 = new TH1D ( "histo_ptd_n85", "dN/dg", hptd_nbin, hptd_low, hptd_high );
-  fHptd_n85->SetStats ( kTRUE );
-  fHptd_n85->GetXaxis()->SetTitle ( "g" );
-  fHptd_n85->GetYaxis()->SetTitle ( "1/N_{jets} dN/dg" );
-  fHptd_n85->GetXaxis()->SetTitleColor ( 1 );
-  fHptd_n85->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fHptd_n85 );
-
-  fHptd_n80 = new TH1D ( "histo_ptd_n80", "dN/dg", hptd_nbin, hptd_low, hptd_high );
-  fHptd_n80->SetStats ( kTRUE );
-  fHptd_n80->GetXaxis()->SetTitle ( "g" );
-  fHptd_n80->GetYaxis()->SetTitle ( "1/N_{jets} dN/dg" );
-  fHptd_n80->GetXaxis()->SetTitleColor ( 1 );
-  fHptd_n80->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fHptd_n80 );
-
-  fHptd_n75 = new TH1D ( "histo_ptd_n75", "dN/dg", hptd_nbin, hptd_low, hptd_high );
-  fHptd_n75->SetStats ( kTRUE );
-  fHptd_n75->GetXaxis()->SetTitle ( "g" );
-  fHptd_n75->GetYaxis()->SetTitle ( "1/N_{jets} dN/dg" );
-  fHptd_n75->GetXaxis()->SetTitleColor ( 1 );
-  fHptd_n75->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fHptd_n75 );
-
-  fHptd_n70 = new TH1D ( "histo_ptd_n70", "dN/dg", hptd_nbin, hptd_low, hptd_high );
-  fHptd_n70->SetStats ( kTRUE );
-  fHptd_n70->GetXaxis()->SetTitle ( "g" );
-  fHptd_n70->GetYaxis()->SetTitle ( "1/N_{jets} dN/dg" );
-  fHptd_n70->GetXaxis()->SetTitleColor ( 1 );
-  fHptd_n70->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fHptd_n70 );
-
-  fHptd_pt90 = new TH1D ( "histo_ptd_pt90", "dN/dg", hptd_nbin, hptd_low, hptd_high );
-  fHptd_pt90->SetStats ( kTRUE );
-  fHptd_pt90->GetXaxis()->SetTitle ( "g" );
-  fHptd_pt90->GetYaxis()->SetTitle ( "1/N_{jets} dN/dg" );
-  fHptd_pt90->GetXaxis()->SetTitleColor ( 1 );
-  fHptd_pt90->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fHptd_pt90 );
-
-  fHptd_pt85 = new TH1D ( "histo_ptd_pt85", "dN/dg", hptd_nbin, hptd_low, hptd_high );
-  fHptd_pt85->SetStats ( kTRUE );
-  fHptd_pt85->GetXaxis()->SetTitle ( "g" );
-  fHptd_pt85->GetYaxis()->SetTitle ( "1/N_{jets} dN/dg" );
-  fHptd_pt85->GetXaxis()->SetTitleColor ( 1 );
-  fHptd_pt85->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fHptd_pt85 );
-
-  fHptd_pt80 = new TH1D ( "histo_ptd_pt80", "dN/dg", hptd_nbin, hptd_low, hptd_high );
-  fHptd_pt80->SetStats ( kTRUE );
-  fHptd_pt80->GetXaxis()->SetTitle ( "g" );
-  fHptd_pt80->GetYaxis()->SetTitle ( "1/N_{jets} dN/dg" );
-  fHptd_pt80->GetXaxis()->SetTitleColor ( 1 );
-  fHptd_pt80->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fHptd_pt80 );
-
-  fHptd_pt75 = new TH1D ( "histo_ptd_pt75", "dN/dg", hptd_nbin, hptd_low, hptd_high );
-  fHptd_pt75->SetStats ( kTRUE );
-  fHptd_pt75->GetXaxis()->SetTitle ( "g" );
-  fHptd_pt75->GetYaxis()->SetTitle ( "1/N_{jets} dN/dg" );
-  fHptd_pt75->GetXaxis()->SetTitleColor ( 1 );
-  fHptd_pt75->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fHptd_pt75 );
-
-  fHptd_pt70 = new TH1D ( "histo_ptd_pt70", "dN/dg", hptd_nbin, hptd_low, hptd_high );
-  fHptd_pt70->SetStats ( kTRUE );
-  fHptd_pt70->GetXaxis()->SetTitle ( "g" );
-  fHptd_pt70->GetYaxis()->SetTitle ( "1/N_{jets} dN/dg" );
-  fHptd_pt70->GetXaxis()->SetTitleColor ( 1 );
-  fHptd_pt70->SetMarkerStyle ( kFullCircle );
-  fOutput->Add ( fHptd_pt70 );
+  TString histname = "", histtitle = "", groupname = "";
+  AliJetContainer* jetCont = 0;
+  TIter next(&fJetCollArray);
+  while ((jetCont = static_cast<AliJetContainer*>(next())))
+    {
+    groupname = jetCont->GetName();
+    fHistManager.CreateHistoGroup(groupname);
+    for (Int_t cent = 0; cent < fNcentBins; cent++)
+      {
+      Int_t h1_nbin = 200; Double_t h1_binwidth = 1; Double_t h1_low = 0;
+      Double_t h1_high = h1_low + h1_binwidth * h1_nbin; // 1GeV/bin
+      histname = TString::Format("%s/histo1_%d", groupname.Data(), cent);
+      histtitle = TString::Format("%s;#it{p}_{T,jet} (GeV/#it{c}) (accepted);Jets", histname.Data()); // Pt distro of jets
+      fHistManager.CreateTH1(histname, histtitle, h1_nbin, h1_low, h1_high);
+
+      Int_t h2_nbin = 200; Double_t h2_binwidth = 0.01; Double_t h2_low = -1;
+      Double_t h2_high = h2_low + h2_binwidth * h2_nbin;
+      histname = TString::Format("%s/histo2_%d", groupname.Data(), cent);
+      histtitle = TString::Format("%s;#it{#eta}_{jet};Jets", histname.Data());  // Eta distro of jets
+      fHistManager.CreateTH1(histname, histtitle, h2_nbin, h2_low, h2_high); // 1 unit of rapidity / 100 bin
+
+      Int_t h3_nbin = 126; Double_t h3_binwidth = 0.05; Double_t h3_low = 0.;
+      Double_t h3_high = h3_low + h3_binwidth * h3_nbin;
+      histname = TString::Format("%s/histo3_%d", groupname.Data(), cent);
+      histtitle = TString::Format("%s;#it{#phi}_{jet};Jets", histname.Data()); // Phi distro of jets
+      fHistManager.CreateTH1(histname, histtitle, h3_nbin, h3_low, h3_high);
+
+      //#####################################
+      Int_t h4_nbin = 100; Double_t h4_binwidth = 1; Double_t h4_low = 0;
+      Double_t h4_high = h4_low + h4_binwidth * h4_nbin; // 1 unit of multiplicity /bin
+      histname = TString::Format("%s/histo4_%d", groupname.Data(), cent);
+      histtitle = TString::Format("%s;N_{tracks}(jet);Jets", histname.Data()); // Multiplicity of jets; chg tracks
+      fHistManager.CreateTH1(histname, histtitle, h4_nbin, h4_low, h4_high);
+
+      histname = TString::Format("%s/histo4c_%d", groupname.Data(), cent);
+      histtitle = TString::Format("%s;N_{tracks}(jet);Jets", histname.Data());
+      fHistManager.CreateTH1(histname, histtitle, h4_nbin, h4_low, h4_high); // Multiplicity of jets; all tracks
+
+      histname = TString::Format("%s/histo6_%d", groupname.Data(), cent);
+      histtitle = TString::Format("%s;N_{tracks}(jet1);Jets", histname.Data()); // Multiplicity of jet1; chg tracks
+      fHistManager.CreateTH1(histname, histtitle, h4_nbin, h4_low, h4_high);
+
+      histname = TString::Format("%s/histo6c_%d", groupname.Data(), cent);
+      histtitle = TString::Format("%s;N_{tracks}(jet1);Jets", histname.Data()); // Multiplicity of jet1; all tracks
+      fHistManager.CreateTH1(histname, histtitle, h4_nbin, h4_low, h4_high);
+      //#####################################
+
+      Int_t h5_nbin = 200; Double_t h5_binwidth = 1; Double_t h5_low = 0;
+      Double_t h5_high = h5_low + h5_binwidth * h5_nbin;
+      histname = TString::Format("%s/histo5_%d", groupname.Data(), cent);
+      histtitle = TString::Format("%s;N_{jets};Events", histname.Data()); // Distribution of jets in events
+      fHistManager.CreateTH1(histname, histtitle, h5_nbin, h5_low, h5_high);
+
+      //#####################################
+      Int_t h7_xnbin = 100; Double_t h7_xbinwidth = 1; Double_t h7_xlow = 0;
+      Double_t h7_xhigh = h7_xlow + h7_xbinwidth * h7_xnbin;
+      Int_t h7_ynbin = 200; Double_t h7_ybinwidth = 1; Double_t h7_ylow = 0;
+      Double_t h7_yhigh = h7_ylow + h7_ybinwidth * h7_ynbin;
+
+      histname = TString::Format("%s/histo7_%d", groupname.Data(), cent);
+      histtitle = TString::Format("%s;#it{p}_{T,jet1} (GeV/c);N_{tracks}(jet1)", histname.Data()); // N vs pt jet1
+      fHistManager.CreateTH2(histname, histtitle, h7_xnbin, h7_xlow, h7_xhigh, h7_ynbin, h7_ylow, h7_yhigh);
+
+      histname = TString::Format("%s/histo7all_%d", groupname.Data(), cent);
+      histtitle = TString::Format("%s;#it{p}_{T,jet} (GeV/c);N_{tracks}(jets)", histname.Data()); // N vs pt all jets
+      fHistManager.CreateTH2(histname, histtitle, h7_xnbin, h7_xlow, h7_xhigh, h7_ynbin, h7_ylow, h7_yhigh);
+      //#####################################
+
+      //########################################################
+      Int_t h8_nbin = 101; Double_t h8_binwidth = 0.01; Double_t h8_low = 0;
+      Double_t h8_high = h8_low + h8_binwidth * h8_nbin;
+
+      // Standard implementation of Z
+      histname = TString::Format("%s/histo8_%d", groupname.Data(), cent);
+      histtitle = TString::Format("%s - jet1;z;F(Z) = 1/N_{jet1} dN/dz", histname.Data()); // scalar z ; jet1
+      fHistManager.CreateTH1(histname, histtitle, h8_nbin, h8_low, h8_high);
+
+      histname = TString::Format("%s/histo8_all_%d", groupname.Data(), cent);
+      histtitle = TString::Format("%s - all jets;z;F(Z) = 1/N_{jets} dN/dz", histname.Data()); // scalar z ; all jets
+      fHistManager.CreateTH1(histname, histtitle, h8_nbin, h8_low, h8_high);
+
+      //########################################################
+      // P_tot implementation of Z
+      histname = TString::Format("%s/histo8_p_%d", groupname.Data(), cent);
+      histtitle = TString::Format("%s - jet1 P_tot;z = p_{track}/p_{jet1};F(Z) = 1/N_{jet1} dN/dz", histname.Data());
+      fHistManager.CreateTH1(histname, histtitle, h8_nbin, h8_low, h8_high);
+
+      histname = TString::Format("%s/histo8_all_p_%d", groupname.Data(), cent);
+      histtitle = TString::Format("%s - all jets P_tot;z = p_{track}/p_{jet};F(Z) = 1/N_{jets} dN/dz", histname.Data());
+      fHistManager.CreateTH1(histname, histtitle, h8_nbin, h8_low, h8_high);
+
+      //########################################################
+      // Pt implementation of Z
+      histname = TString::Format("%s/histo8_pt_%d", groupname.Data(), cent);
+      histtitle = TString::Format("%s - jet1 Pt;z = p_{T,track}/p_{T,jet1};F(Z) = 1/N_{jet1} dN/dz", histname.Data());
+      fHistManager.CreateTH1(histname, histtitle, h8_nbin, h8_low, h8_high);
+
+      histname = TString::Format("%s/histo8_all_pt_%d", groupname.Data(), cent);
+      histtitle = TString::Format("%s - all jets Pt;z = p_{T,track}/p_{T,jet1};F(Z) = 1/N_{jets} dN/dz", histname.Data());
+      fHistManager.CreateTH1(histname, histtitle, h8_nbin, h8_low, h8_high);
+      //########################################################
+
+      //########################################################
+      Int_t h8xi_nbin = 300; Double_t h8xi_binwidth = 0.05; Double_t h8xi_low = 0;
+      Double_t h8xi_high = h8xi_low + h8xi_binwidth * h8xi_nbin;
+      histname = TString::Format("%s/histo8xi_%d", groupname.Data(), cent);
+      histtitle = TString::Format("%s - jet1;#xi = ln(1/z);D(#xi) = 1/N_{jet1} dN/d#xi", histname.Data());
+      fHistManager.CreateTH1(histname, histtitle, h8xi_nbin, h8xi_low, h8xi_high);
+
+      histname = TString::Format("%s/histo8xi_all_%d", groupname.Data(), cent);
+      histtitle = TString::Format("%s - all jets;#xi = ln(1/z);D(#xi) = 1/N_{jets} dN/d#xi", histname.Data());
+      fHistManager.CreateTH1(histname, histtitle, h8xi_nbin, h8xi_low, h8xi_high);
+
+      //########################################################
+      histname = TString::Format("%s/histo8xi_p_%d", groupname.Data(), cent);
+      histtitle = TString::Format("%s - jet1 P_tot;#xi = ln(1/z);D(#xi) = 1/N_{jet1} dN/d#xi", histname.Data());
+      fHistManager.CreateTH1(histname, histtitle, h8xi_nbin, h8xi_low, h8xi_high);
+
+      histname = TString::Format("%s/histo8xi_all_p_%d", groupname.Data(), cent);
+      histtitle = TString::Format("%s - all jets P_tot;#xi = ln(1/z);D(#xi) = 1/N_{jets} dN/d#xi", histname.Data());
+      fHistManager.CreateTH1(histname, histtitle, h8xi_nbin, h8xi_low, h8xi_high);
+
+      //########################################################
+      histname = TString::Format("%s/histo8xi_pt_%d", groupname.Data(), cent);
+      histtitle = TString::Format("%s - jet1 Pt;#xi = ln(1/z);D(#xi) = 1/N_{jet1} dN/d#xi", histname.Data());
+      fHistManager.CreateTH1(histname, histtitle, h8xi_nbin, h8xi_low, h8xi_high);
+
+      histname = TString::Format("%s/histo8xi_all_pt_%d", groupname.Data(), cent);
+      histtitle = TString::Format("%s - all jets Pt;#xi = ln(1/z);D(#xi) = 1/N_{jets} dN/d#xi", histname.Data());
+      fHistManager.CreateTH1(histname, histtitle, h8xi_nbin, h8xi_low, h8xi_high);
+      //########################################################
+
+
+
+
+
+
+
+
+
+
+/// TODO
+
+
+
+
+
+
+
+
+
+      }
+    }
+
+
+
+
+
+
+    //__________________________________________________________________________________________________
+
+
+    //__________________________________________________________________________________________________
+
+
+    //____________________________________________________________________________________
+      Int_t h15_nbin = 100;
+      Double_t h15_binwidth = 0.01;
+      Double_t h15_xlow = 0.;
+      Double_t h15_xhigh = h15_xlow + h15_binwidth * h15_nbin;
+
+      fH15 = new TProfile ( "histo15", "<p_{T}> track in dR(jet1)", h15_nbin, h15_xlow, h15_xhigh );
+      fH15->GetXaxis()->SetTitle ( "R" );
+      fH15->GetYaxis()->SetTitle ( "<p_{T}> track" );
+
+    //=====================================================================================
+      fH15_n70 = new TProfile ( "histo15_n70", "<p_{T}> track in dR(jet1) - 70% of particles", h15_nbin, h15_xlow, h15_xhigh );
+      fH15_n70->GetXaxis()->SetTitle ( "R" );
+      fH15_n70->GetYaxis()->SetTitle ( "<p_{T}> track" );
+
+      fH15_n75 = new TProfile ( "histo15_n75", "<p_{T}> track in dR(jet1) - 75% of particles", h15_nbin, h15_xlow, h15_xhigh );
+      fH15_n75->GetXaxis()->SetTitle ( "R" );
+      fH15_n75->GetYaxis()->SetTitle ( "<p_{T}> track" );
+
+      fH15_n80 = new TProfile ( "histo15_n80", "<p_{T}> track in dR(jet1) - 80% of particles", h15_nbin, h15_xlow, h15_xhigh );
+      fH15_n80->GetXaxis()->SetTitle ( "R" );
+      fH15_n80->GetYaxis()->SetTitle ( "<p_{T}> track" );
+
+      fH15_n85 = new TProfile ( "histo15_n85", "<p_{T}> track in dR(jet1) - 85% of particles", h15_nbin, h15_xlow, h15_xhigh );
+      fH15_n85->GetXaxis()->SetTitle ( "R" );
+      fH15_n85->GetYaxis()->SetTitle ( "<p_{T}> track" );
+
+      fH15_n90 = new TProfile ( "histo15_n90", "<p_{T}> track in dR(jet1) - 90% of particles", h15_nbin, h15_xlow, h15_xhigh );
+      fH15_n90->GetXaxis()->SetTitle ( "R" );
+      fH15_n90->GetYaxis()->SetTitle ( "<p_{T}> track" );
+
+    //=====================================================================================
+      fH15_pt70 = new TProfile ( "histo15_pt70", "<p_{T}> track in dR(jet1) - 70% of Pt", h15_nbin, h15_xlow, h15_xhigh );
+      fH15_pt70->GetXaxis()->SetTitle ( "R" );
+      fH15_pt70->GetYaxis()->SetTitle ( "<p_{T}> track" );
+
+      fH15_pt75 = new TProfile ( "histo15_pt75", "<p_{T}> track in dR(jet1) - 75% of Pt", h15_nbin, h15_xlow, h15_xhigh );
+      fH15_pt75->GetXaxis()->SetTitle ( "R" );
+      fH15_pt75->GetYaxis()->SetTitle ( "<p_{T}> track" );
+
+      fH15_pt80 = new TProfile ( "histo15_pt80", "<p_{T}> track in dR(jet1) - 80% of Pt", h15_nbin, h15_xlow, h15_xhigh );
+      fH15_pt80->GetXaxis()->SetTitle ( "R" );
+      fH15_pt80->GetYaxis()->SetTitle ( "<p_{T}> track" );
+
+      fH15_pt85 = new TProfile ( "histo15_pt85", "<p_{T}> track in dR(jet1) - 85% of Pt", h15_nbin, h15_xlow, h15_xhigh );
+      fH15_pt85->GetXaxis()->SetTitle ( "R" );
+      fH15_pt85->GetYaxis()->SetTitle ( "<p_{T}> track" );
+
+      fH15_pt90 = new TProfile ( "histo15_pt90", "<p_{T}> track in dR(jet1) - 90% of Pt", h15_nbin, h15_xlow, h15_xhigh );
+      fH15_pt90->GetXaxis()->SetTitle ( "R" );
+      fH15_pt90->GetYaxis()->SetTitle ( "<p_{T}> track" );
+
+
+
+    //__________________________________________________________________________________________________
+      fH15all = new TProfile ( "histo15all", "<p_{T}> track in dR(jet1)", h15_nbin, h15_xlow, h15_xhigh );
+      fH15all->GetXaxis()->SetTitle ( "R" );
+      fH15all->GetYaxis()->SetTitle ( "<p_{T}> track" );
+
+    //=====================================================================================
+      fH15all_n70 = new TProfile ( "histo15all_n70", "<p_{T}> track in dR(jet1) - 70% of particles", h15_nbin, h15_xlow, h15_xhigh );
+      fH15all_n70->GetXaxis()->SetTitle ( "R" );
+      fH15all_n70->GetYaxis()->SetTitle ( "<p_{T}> track" );
+
+      fH15all_n75 = new TProfile ( "histo15all_n75", "<p_{T}> track in dR(jet1) - 75% of particles", h15_nbin, h15_xlow, h15_xhigh );
+      fH15all_n75->GetXaxis()->SetTitle ( "R" );
+      fH15all_n75->GetYaxis()->SetTitle ( "<p_{T}> track" );
+
+      fH15all_n80 = new TProfile ( "histo15all_n80", "<p_{T}> track in dR(jet1) - 80% of particles", h15_nbin, h15_xlow, h15_xhigh );
+      fH15all_n80->GetXaxis()->SetTitle ( "R" );
+      fH15all_n80->GetYaxis()->SetTitle ( "<p_{T}> track" );
+
+      fH15all_n85 = new TProfile ( "histo15all_n85", "<p_{T}> track in dR(jet1) - 85% of particles", h15_nbin, h15_xlow, h15_xhigh );
+      fH15all_n85->GetXaxis()->SetTitle ( "R" );
+      fH15all_n85->GetYaxis()->SetTitle ( "<p_{T}> track" );
+
+      fH15all_n90 = new TProfile ( "histo15all_n90", "<p_{T}> track in dR(jet1) - 90% of particles", h15_nbin, h15_xlow, h15_xhigh );
+      fH15all_n90->GetXaxis()->SetTitle ( "R" );
+      fH15all_n90->GetYaxis()->SetTitle ( "<p_{T}> track" );
+
+    //=====================================================================================
+      fH15all_pt70 = new TProfile ( "histo15all_pt70", "<p_{T}> track in dR(jet1) - 70% of Pt", h15_nbin, h15_xlow, h15_xhigh );
+      fH15all_pt70->GetXaxis()->SetTitle ( "R" );
+      fH15all_pt70->GetYaxis()->SetTitle ( "<p_{T}> track" );
+
+      fH15all_pt75 = new TProfile ( "histo15all_pt75", "<p_{T}> track in dR(jet1) - 75% of Pt", h15_nbin, h15_xlow, h15_xhigh );
+      fH15all_pt75->GetXaxis()->SetTitle ( "R" );
+      fH15all_pt75->GetYaxis()->SetTitle ( "<p_{T}> track" );
+
+      fH15all_pt80 = new TProfile ( "histo15all_pt80", "<p_{T}> track in dR(jet1) - 80% of Pt", h15_nbin, h15_xlow, h15_xhigh );
+      fH15all_pt80->GetXaxis()->SetTitle ( "R" );
+      fH15all_pt80->GetYaxis()->SetTitle ( "<p_{T}> track" );
+
+      fH15all_pt85 = new TProfile ( "histo15all_pt85", "<p_{T}> track in dR(jet1) - 85% of Pt", h15_nbin, h15_xlow, h15_xhigh );
+      fH15all_pt85->GetXaxis()->SetTitle ( "R" );
+      fH15all_pt85->GetYaxis()->SetTitle ( "<p_{T}> track" );
+
+      fH15all_pt90 = new TProfile ( "histo15all_pt90", "<p_{T}> track in dR(jet1) - 90% of Pt", h15_nbin, h15_xlow, h15_xhigh );
+      fH15all_pt90->GetXaxis()->SetTitle ( "R" );
+      fH15all_pt90->GetYaxis()->SetTitle ( "<p_{T}> track" );
+
+    //____________________________________________________________________________________
+      fH15_bin = new TH1D ( "histo15_bin", "p_{T} SUM (track) in dR(jet1)", h15_nbin, h15_xlow, h15_xhigh );
+      fH15_bin->GetXaxis()->SetTitle ( " R" );
+      fH15_bin->GetYaxis()->SetTitle ( "p_{T} SUM (track)" );
+
+
+    //=====================================================================================
+      fH15_bin_n70 = new TH1D ( "histo15_bin_n70", "p_{T} SUM (track) in dR(jet1) - 70% of particles", h15_nbin, h15_xlow, h15_xhigh );
+      fH15_bin_n70->GetXaxis()->SetTitle ( "R" );
+      fH15_bin_n70->GetYaxis()->SetTitle ( "p_{T} SUM (track)" );
+
+      fH15_bin_n75 = new TH1D ( "histo15_bin_n75", "p_{T} SUM (track) in dR(jet1) - 75% of particles", h15_nbin, h15_xlow, h15_xhigh );
+      fH15_bin_n75->GetXaxis()->SetTitle ( "R" );
+      fH15_bin_n75->GetYaxis()->SetTitle ( "p_{T} SUM (track)" );
+
+      fH15_bin_n80 = new TH1D ( "histo15_bin_n80", "p_{T} SUM (track) in dR(jet1) - 80% of particles", h15_nbin, h15_xlow, h15_xhigh );
+      fH15_bin_n80->GetXaxis()->SetTitle ( "R" );
+      fH15_bin_n80->GetYaxis()->SetTitle ( "p_{T} SUM (track)" );
+
+      fH15_bin_n85 = new TH1D ( "histo15_bin_n85", "p_{T} SUM (track) in dR(jet1) - 85% of particles", h15_nbin, h15_xlow, h15_xhigh );
+      fH15_bin_n85->GetXaxis()->SetTitle ( "R" );
+      fH15_bin_n85->GetYaxis()->SetTitle ( "p_{T} SUM (track)" );
+
+      fH15_bin_n90 = new TH1D ( "histo15_bin_n90", "p_{T} SUM (track) in dR(jet1) - 90% of particles", h15_nbin, h15_xlow, h15_xhigh );
+      fH15_bin_n90->GetXaxis()->SetTitle ( "R" );
+      fH15_bin_n90->GetYaxis()->SetTitle ( "p_{T} SUM (track)" );
+
+    //=====================================================================================
+      fH15_bin_pt70 = new TH1D ( "histo15_bin_pt70", "p_{T} SUM (track) in dR(jet1) - 70% of Pt", h15_nbin, h15_xlow, h15_xhigh );
+      fH15_bin_pt70->GetXaxis()->SetTitle ( "R" );
+      fH15_bin_pt70->GetYaxis()->SetTitle ( "p_{T} SUM (track)" );
+
+      fH15_bin_pt75 = new TH1D ( "histo15_bin_pt75", "p_{T} SUM (track) in dR(jet1) - 75% of Pt", h15_nbin, h15_xlow, h15_xhigh );
+      fH15_bin_pt75->GetXaxis()->SetTitle ( "R" );
+      fH15_bin_pt75->GetYaxis()->SetTitle ( "p_{T} SUM (track)" );
+
+      fH15_bin_pt80 = new TH1D ( "histo15_bin_pt80", "p_{T} SUM (track) in dR(jet1) - 80% of Pt", h15_nbin, h15_xlow, h15_xhigh );
+      fH15_bin_pt80->GetXaxis()->SetTitle ( "R" );
+      fH15_bin_pt80->GetYaxis()->SetTitle ( "p_{T} SUM (track)" );
+
+      fH15_bin_pt85 = new TH1D ( "histo15_bin_pt85", "p_{T} SUM (track) in dR(jet1) - 85% of Pt", h15_nbin, h15_xlow, h15_xhigh );
+      fH15_bin_pt85->GetXaxis()->SetTitle ( "R" );
+      fH15_bin_pt85->GetYaxis()->SetTitle ( "p_{T} SUM (track)" );
+
+      fH15_bin_pt90 = new TH1D ( "histo15_bin_pt90", "p_{T} SUM (track) in dR(jet1) - 90% of Pt", h15_nbin, h15_xlow, h15_xhigh );
+      fH15_bin_pt90->GetXaxis()->SetTitle ( "R" );
+      fH15_bin_pt90->GetYaxis()->SetTitle ( "p_{T} SUM (track)" );
+
+
+    //____________________________________________________________________________________
+      fH15all_bin = new TH1D ( "histo15_bin_all", "p_{T} SUM (track) in dR (jet)", h15_nbin, h15_xlow, h15_xhigh );
+      fH15all_bin->GetXaxis()->SetTitle ( "R" );
+      fH15all_bin->GetYaxis()->SetTitle ( "p_{T} SUM (track)" );
+
+    //=====================================================================================
+      fH15all_bin_n70 = new TH1D ( "histo15_bin_n70_all", "p_{T} SUM (track) in dR (jet) - 70% of particles", h15_nbin, h15_xlow, h15_xhigh );
+      fH15all_bin_n70->GetXaxis()->SetTitle ( "R" );
+      fH15all_bin_n70->GetYaxis()->SetTitle ( "p_{T} SUM (track)" );
+
+      fH15all_bin_n75 = new TH1D ( "histo15_bin_n75_all", "p_{T} SUM (track) in dR (jet) - 75% of particles", h15_nbin, h15_xlow, h15_xhigh );
+      fH15all_bin_n75->GetXaxis()->SetTitle ( "R" );
+      fH15all_bin_n75->GetYaxis()->SetTitle ( "p_{T} SUM (track)" );
+
+      fH15all_bin_n80 = new TH1D ( "histo15_bin_n80_all", "p_{T} SUM (track) in dR (jet) - 80% of particles", h15_nbin, h15_xlow, h15_xhigh );
+      fH15all_bin_n80->GetXaxis()->SetTitle ( "R" );
+      fH15all_bin_n80->GetYaxis()->SetTitle ( "p_{T} SUM (track)" );
+
+      fH15all_bin_n85 = new TH1D ( "histo15_bin_n85_all", "p_{T} SUM (track) in dR (jet) - 85% of particles", h15_nbin, h15_xlow, h15_xhigh );
+      fH15all_bin_n85->GetXaxis()->SetTitle ( "R" );
+      fH15all_bin_n85->GetYaxis()->SetTitle ( "p_{T} SUM (track)" );
+
+      fH15all_bin_n90 = new TH1D ( "histo15_bin_n90_all", "p_{T} SUM (track) in dR (jet) - 90% of particles", h15_nbin, h15_xlow, h15_xhigh );
+      fH15all_bin_n90->GetXaxis()->SetTitle ( "R" );
+      fH15all_bin_n90->GetYaxis()->SetTitle ( "p_{T} SUM (track)" );
+
+    //=====================================================================================
+      fH15all_bin_pt70 = new TH1D ( "histo15_bin_pt70_all", "p_{T} SUM (track) in dR (jet) - 70% of Pt", h15_nbin, h15_xlow, h15_xhigh );
+      fH15all_bin_pt70->GetXaxis()->SetTitle ( "R" );
+      fH15all_bin_pt70->GetYaxis()->SetTitle ( "p_{T} SUM (track)" );
+
+      fH15all_bin_pt75 = new TH1D ( "histo15_bin_pt75_all", "p_{T} SUM (track) in dR (jet) - 75% of Pt", h15_nbin, h15_xlow, h15_xhigh );
+      fH15all_bin_pt75->GetXaxis()->SetTitle ( "R" );
+      fH15all_bin_pt75->GetYaxis()->SetTitle ( "p_{T} SUM (track)" );
+
+      fH15all_bin_pt80 = new TH1D ( "histo15_bin_pt80_all", "p_{T} SUM (track) in dR (jet) - 80% of Pt", h15_nbin, h15_xlow, h15_xhigh );
+      fH15all_bin_pt80->GetXaxis()->SetTitle ( "R" );
+      fH15all_bin_pt80->GetYaxis()->SetTitle ( "p_{T} SUM (track)" );
+
+      fH15all_bin_pt85 = new TH1D ( "histo15_bin_pt85_all", "p_{T} SUM (track) in dR (jet) - 85% of Pt", h15_nbin, h15_xlow, h15_xhigh );
+      fH15all_bin_pt85->GetXaxis()->SetTitle ( "R" );
+      fH15all_bin_pt85->GetYaxis()->SetTitle ( "p_{T} SUM (track)" );
+
+      fH15all_bin_pt90 = new TH1D ( "histo15_bin_pt90_all", "p_{T} SUM (track) in dR (jet) - 90% of Pt", h15_nbin, h15_xlow, h15_xhigh );
+      fH15all_bin_pt90->GetXaxis()->SetTitle ( "R" );
+      fH15all_bin_pt90->GetYaxis()->SetTitle ( "p_{T} SUM (track)" );
+
+    //____________________________________________________________________________________
+      Int_t h20_nbin = 100;
+      Double_t h20_binwidth = 0.01;
+      Double_t h20_low = 0.;
+      Double_t h20_high = h20_low + h20_binwidth * h20_nbin;
+      fH20 = new TH1D ( "histo20", "dN/dR (jet1)", h20_nbin, h20_low, h20_high );
+      fH20->GetXaxis()->SetTitle ( "R" );
+      fH20->GetYaxis()->SetTitle ( "dN/dR" );
+
+    //=====================================================================================
+      fH20_n70 = new TH1D ( "histo20_n70", "dN/dR (jet1) - 70% of particles", h20_nbin, h20_low, h20_high );
+      fH20_n70->GetXaxis()->SetTitle ( "R" );
+      fH20_n70->GetYaxis()->SetTitle ( "dN/dR" );
+
+      fH20_n75 = new TH1D ( "histo20_n75", "dN/dR (jet1) - 75% of particles", h20_nbin, h20_low, h20_high );
+      fH20_n75->GetXaxis()->SetTitle ( "R" );
+      fH20_n75->GetYaxis()->SetTitle ( "dN/dR" );
+
+      fH20_n80 = new TH1D ( "histo20_n80", "dN/dR (jet1) - 80% of particles", h20_nbin, h20_low, h20_high );
+      fH20_n80->GetXaxis()->SetTitle ( "R" );
+      fH20_n80->GetYaxis()->SetTitle ( "dN/dR" );
+
+      fH20_n85 = new TH1D ( "histo20_n85", "dN/dR (jet1) - 85% of particles", h20_nbin, h20_low, h20_high );
+      fH20_n85->GetXaxis()->SetTitle ( "R" );
+      fH20_n85->GetYaxis()->SetTitle ( "dN/dR" );
+
+      fH20_n90 = new TH1D ( "histo20_n90", "dN/dR (jet1) - 90% of particles", h20_nbin, h20_low, h20_high );
+      fH20_n90->GetXaxis()->SetTitle ( "R" );
+      fH20_n90->GetYaxis()->SetTitle ( "dN/dR" );
+
+    //=====================================================================================
+      fH20_pt70 = new TH1D ( "histo20_pt70", "dN/dR (jet1) - 70% of Pt", h20_nbin, h20_low, h20_high );
+      fH20_pt70->GetXaxis()->SetTitle ( "R" );
+      fH20_pt70->GetYaxis()->SetTitle ( "dN/dR" );
+
+      fH20_pt75 = new TH1D ( "histo20_pt75", "dN/dR (jet1) - 75% of Pt", h20_nbin, h20_low, h20_high );
+      fH20_pt75->GetXaxis()->SetTitle ( "R" );
+      fH20_pt75->GetYaxis()->SetTitle ( "dN/dR" );
+
+      fH20_pt80 = new TH1D ( "histo20_pt80", "dN/dR (jet1) - 80% of Pt", h20_nbin, h20_low, h20_high );
+      fH20_pt80->GetXaxis()->SetTitle ( "R" );
+      fH20_pt80->GetYaxis()->SetTitle ( "dN/dR" );
+
+      fH20_pt85 = new TH1D ( "histo20_pt85", "dN/dR (jet1) - 85% of Pt", h20_nbin, h20_low, h20_high );
+      fH20_pt85->GetXaxis()->SetTitle ( "R" );
+      fH20_pt85->GetYaxis()->SetTitle ( "dN/dR" );
+
+      fH20_pt90 = new TH1D ( "histo20_pt90", "dN/dR (jet1) - 90% of Pt", h20_nbin, h20_low, h20_high );
+      fH20_pt90->GetXaxis()->SetTitle ( "R" );
+      fH20_pt90->GetYaxis()->SetTitle ( "dN/dR" );
+
+
+    //____________________________________________________________________________________
+      fH20all = new TH1D ( "histo20_all", "dN/dR - all jets", h20_nbin, h20_low, h20_high );
+      fH20all->GetXaxis()->SetTitle ( "R" );
+      fH20all->GetYaxis()->SetTitle ( "dN/dR" );
+
+
+    //=====================================================================================
+      fH20all_n70 = new TH1D ( "histo20_n70_all", "dN/dR - all jets - 70% of particles", h20_nbin, h20_low, h20_high );
+      fH20all_n70->GetXaxis()->SetTitle ( "R" );
+      fH20all_n70->GetYaxis()->SetTitle ( "dN/dR" );
+
+      fH20all_n75 = new TH1D ( "histo20_n75_all", "dN/dR - all jets - 75% of particles", h20_nbin, h20_low, h20_high );
+      fH20all_n75->GetXaxis()->SetTitle ( "R" );
+      fH20all_n75->GetYaxis()->SetTitle ( "dN/dR" );
+
+      fH20all_n80 = new TH1D ( "histo20_n80_all", "dN/dR - all jets - 80% of particles", h20_nbin, h20_low, h20_high );
+      fH20all_n80->GetXaxis()->SetTitle ( "R" );
+      fH20all_n80->GetYaxis()->SetTitle ( "dN/dR" );
+
+      fH20all_n85 = new TH1D ( "histo20_n85_all", "dN/dR - all jets - 85% of particles", h20_nbin, h20_low, h20_high );
+      fH20all_n85->GetXaxis()->SetTitle ( "R" );
+      fH20all_n85->GetYaxis()->SetTitle ( "dN/dR" );
+
+      fH20all_n90 = new TH1D ( "histo20_n90_all", "dN/dR - all jets - 90% of particles", h20_nbin, h20_low, h20_high );
+      fH20all_n90->GetXaxis()->SetTitle ( "R" );
+      fH20all_n90->GetYaxis()->SetTitle ( "dN/dR" );
+
+    //=====================================================================================
+      fH20all_pt70 = new TH1D ( "histo20_pt70_all", "dN/dR - all jets - 70% of Pt", h20_nbin, h20_low, h20_high );
+      fH20all_pt70->GetXaxis()->SetTitle ( "R" );
+      fH20all_pt70->GetYaxis()->SetTitle ( "dN/dR" );
+
+      fH20all_pt75 = new TH1D ( "histo20_pt75_all", "dN/dR - all jets - 75% of Pt", h20_nbin, h20_low, h20_high );
+      fH20all_pt75->GetXaxis()->SetTitle ( "R" );
+      fH20all_pt75->GetYaxis()->SetTitle ( "dN/dR" );
+
+      fH20all_pt80 = new TH1D ( "histo20_pt80_all", "dN/dR - all jets - 80% of Pt", h20_nbin, h20_low, h20_high );
+      fH20all_pt80->GetXaxis()->SetTitle ( "R" );
+      fH20all_pt80->GetYaxis()->SetTitle ( "dN/dR" );
+
+      fH20all_pt85 = new TH1D ( "histo20_pt85_all", "dN/dR - all jets - 85% of Pt", h20_nbin, h20_low, h20_high );
+      fH20all_pt85->GetXaxis()->SetTitle ( "R" );
+      fH20all_pt85->GetYaxis()->SetTitle ( "dN/dR" );
+
+      fH20all_pt90 = new TH1D ( "histo20_pt90_all", "dN/dR - all jets - 90% of Pt", h20_nbin, h20_low, h20_high );
+      fH20all_pt90->GetXaxis()->SetTitle ( "R" );
+      fH20all_pt90->GetYaxis()->SetTitle ( "dN/dR" );
+
+      //____________________________________________________________________________________
+      Int_t h23_nbin = 400;
+      Double_t h23_binwidth = 1.;
+      Double_t h23_low = 0.;
+      Double_t h23_high = h23_low + h23_binwidth * h23_nbin;
+
+      fH23 = new TProfile ( "histo23", "Jet1 Size vs P_{T}(jet1)", h23_nbin, h23_low, h23_high );
+      fH23->GetXaxis()->SetTitle ( "p_{T}(jet1) (GeV/c)" );
+      fH23->GetYaxis()->SetTitle ( "<R(jet1)> in 1 GeV/c bin" );
+
+      fH24 = new TProfile ( "histo24", "Jet1 Size vs P_{T}(jet1) - 80% of particles", h23_nbin, h23_low, h23_high );
+      fH24->GetXaxis()->SetTitle ( "p_{T}(jet1) (GeV/c)" );
+      fH24->GetYaxis()->SetTitle ( "<R(jet1)> in 1 GeV/c bin" );
+
+      fH25 = new TProfile ( "histo25", "Jet1 Size vs P_{T}(jet1) - 80% of Pt", h23_nbin, h23_low, h23_high );
+      fH25->GetXaxis()->SetTitle ( "p_{T}(jet1) (GeV/c)" );
+      fH25->GetYaxis()->SetTitle ( "<R(jet1)> in 1 GeV/c bin" );
+
+      fH23all = new TProfile ( "histo23all", "Jet1 Size vs P_{T} - all jets", h23_nbin, h23_low, h23_high );
+      fH23all->GetXaxis()->SetTitle ( "p_{T}(jet) (GeV/c)" );
+      fH23all->GetYaxis()->SetTitle ( "<R(jet1)> in 1 GeV/c bin" );
+
+      fH24all = new TProfile ( "histo24all", "Jet1 Size vs P_{T}(jet1) - 80% of particles", h23_nbin, h23_low, h23_high );
+      fH24all->GetXaxis()->SetTitle ( "p_{T}(jet) (GeV/c)" );
+      fH24all->GetYaxis()->SetTitle ( "<R(jet1)> in 1 GeV/c bin" );
+
+      fH25all = new TProfile ( "histo25all", "Jet1 Size vs P_{T}(jet1) - 80% of Pt", h23_nbin, h23_low, h23_high );
+      fH25all->GetXaxis()->SetTitle ( "p_{T}(jet) (GeV/c)" );
+      fH25all->GetYaxis()->SetTitle ( "<R(jet1)> in 1 GeV/c bin" );
+
+    //=============================================================
+      Int_t hg_nbin = 100;
+      Double_t hg_binwidth = 0.01;
+      Double_t hg_low = 0.;
+      Double_t hg_high = hg_low + hg_binwidth * hg_nbin;
+
+      fHg = new TH1D ( "histo_g", "dN/dg", hg_nbin, hg_low, hg_high );
+      fHg->GetXaxis()->SetTitle ( "g" );
+      fHg->GetYaxis()->SetTitle ( "1/N_{jets} dN/dg" );
+
+      fHg_n90 = new TH1D ( "histo_g_n90", "dN/dg", hg_nbin, hg_low, hg_high );
+      fHg_n90->GetXaxis()->SetTitle ( "g" );
+      fHg_n90->GetYaxis()->SetTitle ( "1/N_{jets} dN/dg" );
+
+      fHg_n85 = new TH1D ( "histo_g_n85", "dN/dg", hg_nbin, hg_low, hg_high );
+      fHg_n85->GetXaxis()->SetTitle ( "g" );
+      fHg_n85->GetYaxis()->SetTitle ( "1/N_{jets} dN/dg" );
+
+      fHg_n80 = new TH1D ( "histo_g_n80", "dN/dg", hg_nbin, hg_low, hg_high );
+      fHg_n80->GetXaxis()->SetTitle ( "g" );
+      fHg_n80->GetYaxis()->SetTitle ( "1/N_{jets} dN/dg" );
+
+      fHg_n75 = new TH1D ( "histo_g_n75", "dN/dg", hg_nbin, hg_low, hg_high );
+      fHg_n75->GetXaxis()->SetTitle ( "g" );
+      fHg_n75->GetYaxis()->SetTitle ( "1/N_{jets} dN/dg" );
+
+      fHg_n70 = new TH1D ( "histo_g_n70", "dN/dg", hg_nbin, hg_low, hg_high );
+      fHg_n70->GetXaxis()->SetTitle ( "g" );
+      fHg_n70->GetYaxis()->SetTitle ( "1/N_{jets} dN/dg" );
+
+      fHg_pt90 = new TH1D ( "histo_g_pt90", "dN/dg", hg_nbin, hg_low, hg_high );
+      fHg_pt90->GetXaxis()->SetTitle ( "g" );
+      fHg_pt90->GetYaxis()->SetTitle ( "1/N_{jets} dN/dg" );
+
+      fHg_pt85 = new TH1D ( "histo_g_pt85", "dN/dg", hg_nbin, hg_low, hg_high );
+      fHg_pt85->GetXaxis()->SetTitle ( "g" );
+      fHg_pt85->GetYaxis()->SetTitle ( "1/N_{jets} dN/dg" );
+
+      fHg_pt80 = new TH1D ( "histo_g_pt80", "dN/dg", hg_nbin, hg_low, hg_high );
+      fHg_pt80->GetXaxis()->SetTitle ( "g" );
+      fHg_pt80->GetYaxis()->SetTitle ( "1/N_{jets} dN/dg" );
+
+      fHg_pt75 = new TH1D ( "histo_g_pt75", "dN/dg", hg_nbin, hg_low, hg_high );
+      fHg_pt75->GetXaxis()->SetTitle ( "g" );
+      fHg_pt75->GetYaxis()->SetTitle ( "1/N_{jets} dN/dg" );
+
+      fHg_pt70 = new TH1D ( "histo_g_pt70", "dN/dg", hg_nbin, hg_low, hg_high );
+      fHg_pt70->GetXaxis()->SetTitle ( "g" );
+      fHg_pt70->GetYaxis()->SetTitle ( "1/N_{jets} dN/dg" );
+
+
+    //=============================================================
+      Int_t hptd_nbin = 100;
+      Double_t hptd_binwidth = 0.01;
+      Double_t hptd_low = 0.;
+      Double_t hptd_high = hptd_low + hptd_binwidth * hptd_nbin;
+
+      fHptd = new TH1D ( "histo_g", "dN/dg", hptd_nbin, hptd_low, hptd_high );
+      fHptd->GetXaxis()->SetTitle ( "g" );
+      fHptd->GetYaxis()->SetTitle ( "1/N_{jets} dN/dg" );
+
+      fHptd_n90 = new TH1D ( "histo_ptd_n90", "dN/dg", hptd_nbin, hptd_low, hptd_high );
+      fHptd_n90->GetXaxis()->SetTitle ( "g" );
+      fHptd_n90->GetYaxis()->SetTitle ( "1/N_{jets} dN/dg" );
+
+      fHptd_n85 = new TH1D ( "histo_ptd_n85", "dN/dg", hptd_nbin, hptd_low, hptd_high );
+      fHptd_n85->GetXaxis()->SetTitle ( "g" );
+      fHptd_n85->GetYaxis()->SetTitle ( "1/N_{jets} dN/dg" );
+
+      fHptd_n80 = new TH1D ( "histo_ptd_n80", "dN/dg", hptd_nbin, hptd_low, hptd_high );
+      fHptd_n80->GetXaxis()->SetTitle ( "g" );
+      fHptd_n80->GetYaxis()->SetTitle ( "1/N_{jets} dN/dg" );
+
+      fHptd_n75 = new TH1D ( "histo_ptd_n75", "dN/dg", hptd_nbin, hptd_low, hptd_high );
+      fHptd_n75->GetXaxis()->SetTitle ( "g" );
+      fHptd_n75->GetYaxis()->SetTitle ( "1/N_{jets} dN/dg" );
+
+      fHptd_n70 = new TH1D ( "histo_ptd_n70", "dN/dg", hptd_nbin, hptd_low, hptd_high );
+      fHptd_n70->GetXaxis()->SetTitle ( "g" );
+      fHptd_n70->GetYaxis()->SetTitle ( "1/N_{jets} dN/dg" );
+
+      fHptd_pt90 = new TH1D ( "histo_ptd_pt90", "dN/dg", hptd_nbin, hptd_low, hptd_high );
+      fHptd_pt90->GetXaxis()->SetTitle ( "g" );
+      fHptd_pt90->GetYaxis()->SetTitle ( "1/N_{jets} dN/dg" );
+
+      fHptd_pt85 = new TH1D ( "histo_ptd_pt85", "dN/dg", hptd_nbin, hptd_low, hptd_high );
+      fHptd_pt85->GetXaxis()->SetTitle ( "g" );
+      fHptd_pt85->GetYaxis()->SetTitle ( "1/N_{jets} dN/dg" );
+
+      fHptd_pt80 = new TH1D ( "histo_ptd_pt80", "dN/dg", hptd_nbin, hptd_low, hptd_high );
+      fHptd_pt80->GetXaxis()->SetTitle ( "g" );
+      fHptd_pt80->GetYaxis()->SetTitle ( "1/N_{jets} dN/dg" );
+
+      fHptd_pt75 = new TH1D ( "histo_ptd_pt75", "dN/dg", hptd_nbin, hptd_low, hptd_high );
+      fHptd_pt75->GetXaxis()->SetTitle ( "g" );
+      fHptd_pt75->GetYaxis()->SetTitle ( "1/N_{jets} dN/dg" );
+
+      fHptd_pt70 = new TH1D ( "histo_ptd_pt70", "dN/dg", hptd_nbin, hptd_low, hptd_high );
+      fHptd_pt70->GetXaxis()->SetTitle ( "g" );
+      fHptd_pt70->GetYaxis()->SetTitle ( "1/N_{jets} dN/dg" );
 
 
   // =========== Switch on Sumw2 for all histos ===========
   for ( Int_t i = 0; i < fOutput->GetEntries(); ++i )
       {
-      TH1 *h1 = dynamic_cast<TH1 *> ( fOutput->At ( i ) );
+      TH1 *h1 = dynamic_cast<TH1 *> ( fOutput->At (i) );
       if ( h1 ) { h1->Sumw2();continue; }
 
-      TProfile *hprof1 = dynamic_cast<TProfile *> ( fOutput->At ( i ) );
+      TH2 *h2 = dynamic_cast<TH2 *> ( fOutput->At (i) );
+      if ( h2 ) { h2->Sumw2();continue; }
+
+      TProfile *hprof1 = dynamic_cast<TProfile *> ( fOutput->At (i) );
       if ( hprof1 ) { hprof1->Sumw2(); }
       }
+
+  TIter next(fHistManager.GetListOfHistograms());
+  TObject* obj = 0;
+  while ((obj = next())) { fOutput->Add(obj); }
 
   PostData ( 1, fOutput ); // Post data for ALL output slots > 0 here.
   }
@@ -1928,7 +1515,7 @@ void AliAnalysisTaskEmcalJetCDF::Terminate ( Option_t * )
   {
   // Called once at the end of the analysis.
   // Update pointers reading them from the output slot
-  fOutput = dynamic_cast<TList *> ( GetOutputData (0) );
+  fOutput = dynamic_cast<AliEmcalList*> ( GetOutputData (0) );
   }
 
 //________________________________________________________________________
@@ -1945,4 +1532,12 @@ Double_t AliAnalysisTaskEmcalJetCDF::Z_pt( const AliEmcalJet* jet, const AliVPar
   return (trk != 0) ? trk->Pt() / jet->Pt() : 0.;
 }
 
+//________________________________________________________________________
+TObject* AliAnalysisTaskEmcalJetCDF::GetHistogram ( const char* histName )
+{
+  return fHistManager.FindObject(histName);
+}
+
+
 // kate: indent-mode none; indent-width 2; replace-tabs on;
+
