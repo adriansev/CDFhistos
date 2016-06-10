@@ -924,18 +924,110 @@ void AliAnalysisTaskEmcalJetCDF::UserCreateOutputObjects()
       fHistManager.CreateTH1(histname, histtitle, h8xi_nbin, h8xi_low, h8xi_high);
       //########################################################
 
+      //########################################################
+      Int_t h15_xnbin = 100; Double_t h15_xbinwidth = 0.01; Double_t h15_xlow = 0.;
+      Double_t h15_xhigh = h15_xlow + h15_xbinwidth * h15_xnbin;
+      Int_t h15_ynbin = 1000; Double_t h15_ybinwidth = 1.; Double_t h15_ylow = 0.;
+      Double_t h15_yhigh = h15_ylow + h15_ybinwidth * h15_ynbin;
+      //########################################################
 
+      histname = TString::Format("%s/histo15_%d", groupname.Data(), cent);
+      histtitle = TString::Format("%s - jet1;dR;<p_{T}> track", histname.Data()); // N vs pt jet1
+      fHistManager.CreateTH2(histname, histtitle, h15_xnbin, h15_xlow, h15_xhigh, h15_ynbin, h15_ylow, h15_yhigh);
 
+      histname = TString::Format("%s/histo15_n70_%d", groupname.Data(), cent);
+      histtitle = TString::Format("%s - jet1;dR;<p_{T}> track", histname.Data()); // N vs pt jet1
+      fHistManager.CreateTH2(histname, histtitle, h15_xnbin, h15_xlow, h15_xhigh, h15_ynbin, h15_ylow, h15_yhigh);
 
+      histname = TString::Format("%s/histo15_n75_%d", groupname.Data(), cent);
+      histtitle = TString::Format("%s - jet1;dR;<p_{T}> track", histname.Data()); // N vs pt jet1
+      fHistManager.CreateTH2(histname, histtitle, h15_xnbin, h15_xlow, h15_xhigh, h15_ynbin, h15_ylow, h15_yhigh);
 
+      histname = TString::Format("%s/histo15_n80_%d", groupname.Data(), cent);
+      histtitle = TString::Format("%s - jet1;dR;<p_{T}> track", histname.Data()); // N vs pt jet1
+      fHistManager.CreateTH2(histname, histtitle, h15_xnbin, h15_xlow, h15_xhigh, h15_ynbin, h15_ylow, h15_yhigh);
 
+      histname = TString::Format("%s/histo15_n85_%d", groupname.Data(), cent);
+      histtitle = TString::Format("%s - jet1;dR;<p_{T}> track", histname.Data()); // N vs pt jet1
+      fHistManager.CreateTH2(histname, histtitle, h15_xnbin, h15_xlow, h15_xhigh, h15_ynbin, h15_ylow, h15_yhigh);
+
+      histname = TString::Format("%s/histo15_n90_%d", groupname.Data(), cent);
+      histtitle = TString::Format("%s - jet1;dR;<p_{T}> track", histname.Data()); // N vs pt jet1
+      fHistManager.CreateTH2(histname, histtitle, h15_xnbin, h15_xlow, h15_xhigh, h15_ynbin, h15_ylow, h15_yhigh);
+
+      //=====================================================================================
+      histname = TString::Format("%s/histo15_pt70_%d", groupname.Data(), cent);
+      histtitle = TString::Format("%s - jet1;dR;<p_{T}> track", histname.Data()); // N vs pt jet1
+      fHistManager.CreateTH2(histname, histtitle, h15_xnbin, h15_xlow, h15_xhigh, h15_ynbin, h15_ylow, h15_yhigh);
+
+      histname = TString::Format("%s/histo15_pt75_%d", groupname.Data(), cent);
+      histtitle = TString::Format("%s - jet1;dR;<p_{T}> track", histname.Data()); // N vs pt jet1
+      fHistManager.CreateTH2(histname, histtitle, h15_xnbin, h15_xlow, h15_xhigh, h15_ynbin, h15_ylow, h15_yhigh);
+
+      histname = TString::Format("%s/histo15_pt80_%d", groupname.Data(), cent);
+      histtitle = TString::Format("%s - jet1;dR;<p_{T}> track", histname.Data()); // N vs pt jet1
+      fHistManager.CreateTH2(histname, histtitle, h15_xnbin, h15_xlow, h15_xhigh, h15_ynbin, h15_ylow, h15_yhigh);
+
+      histname = TString::Format("%s/histo15_pt85_%d", groupname.Data(), cent);
+      histtitle = TString::Format("%s - jet1;dR;<p_{T}> track", histname.Data()); // N vs pt jet1
+      fHistManager.CreateTH2(histname, histtitle, h15_xnbin, h15_xlow, h15_xhigh, h15_ynbin, h15_ylow, h15_yhigh);
+
+      histname = TString::Format("%s/histo15_pt90_%d", groupname.Data(), cent);
+      histtitle = TString::Format("%s - jet1;dR;<p_{T}> track", histname.Data()); // N vs pt jet1
+      fHistManager.CreateTH2(histname, histtitle, h15_xnbin, h15_xlow, h15_xhigh, h15_ynbin, h15_ylow, h15_yhigh);
+
+      //___________________________________________
+      histname = TString::Format("%s/histo15all_%d", groupname.Data(), cent);
+      histtitle = TString::Format("%s - all jets;dR;<p_{T}> track", histname.Data()); // N vs pt jet1
+      fHistManager.CreateTH2(histname, histtitle, h15_xnbin, h15_xlow, h15_xhigh, h15_ynbin, h15_ylow, h15_yhigh);
+
+      histname = TString::Format("%s/histo15all_n70_%d", groupname.Data(), cent);
+      histtitle = TString::Format("%s - all jets;dR;<p_{T}> track", histname.Data()); // N vs pt jet1
+      fHistManager.CreateTH2(histname, histtitle, h15_xnbin, h15_xlow, h15_xhigh, h15_ynbin, h15_ylow, h15_yhigh);
+
+      histname = TString::Format("%s/histo15all_n75_%d", groupname.Data(), cent);
+      histtitle = TString::Format("%s - all jets;dR;<p_{T}> track", histname.Data()); // N vs pt jet1
+      fHistManager.CreateTH2(histname, histtitle, h15_xnbin, h15_xlow, h15_xhigh, h15_ynbin, h15_ylow, h15_yhigh);
+
+      histname = TString::Format("%s/histo15all_n80_%d", groupname.Data(), cent);
+      histtitle = TString::Format("%s - all jets;dR;<p_{T}> track", histname.Data()); // N vs pt jet1
+      fHistManager.CreateTH2(histname, histtitle, h15_xnbin, h15_xlow, h15_xhigh, h15_ynbin, h15_ylow, h15_yhigh);
+
+      histname = TString::Format("%s/histo15all_n85_%d", groupname.Data(), cent);
+      histtitle = TString::Format("%s - all jets;dR;<p_{T}> track", histname.Data()); // N vs pt jet1
+      fHistManager.CreateTH2(histname, histtitle, h15_xnbin, h15_xlow, h15_xhigh, h15_ynbin, h15_ylow, h15_yhigh);
+
+      histname = TString::Format("%s/histo15all_n90_%d", groupname.Data(), cent);
+      histtitle = TString::Format("%s - all jets;dR;<p_{T}> track", histname.Data()); // N vs pt jet1
+      fHistManager.CreateTH2(histname, histtitle, h15_xnbin, h15_xlow, h15_xhigh, h15_ynbin, h15_ylow, h15_yhigh);
+
+      //=====================================================================================
+      histname = TString::Format("%s/histo15all_pt70_%d", groupname.Data(), cent);
+      histtitle = TString::Format("%s - all jets;dR;<p_{T}> track", histname.Data()); // N vs pt jet1
+      fHistManager.CreateTH2(histname, histtitle, h15_xnbin, h15_xlow, h15_xhigh, h15_ynbin, h15_ylow, h15_yhigh);
+
+      histname = TString::Format("%s/histo15all_pt75_%d", groupname.Data(), cent);
+      histtitle = TString::Format("%s - all jets;dR;<p_{T}> track", histname.Data()); // N vs pt jet1
+      fHistManager.CreateTH2(histname, histtitle, h15_xnbin, h15_xlow, h15_xhigh, h15_ynbin, h15_ylow, h15_yhigh);
+
+      histname = TString::Format("%s/histo15all_pt80_%d", groupname.Data(), cent);
+      histtitle = TString::Format("%s - all jets;dR;<p_{T}> track", histname.Data()); // N vs pt jet1
+      fHistManager.CreateTH2(histname, histtitle, h15_xnbin, h15_xlow, h15_xhigh, h15_ynbin, h15_ylow, h15_yhigh);
+
+      histname = TString::Format("%s/histo15all_pt85_%d", groupname.Data(), cent);
+      histtitle = TString::Format("%s - all jets;dR;<p_{T}> track", histname.Data()); // N vs pt jet1
+      fHistManager.CreateTH2(histname, histtitle, h15_xnbin, h15_xlow, h15_xhigh, h15_ynbin, h15_ylow, h15_yhigh);
+
+      histname = TString::Format("%s/histo15all_pt90_%d", groupname.Data(), cent);
+      histtitle = TString::Format("%s - all jets;dR;<p_{T}> track", histname.Data()); // N vs pt jet1
+      fHistManager.CreateTH2(histname, histtitle, h15_xnbin, h15_xlow, h15_xhigh, h15_ynbin, h15_ylow, h15_yhigh);
 
 
 
 
 /// TODO
 
-
+// DE VAZUT DACA LA TH2 PE LINGA PROFIL SE POATE FACE SI SUMA PE O AXA
 
 
 
@@ -948,115 +1040,6 @@ void AliAnalysisTaskEmcalJetCDF::UserCreateOutputObjects()
 
 
 
-
-
-
-    //__________________________________________________________________________________________________
-
-
-    //__________________________________________________________________________________________________
-
-
-    //____________________________________________________________________________________
-      Int_t h15_nbin = 100;
-      Double_t h15_binwidth = 0.01;
-      Double_t h15_xlow = 0.;
-      Double_t h15_xhigh = h15_xlow + h15_binwidth * h15_nbin;
-
-      fH15 = new TProfile ( "histo15", "<p_{T}> track in dR(jet1)", h15_nbin, h15_xlow, h15_xhigh );
-      fH15->GetXaxis()->SetTitle ( "R" );
-      fH15->GetYaxis()->SetTitle ( "<p_{T}> track" );
-
-    //=====================================================================================
-      fH15_n70 = new TProfile ( "histo15_n70", "<p_{T}> track in dR(jet1) - 70% of particles", h15_nbin, h15_xlow, h15_xhigh );
-      fH15_n70->GetXaxis()->SetTitle ( "R" );
-      fH15_n70->GetYaxis()->SetTitle ( "<p_{T}> track" );
-
-      fH15_n75 = new TProfile ( "histo15_n75", "<p_{T}> track in dR(jet1) - 75% of particles", h15_nbin, h15_xlow, h15_xhigh );
-      fH15_n75->GetXaxis()->SetTitle ( "R" );
-      fH15_n75->GetYaxis()->SetTitle ( "<p_{T}> track" );
-
-      fH15_n80 = new TProfile ( "histo15_n80", "<p_{T}> track in dR(jet1) - 80% of particles", h15_nbin, h15_xlow, h15_xhigh );
-      fH15_n80->GetXaxis()->SetTitle ( "R" );
-      fH15_n80->GetYaxis()->SetTitle ( "<p_{T}> track" );
-
-      fH15_n85 = new TProfile ( "histo15_n85", "<p_{T}> track in dR(jet1) - 85% of particles", h15_nbin, h15_xlow, h15_xhigh );
-      fH15_n85->GetXaxis()->SetTitle ( "R" );
-      fH15_n85->GetYaxis()->SetTitle ( "<p_{T}> track" );
-
-      fH15_n90 = new TProfile ( "histo15_n90", "<p_{T}> track in dR(jet1) - 90% of particles", h15_nbin, h15_xlow, h15_xhigh );
-      fH15_n90->GetXaxis()->SetTitle ( "R" );
-      fH15_n90->GetYaxis()->SetTitle ( "<p_{T}> track" );
-
-    //=====================================================================================
-      fH15_pt70 = new TProfile ( "histo15_pt70", "<p_{T}> track in dR(jet1) - 70% of Pt", h15_nbin, h15_xlow, h15_xhigh );
-      fH15_pt70->GetXaxis()->SetTitle ( "R" );
-      fH15_pt70->GetYaxis()->SetTitle ( "<p_{T}> track" );
-
-      fH15_pt75 = new TProfile ( "histo15_pt75", "<p_{T}> track in dR(jet1) - 75% of Pt", h15_nbin, h15_xlow, h15_xhigh );
-      fH15_pt75->GetXaxis()->SetTitle ( "R" );
-      fH15_pt75->GetYaxis()->SetTitle ( "<p_{T}> track" );
-
-      fH15_pt80 = new TProfile ( "histo15_pt80", "<p_{T}> track in dR(jet1) - 80% of Pt", h15_nbin, h15_xlow, h15_xhigh );
-      fH15_pt80->GetXaxis()->SetTitle ( "R" );
-      fH15_pt80->GetYaxis()->SetTitle ( "<p_{T}> track" );
-
-      fH15_pt85 = new TProfile ( "histo15_pt85", "<p_{T}> track in dR(jet1) - 85% of Pt", h15_nbin, h15_xlow, h15_xhigh );
-      fH15_pt85->GetXaxis()->SetTitle ( "R" );
-      fH15_pt85->GetYaxis()->SetTitle ( "<p_{T}> track" );
-
-      fH15_pt90 = new TProfile ( "histo15_pt90", "<p_{T}> track in dR(jet1) - 90% of Pt", h15_nbin, h15_xlow, h15_xhigh );
-      fH15_pt90->GetXaxis()->SetTitle ( "R" );
-      fH15_pt90->GetYaxis()->SetTitle ( "<p_{T}> track" );
-
-
-
-    //__________________________________________________________________________________________________
-      fH15all = new TProfile ( "histo15all", "<p_{T}> track in dR(jet1)", h15_nbin, h15_xlow, h15_xhigh );
-      fH15all->GetXaxis()->SetTitle ( "R" );
-      fH15all->GetYaxis()->SetTitle ( "<p_{T}> track" );
-
-    //=====================================================================================
-      fH15all_n70 = new TProfile ( "histo15all_n70", "<p_{T}> track in dR(jet1) - 70% of particles", h15_nbin, h15_xlow, h15_xhigh );
-      fH15all_n70->GetXaxis()->SetTitle ( "R" );
-      fH15all_n70->GetYaxis()->SetTitle ( "<p_{T}> track" );
-
-      fH15all_n75 = new TProfile ( "histo15all_n75", "<p_{T}> track in dR(jet1) - 75% of particles", h15_nbin, h15_xlow, h15_xhigh );
-      fH15all_n75->GetXaxis()->SetTitle ( "R" );
-      fH15all_n75->GetYaxis()->SetTitle ( "<p_{T}> track" );
-
-      fH15all_n80 = new TProfile ( "histo15all_n80", "<p_{T}> track in dR(jet1) - 80% of particles", h15_nbin, h15_xlow, h15_xhigh );
-      fH15all_n80->GetXaxis()->SetTitle ( "R" );
-      fH15all_n80->GetYaxis()->SetTitle ( "<p_{T}> track" );
-
-      fH15all_n85 = new TProfile ( "histo15all_n85", "<p_{T}> track in dR(jet1) - 85% of particles", h15_nbin, h15_xlow, h15_xhigh );
-      fH15all_n85->GetXaxis()->SetTitle ( "R" );
-      fH15all_n85->GetYaxis()->SetTitle ( "<p_{T}> track" );
-
-      fH15all_n90 = new TProfile ( "histo15all_n90", "<p_{T}> track in dR(jet1) - 90% of particles", h15_nbin, h15_xlow, h15_xhigh );
-      fH15all_n90->GetXaxis()->SetTitle ( "R" );
-      fH15all_n90->GetYaxis()->SetTitle ( "<p_{T}> track" );
-
-    //=====================================================================================
-      fH15all_pt70 = new TProfile ( "histo15all_pt70", "<p_{T}> track in dR(jet1) - 70% of Pt", h15_nbin, h15_xlow, h15_xhigh );
-      fH15all_pt70->GetXaxis()->SetTitle ( "R" );
-      fH15all_pt70->GetYaxis()->SetTitle ( "<p_{T}> track" );
-
-      fH15all_pt75 = new TProfile ( "histo15all_pt75", "<p_{T}> track in dR(jet1) - 75% of Pt", h15_nbin, h15_xlow, h15_xhigh );
-      fH15all_pt75->GetXaxis()->SetTitle ( "R" );
-      fH15all_pt75->GetYaxis()->SetTitle ( "<p_{T}> track" );
-
-      fH15all_pt80 = new TProfile ( "histo15all_pt80", "<p_{T}> track in dR(jet1) - 80% of Pt", h15_nbin, h15_xlow, h15_xhigh );
-      fH15all_pt80->GetXaxis()->SetTitle ( "R" );
-      fH15all_pt80->GetYaxis()->SetTitle ( "<p_{T}> track" );
-
-      fH15all_pt85 = new TProfile ( "histo15all_pt85", "<p_{T}> track in dR(jet1) - 85% of Pt", h15_nbin, h15_xlow, h15_xhigh );
-      fH15all_pt85->GetXaxis()->SetTitle ( "R" );
-      fH15all_pt85->GetYaxis()->SetTitle ( "<p_{T}> track" );
-
-      fH15all_pt90 = new TProfile ( "histo15all_pt90", "<p_{T}> track in dR(jet1) - 90% of Pt", h15_nbin, h15_xlow, h15_xhigh );
-      fH15all_pt90->GetXaxis()->SetTitle ( "R" );
-      fH15all_pt90->GetYaxis()->SetTitle ( "<p_{T}> track" );
 
     //____________________________________________________________________________________
       fH15_bin = new TH1D ( "histo15_bin", "p_{T} SUM (track) in dR(jet1)", h15_nbin, h15_xlow, h15_xhigh );
