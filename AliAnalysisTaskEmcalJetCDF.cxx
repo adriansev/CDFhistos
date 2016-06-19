@@ -81,41 +81,10 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
 
   AliJetContainer* jetCont = NULL;
   TIter next(&fJetCollArray);
-
   while ((jetCont = static_cast<AliJetContainer*>(next())))
     {
     if (!jetCont) { continue; }
     groupname = jetCont->GetName();
-
-    // Number of Jets found in event - accepted cuts applied by JetContainer
-    Int_t fNJets_accepted = jetCont->GetNJets();
-
-    // get particles connected to jets
-    AliParticleContainer* fTracksCont = jetCont->GetParticleContainer();
-    if (!fTracksCont) { std::cout << "*********   JET CONTAINER WITHOUT TRACKS CONTAINER   *********" << endl; continue; }
-    TClonesArray* fTracksContArray = fTracksCont->GetArray();
-
-    // Multiplicity in event - accepted tracks in tracks container
-    Int_t fNaccPart = fTracksCont->GetNAcceptedParticles();
-
-    // get clusters connected to jets
-    AliClusterContainer* fCaloClustersCont = jetCont->GetClusterContainer();
-    // accepted clusters in cluster container
-    Int_t fNaccClus = -1;
-    if (fCaloClustersCont) { fNaccClus = fCaloClustersCont->GetNAcceptedClusters(); }
-
-    // protection
-    if ( ( fNJets_accepted < 1 ) || ( fNaccPart < 1 ) )
-      {
-      if ( fDebug > 1 ) { std::cout << "accepted (fNJets || fNPart) == 0" << std::endl; }
-      return kFALSE;
-      }
-
-    if ( fDebug > 1 )
-      { std::cout << "fNJets = " << fNJets_accepted << " ; fNPart = " << fNaccPart << std::endl; }
-
-    AliVParticle* track = NULL;
-    AliEmcalJet*    jet = NULL;
 
 //######################################################################################################
 //   Get histo pointers from Hist Manager
@@ -383,6 +352,36 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
     histname = TString::Format("%s/histo_ptd_pt90_%d", groupname.Data(), fCentBin);
     TH1D* fHptd_pt90 = (TH1D*)GetHistogram(histname.Data());
 //######################################################################################################
+
+    // Number of Jets found in event - accepted cuts applied by JetContainer
+    Int_t fNJets_accepted = jetCont->GetNJets();
+
+    // get particles connected to jets
+    AliParticleContainer* fTracksCont = jetCont->GetParticleContainer();
+    if (!fTracksCont) { std::cout << "*********   JET CONTAINER WITHOUT TRACKS CONTAINER   *********" << endl; continue; }
+    TClonesArray* fTracksContArray = fTracksCont->GetArray();
+
+    // Multiplicity in event - accepted tracks in tracks container
+    Int_t fNaccPart = fTracksCont->GetNAcceptedParticles();
+
+    // get clusters connected to jets
+    AliClusterContainer* fCaloClustersCont = jetCont->GetClusterContainer();
+    // accepted clusters in cluster container
+    Int_t fNaccClus = -1;
+    if (fCaloClustersCont) { fNaccClus = fCaloClustersCont->GetNAcceptedClusters(); }
+
+    // protection
+    if ( ( fNJets_accepted < 1 ) || ( fNaccPart < 1 ) )
+      {
+      if ( fDebug > 1 ) { std::cout << "accepted (fNJets || fNPart) == 0" << std::endl; }
+      return kFALSE;
+      }
+
+    if ( fDebug > 1 )
+      { std::cout << "fNJets = " << fNJets_accepted << " ; fNPart = " << fNaccPart << std::endl; }
+
+    AliVParticle* track = NULL;
+    AliEmcalJet*    jet = NULL;
 
     fH5->Fill ( fNJets_accepted ); // Distribution of jets in events;
 
