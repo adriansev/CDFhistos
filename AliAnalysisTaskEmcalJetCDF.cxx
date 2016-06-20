@@ -86,6 +86,15 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
     if (!jetCont) { continue; }
     groupname = jetCont->GetName();
 
+    Double_t jet_pt_min = jetCont->GetMinPt();
+    Double_t jet_pt_max = jetCont->GetMaxPt();
+
+    TString jetstrmin = ( ULong_t ) ( jet_pt_min * 1000 );
+    TString jetstrmax = ( ULong_t ) ( jet_pt_max * 1000 );
+
+    // add to groupname the min,max pt cuts of jets in the container
+    groupname += "ptbin" + "_" + jetstrmin + "_" + jetstrmax;
+
 //######################################################################################################
 //   Get histo pointers from Hist Manager
     histname = TString::Format("%s/histo1_%d", groupname.Data(), fCentBin);
@@ -810,6 +819,16 @@ void AliAnalysisTaskEmcalJetCDF::UserCreateOutputObjects()
   while ((jetCont = static_cast<AliJetContainer*>(next())))
     {
     groupname = jetCont->GetName();
+
+    Double_t jet_pt_min = jetCont->GetMinPt();
+    Double_t jet_pt_max = jetCont->GetMaxPt();
+
+    TString jetstrmin = ( ULong_t ) ( jet_pt_min * 1000 );
+    TString jetstrmax = ( ULong_t ) ( jet_pt_max * 1000 );
+
+    // add to groupname the min,max pt cuts of jets in the container
+    groupname += "ptbin" + "_" + jetstrmin + "_" + jetstrmax;
+
     fHistManager.CreateHistoGroup(groupname);
     for (Int_t cent = 0; cent < fNcentBins; cent++)
       {
