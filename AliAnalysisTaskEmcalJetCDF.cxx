@@ -77,7 +77,7 @@ Bool_t AliAnalysisTaskEmcalJetCDF::Run()
 //________________________________________________________________________
 Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
   {
-  TString histname = "", groupname = "";
+  TString histname = "", groupname = "", fullgroupname = "";
 
   AliJetContainer* jetCont = NULL;
   TIter next(&fJetCollArray);
@@ -85,15 +85,6 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
     {
     if (!jetCont) { continue; }
     groupname = jetCont->GetName();
-
-    Double_t jet_pt_min = jetCont->GetMinPt();
-    Double_t jet_pt_max = jetCont->GetMaxPt();
-
-    TString jetstrmin = ( ULong_t ) ( jet_pt_min * 1000 );
-    TString jetstrmax = ( ULong_t ) ( jet_pt_max * 1000 );
-
-    // add to groupname the min,max pt cuts of jets in the container
-    groupname += "ptbin" + "_" + jetstrmin + "_" + jetstrmax;
 
 //######################################################################################################
 //   Get histo pointers from Hist Manager
@@ -813,7 +804,7 @@ void AliAnalysisTaskEmcalJetCDF::UserCreateOutputObjects()
   // Create user output.
   AliAnalysisTaskEmcalJet::UserCreateOutputObjects();
 
-  TString histname = "", histtitle = "", groupname = "";
+  TString histname = "", histtitle = "", groupname = "", fullgroupname = "";
   AliJetContainer* jetCont = 0;
   TIter next(&fJetCollArray);
   while ((jetCont = static_cast<AliJetContainer*>(next())))
@@ -827,7 +818,7 @@ void AliAnalysisTaskEmcalJetCDF::UserCreateOutputObjects()
     TString jetstrmax = ( ULong_t ) ( jet_pt_max * 1000 );
 
     // add to groupname the min,max pt cuts of jets in the container
-    groupname += "ptbin" + "_" + jetstrmin + "_" + jetstrmax;
+    groupname = groupname + "_" + "ptbin" + "_" + jetstrmin + "_" + jetstrmax;
 
     fHistManager.CreateHistoGroup(groupname);
     for (Int_t cent = 0; cent < fNcentBins; cent++)
