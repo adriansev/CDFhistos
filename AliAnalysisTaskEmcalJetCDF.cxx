@@ -81,9 +81,8 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
 
   AliJetContainer* jetCont = NULL;
   TIter next(&fJetCollArray);
-  while ((jetCont = static_cast<AliJetContainer*>(next())))
+  while ( (jetCont = static_cast<AliJetContainer*>(next())) )
     {
-    if (!jetCont) { continue; }
     groupname = jetCont->GetName();
 
     Double_t jet_pt_min = jetCont->GetMinPt();
