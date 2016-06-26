@@ -38,6 +38,9 @@
 ClassImp ( AliAnalysisTaskEmcalJetCDF );
 /// \endcond
 
+// namespace of functions that were not related to the object
+using namespace NS_AliAnalysisTaskEmcalJetCDF;
+
 /**
  * Default constructor. Needed by ROOT I/O
  */
@@ -467,7 +470,7 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
       //___________________________________________________________________________
       // parsing tracks of jet1 (leading jet) in decreasing order of Pt
 
-      for ( Size_t i = 0; i < jet1_npart; i++ )
+      for (std::size_t i = 0; i < jet1_npart; i++ )
           {
           track_idx = jet1_sorted_idxvec.at (i);
           //track = dynamic_cast<AliVParticle*>(fTracksContArray->At( track_idx ));
@@ -626,7 +629,7 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
 
       counter_part = 0; counter_pt = 0.; // reset counters
 
-      for ( Size_t i = 0; i < jet_npart; i++ )
+      for (std::size_t i = 0; i < jet_npart; i++ )
         {
         track_idx = jet_sorted_idxvec.at (i);
         //track = dynamic_cast<AliVParticle*>(fTracksContArray->At( track_idx ));
@@ -1293,101 +1296,6 @@ void AliAnalysisTaskEmcalJetCDF::UserCreateOutputObjects()
   PostData ( 1, fOutput ); // Post data for ALL output slots > 0 here.
   }
 
-//________________________________________________________________________
-// Double_t AliAnalysisTaskEmcalJetCDF::DeltaR ( const AliVParticle *part1, const AliVParticle *part2 )
-//   {
-//   // Helper function to calculate the distance between two jets or a jet and
-//   // particle
-//   Double_t dPhi = part1->Phi() - part2->Phi();
-//   Double_t dEta = part1->Eta() - part2->Eta();
-//   dPhi = TVector2::Phi_mpi_pi ( dPhi );
-//
-//   return TMath::Sqrt ( dPhi * dPhi + dEta * dEta );
-//   }
-
-//__________________________________________________________________________________________________
-std::vector<Int_t> AliAnalysisTaskEmcalJetCDF::SortTracksPt ( AliVEvent *event ) const
-  {
-  //___________________________________________
-  // Sorting by p_T (decreasing) event tracks
-  //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  Int_t entries = event->GetNumberOfTracks();
-
-  // Create vector for Pt sorting
-  std::vector<ptidx_pair> pair_list;
-  pair_list.reserve ( entries );
-
-  for ( Int_t i_entry = 0; i_entry < entries; i_entry++ )
-      {
-      AliVParticle *track = event->GetTrack ( i_entry );
-
-      if ( !track )
-          {
-          AliError ( Form ( "Unable to find track %d in collection %s", i_entry, event->GetName() ) );
-          continue;
-          }
-
-      pair_list.push_back ( std::make_pair ( track->Pt(), i_entry ) );
-      }
-
-  std::stable_sort ( pair_list.begin(), pair_list.end(), sort_descend() );
-
-  // return an vector of indexes of constituents (sorted descending by pt)
-  std::vector<Int_t> index_sorted_list;
-  index_sorted_list.reserve ( entries );
-
-  for ( std::vector< std::pair <Double_t, Int_t> >::iterator it = pair_list.begin(); it != pair_list.end(); ++it )
-      {
-      index_sorted_list.push_back ( ( *it ).second );
-      } // populating the return object with indexes of sorted tracks
-
-  return index_sorted_list;
-  }
-
-//__________________________________________________________________________________________________
-std::vector<Int_t> AliAnalysisTaskEmcalJetCDF::SortTracksPt ( AliParticleContainer *trackscont ) const
-  {
-  //___________________________________________
-  // Sorting by p_T (decreasing) event tracks
-  //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  // Create vector for Pt sorting
-  std::vector<ptidx_pair> pair_list;
-
-  trackscont->ResetCurrentID();
-  AliVTrack *track = NULL;
-  UInt_t i_entry = 0;
-  while( (track = dynamic_cast<AliVTrack*>(trackscont->GetNextAcceptParticle()) ))
-    {
-    i_entry++;
-    pair_list.push_back ( std::make_pair ( track->Pt(), i_entry ) );
-    }
-
-  std::stable_sort ( pair_list.begin(), pair_list.end(), sort_descend() );
-
-  // return an vector of indexes of constituents (sorted descending by pt)
-  std::vector<Int_t> index_sorted_list;
-  index_sorted_list.reserve ( i_entry );
-
-  for ( std::vector< std::pair <Double_t, Int_t> >::iterator it = pair_list.begin(); it != pair_list.end(); ++it )
-      {
-      index_sorted_list.push_back ( ( *it ).second );
-      } // populating the return object with indexes of sorted tracks
-
-  return index_sorted_list;
-  }
-
-//________________________________________________________________________
-// Bool_t AliAnalysisTaskEmcalJetCDF::IdxInArray ( Int_t index, TArrayI &array )
-//   {
-//   for ( Int_t i = 0; i < array.GetSize(); i++ )
-//       {
-//       if ( index == array[i] ) { return kTRUE; }
-//       }
-//
-//   return kFALSE;
-//   }
-
-
 /**
  * This function is executed automatically for the first event.
  * Some extra initialization can be performed here.
@@ -1405,25 +1313,106 @@ void AliAnalysisTaskEmcalJetCDF::Terminate ( Option_t * )
   }
 
 //________________________________________________________________________
-Double_t AliAnalysisTaskEmcalJetCDF::Z_ptot( const AliEmcalJet* jet, const AliVParticle* trk)  const
+TObject* AliAnalysisTaskEmcalJetCDF::GetHistogram ( const char* histName )
+{
+  return fHistManager.FindObject(histName);
+}
+
+//########################################################################
+//   Namespace AliAnalysisTaskEmcalJetCDF 
+//########################################################################
+
+//________________________________________________________________________
+Double_t NS_AliAnalysisTaskEmcalJetCDF::Z_ptot( const AliEmcalJet* jet, const AliVParticle* trk)
 {
   if (trk->P() < 1e-6) return 0.;
   return (trk != 0) ? trk->P()/ jet->P() : 0.;
 }
 
 //________________________________________________________________________
-Double_t AliAnalysisTaskEmcalJetCDF::Z_pt( const AliEmcalJet* jet, const AliVParticle* trk)  const
+Double_t NS_AliAnalysisTaskEmcalJetCDF::Z_pt( const AliEmcalJet* jet, const AliVParticle* trk)
 {
   if (trk->P() < 1e-6) return 0.;
   return (trk != 0) ? trk->Pt() / jet->Pt() : 0.;
 }
 
 //________________________________________________________________________
-TObject* AliAnalysisTaskEmcalJetCDF::GetHistogram ( const char* histName )
-{
-  return fHistManager.FindObject(histName);
-}
+Int_t NS_AliAnalysisTaskEmcalJetCDF::IdxInArray ( Int_t value, TArrayI &array )
+  {
+  for ( Int_t i = 0; i < array.GetSize(); i++ )
+      { if ( value == array[i] ) { return i; } }
+  return -1;
+  }
 
+//________________________________________________________________________
+Double_t NS_AliAnalysisTaskEmcalJetCDF::DeltaR ( const AliVParticle *part1, const AliVParticle *part2 )
+  {
+  // Helper function to calculate the distance between any two jets and/or particle
+  Double_t dPhi = part1->Phi() - part2->Phi();
+  Double_t dEta = part1->Eta() - part2->Eta();
+  dPhi = TVector2::Phi_mpi_pi ( dPhi );
+
+  return TMath::Sqrt ( dPhi * dPhi + dEta * dEta );
+  }
+
+//__________________________________________________________________________________________________
+std::vector<Int_t> NS_AliAnalysisTaskEmcalJetCDF::SortTracksPt ( AliVEvent* event )
+  {
+  // Sorting by p_T (decreasing) event tracks
+  Int_t entries = event->GetNumberOfTracks();
+
+  // Create vector for Pt sorting
+  std::vector<ptidx_pair> pair_list;
+  pair_list.reserve ( entries );
+
+  for ( Int_t i_entry = 0; i_entry < entries; i_entry++ )
+      {
+      AliVParticle* track = event->GetTrack ( i_entry );
+      if ( !track ) { cout << Form ("Unable to find track %d in collection %s", i_entry, event->GetName()) << endl ; continue; }
+
+      pair_list.push_back ( std::make_pair ( track->Pt(), i_entry ) );
+      }
+
+  std::stable_sort ( pair_list.begin(), pair_list.end(), sort_descend() );
+
+  // return an vector of indexes of constituents (sorted descending by pt)
+  std::vector<Int_t> index_sorted_list;
+  index_sorted_list.reserve ( entries );
+
+  // populating the return object with indexes of sorted tracks
+  for (auto it : pair_list) { index_sorted_list.push_back(it.second); }
+
+  return index_sorted_list;
+  }
+
+//__________________________________________________________________________________________________
+std::vector<Int_t> NS_AliAnalysisTaskEmcalJetCDF::SortTracksPt ( AliParticleContainer* trackscont )
+  {
+  // Sorting by p_T (decreasing) event tracks
+  Int_t entries = trackscont->GetNEntries();
+
+  // Create vector for Pt sorting
+  std::vector<ptidx_pair> pair_list;
+  pair_list.reserve ( entries );
+
+  UInt_t i_entry = 0;
+  AliParticleContainer* partCont = 0;
+  for(auto part : partCont->all()) {
+    if (!part) {continue;}
+    pair_list.push_back ( std::make_pair ( part->Pt(), i_entry++ ) );
+    }
+
+  std::stable_sort ( pair_list.begin(), pair_list.end(), sort_descend() );
+
+  // return an vector of indexes of constituents (sorted descending by pt)
+  std::vector<Int_t> index_sorted_list;
+  index_sorted_list.reserve ( i_entry );
+
+  // populating the return object with indexes of sorted tracks
+  for (auto it : pair_list) { index_sorted_list.push_back(it.second); }
+
+  return index_sorted_list;
+  }
 
 // kate: indent-mode none; indent-width 2; replace-tabs on;
 
