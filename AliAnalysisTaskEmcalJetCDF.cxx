@@ -84,6 +84,7 @@ Bool_t AliAnalysisTaskEmcalJetCDF::Run()
 //________________________________________________________________________
 Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
   {
+  namespace CDF = NS_AliAnalysisTaskEmcalJetCDF;
   TString histname = "", groupname = "", fullgroupname = "";
 
   AliJetContainer* jetCont = NULL;
@@ -235,72 +236,6 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
     histname = TString::Format("%s/histo15all_pt90_%d", groupname.Data(), fCentBin);
     TH2D* fH15all_pt90 = (TH2D*)GetHistogram(histname.Data());
 
-    histname = TString::Format("%s/histo20_%d", groupname.Data(), fCentBin);
-    TH1D* fH20 = (TH1D*)GetHistogram(histname.Data());
-
-    histname = TString::Format("%s/histo20_n70_%d", groupname.Data(), fCentBin);
-    TH1D* fH20_n70 = (TH1D*)GetHistogram(histname.Data());
-
-    histname = TString::Format("%s/histo20_n75_%d", groupname.Data(), fCentBin);
-    TH1D* fH20_n75 = (TH1D*)GetHistogram(histname.Data());
-
-    histname = TString::Format("%s/histo20_n80_%d", groupname.Data(), fCentBin);
-    TH1D* fH20_n80 = (TH1D*)GetHistogram(histname.Data());
-
-    histname = TString::Format("%s/histo20_n85_%d", groupname.Data(), fCentBin);
-    TH1D* fH20_n85 = (TH1D*)GetHistogram(histname.Data());
-
-    histname = TString::Format("%s/histo20_n90_%d", groupname.Data(), fCentBin);
-    TH1D* fH20_n90 = (TH1D*)GetHistogram(histname.Data());
-
-    histname = TString::Format("%s/histo20_pt70_%d", groupname.Data(), fCentBin);
-    TH1D* fH20_pt70 = (TH1D*)GetHistogram(histname.Data());
-
-    histname = TString::Format("%s/histo20_pt75_%d", groupname.Data(), fCentBin);
-    TH1D* fH20_pt75 = (TH1D*)GetHistogram(histname.Data());
-
-    histname = TString::Format("%s/histo20_pt80_%d", groupname.Data(), fCentBin);
-    TH1D* fH20_pt80 = (TH1D*)GetHistogram(histname.Data());
-
-    histname = TString::Format("%s/histo20_pt85_%d", groupname.Data(), fCentBin);
-    TH1D* fH20_pt85 = (TH1D*)GetHistogram(histname.Data());
-
-    histname = TString::Format("%s/histo20_pt90_%d", groupname.Data(), fCentBin);
-    TH1D* fH20_pt90 = (TH1D*)GetHistogram(histname.Data());
-
-    histname = TString::Format("%s/histo20all_%d", groupname.Data(), fCentBin);
-    TH1D* fH20all = (TH1D*)GetHistogram(histname.Data());
-
-    histname = TString::Format("%s/histo20all_n70_%d", groupname.Data(), fCentBin);
-    TH1D* fH20all_n70 = (TH1D*)GetHistogram(histname.Data());
-
-    histname = TString::Format("%s/histo20all_n75_%d", groupname.Data(), fCentBin);
-    TH1D* fH20all_n75 = (TH1D*)GetHistogram(histname.Data());
-
-    histname = TString::Format("%s/histo20all_n80_%d", groupname.Data(), fCentBin);
-    TH1D* fH20all_n80 = (TH1D*)GetHistogram(histname.Data());
-
-    histname = TString::Format("%s/histo20all_n85_%d", groupname.Data(), fCentBin);
-    TH1D* fH20all_n85 = (TH1D*)GetHistogram(histname.Data());
-
-    histname = TString::Format("%s/histo20all_n90_%d", groupname.Data(), fCentBin);
-    TH1D* fH20all_n90 = (TH1D*)GetHistogram(histname.Data());
-
-    histname = TString::Format("%s/histo20all_pt70_%d", groupname.Data(), fCentBin);
-    TH1D* fH20all_pt70 = (TH1D*)GetHistogram(histname.Data());
-
-    histname = TString::Format("%s/histo20all_pt75_%d", groupname.Data(), fCentBin);
-    TH1D* fH20all_pt75 = (TH1D*)GetHistogram(histname.Data());
-
-    histname = TString::Format("%s/histo20all_pt80_%d", groupname.Data(), fCentBin);
-    TH1D* fH20all_pt80 = (TH1D*)GetHistogram(histname.Data());
-
-    histname = TString::Format("%s/histo20all_pt85_%d", groupname.Data(), fCentBin);
-    TH1D* fH20all_pt85 = (TH1D*)GetHistogram(histname.Data());
-
-    histname = TString::Format("%s/histo20all_pt90_%d", groupname.Data(), fCentBin);
-    TH1D* fH20all_pt90 = (TH1D*)GetHistogram(histname.Data());
-
     histname = TString::Format("%s/histo_g_%d", groupname.Data(), fCentBin);
     TH1D* fHg = (TH1D*)GetHistogram(histname.Data());
 
@@ -366,6 +301,40 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
 
     histname = TString::Format("%s/histo_ptd_pt90_%d", groupname.Data(), fCentBin);
     TH1D* fHptd_pt90 = (TH1D*)GetHistogram(histname.Data());
+
+    histname = TString::Format("%s/histo_jtR_%d", groupname.Data(), fCentBin);
+    TH1D* fH_jtR = (TH1D*)GetHistogram(histname.Data());
+
+    histname = TString::Format("%s/histo_jtR_n70_%d", groupname.Data(), fCentBin);
+    TH1D* fH_jtR_n70 = (TH1D*)GetHistogram(histname.Data());
+
+    histname = TString::Format("%s/histo_jtR_n75_%d", groupname.Data(), fCentBin);
+    TH1D* fH_jtR_n75 = (TH1D*)GetHistogram(histname.Data());
+
+    histname = TString::Format("%s/histo_jtR_n80_%d", groupname.Data(), fCentBin);
+    TH1D* fH_jtR_n80 = (TH1D*)GetHistogram(histname.Data());
+
+    histname = TString::Format("%s/histo_jtR_n85_%d", groupname.Data(), fCentBin);
+    TH1D* fH_jtR_n85 = (TH1D*)GetHistogram(histname.Data());
+
+    histname = TString::Format("%s/histo_jtR_n90_%d", groupname.Data(), fCentBin);
+    TH1D* fH_jtR_n90 = (TH1D*)GetHistogram(histname.Data());
+
+    histname = TString::Format("%s/histo_jtR_pt70_%d", groupname.Data(), fCentBin);
+    TH1D* fH_jtR_pt70 = (TH1D*)GetHistogram(histname.Data());
+
+    histname = TString::Format("%s/histo_jtR_pt75_%d", groupname.Data(), fCentBin);
+    TH1D* fH_jtR_pt75 = (TH1D*)GetHistogram(histname.Data());
+
+    histname = TString::Format("%s/histo_jtR_pt80_%d", groupname.Data(), fCentBin);
+    TH1D* fH_jtR_pt80 = (TH1D*)GetHistogram(histname.Data());
+
+    histname = TString::Format("%s/histo_jtR_pt85_%d", groupname.Data(), fCentBin);
+    TH1D* fH_jtR_pt85 = (TH1D*)GetHistogram(histname.Data());
+
+    histname = TString::Format("%s/histo_jtR_pt90_%d", groupname.Data(), fCentBin);
+    TH1D* fH_jtR_pt90 = (TH1D*)GetHistogram(histname.Data());
+
 //######################################################################################################
 
     // Number of Jets found in event - accepted cuts applied by JetContainer
@@ -497,68 +466,56 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
 
           fH15->Fill ( dpart, track_pt );          // <p_{T}> track vs the Distance R from Jet1
 
-          fH20->Fill ( dpart );                    // Distribution of R in leading jet
-
           // fill histograms for 70% of particles with highest pt
           if ( counter_part <= jet1_n70 )
               {
               fH15_n70->Fill ( dpart, track_pt );     // <p_{T}> track vs the Distance R from Jet1 - 80% of particles
-              fH20_n70->Fill ( dpart );               // Distribution of R in leading jet
               }
           // fill histograms for 75% of particles with highest pt
           if ( counter_part <= jet1_n75 )
               {
               fH15_n75->Fill ( dpart, track_pt );     // <p_{T}> track vs the Distance R from Jet1 - 80% of particles
-              fH20_n75->Fill ( dpart );               //  Distribution of R in leading jet
               }
           // fill histograms for 80% of particles with highest pt
           if ( counter_part <= jet1_n80 )
               {
               fH15_n80->Fill ( dpart, track_pt );     // <p_{T}> track vs the Distance R from Jet1 - 80% of particles
-              fH20_n80->Fill ( dpart );               // Distribution of R in leading jet
               }
           // fill histograms for 85% of particles with highest pt
           if ( counter_part <= jet1_n85 )
               {
               fH15_n85->Fill ( dpart, track_pt );     // <p_{T}> track vs the Distance R from Jet1 - 80% of particles
-              fH20_n85->Fill ( dpart );               //  Distribution of R in leading jet
               }
           // fill histograms for 90% of particles with highest pt
           if ( counter_part <= jet1_n90 )
               {
               fH15_n90->Fill ( dpart, track_pt );     // <p_{T}> track vs the Distance R from Jet1 - 80% of particles
-              fH20_n90->Fill ( dpart );               //  Distribution of R in leading jet
               }
 
           // fill histograms for particles that have first 70% of pt
           if ( counter_pt <= jet1_pt70 )
               {
               fH15_pt70->Fill ( dpart, track_pt );     //  <p_{T}> track vs the Distance R from Jet1 - 80% of pt
-              fH20_pt70->Fill ( dpart );               //  Distribution of R in leading jet
               }
           // fill histograms for particles that have first 75% of pt
           if ( counter_pt <= jet1_pt75 )
               {
               fH15_pt75->Fill ( dpart, track_pt );     //  <p_{T}> track vs the Distance R from Jet1 - 80% of pt
-              fH20_pt75->Fill ( dpart );               //  Distribution of R in leading jet
               }
           // fill histograms for particles that have first 80% of pt
           if ( counter_pt <= jet1_pt80 )
               {
               fH15_pt80->Fill ( dpart, track_pt );     //  <p_{T}> track vs the Distance R from Jet1 - 80% of pt
-              fH20_pt80->Fill ( dpart );     //  Distribution of R in leading jet
               }
           // fill histograms for particles that have first 80% of pt
           if ( counter_pt <= jet1_pt85 )
               {
               fH15_pt85->Fill ( dpart, track_pt );     //  <p_{T}> track vs the Distance R from Jet1 - 80% of pt
-              fH20_pt85->Fill ( dpart );     //  Distribution of R in leading jet
               }
           // fill histograms for particles that have first 80% of pt
           if ( counter_pt <= jet1_pt90 )
               {
               fH15_pt90->Fill ( dpart, track_pt );     //  <p_{T}> track vs the Distance R from Jet1 - 80% of pt
-              fH20_pt90->Fill ( dpart );     //  Distribution of R in leading jet
               }
 
           ++counter_part; counter_pt += track_pt;
@@ -642,6 +599,7 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
 
         Double_t dpart = jet->DeltaR ( track );
         Double_t track_pt = track->Pt();
+        Double_t jt = CDF::Perp (*track, *jet);
 
         fH8_all->Fill   ( jet->GetZ  ( track ) );  // Momentum distribution for jets (FF)
         fH8xi_all->Fill ( jet->GetXi ( track ) );  // Momentum distribution for jets (FF) xi
@@ -655,7 +613,7 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
         fH8xi_all_pt->Fill ( Xi (z_pt) );  // Momentum distribution for jets (FF) xi
 
         fH15all->Fill ( dpart, track_pt );         // p_{T} track vs the Distance R from jet
-        fH20all->Fill ( dpart );                   // Distribution of R
+        fH_jtR->Fill  ( jt,dpart );                // jt track vs dR
 
         // computing components for g and ptD in the jet tracks loop
         g_tot += (track_pt * dpart)/jet_pt;
@@ -666,7 +624,7 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
         if ( counter_part <= jet_n90 )         /// N90
             {
             fH15all_n90->Fill ( dpart, track_pt );         // p_{T} track vs the Distance R from Jet - 80% of particles
-            fH20all_n90->Fill ( dpart );                   //  Distribution of R in leading jet
+            fH_jtR_n90->Fill  ( jt,dpart );
 
             // computing components for g and ptD in the jet tracks loop
             g_n90 += (track_pt * dpart)/jet_pt;
@@ -677,7 +635,7 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
         if ( counter_pt <= jet_pt90 )         /// PT90
             {
             fH15all_pt90->Fill ( dpart, track_pt ); //  p_{T} track vs the Distance R from Jet - 80% of pt
-            fH20all_pt90->Fill ( dpart );               //  Distribution of R in leading jet
+            fH_jtR_pt90->Fill  ( jt,dpart );
 
             // computing components for g and ptD in the jet tracks loop
             g_pt90 += (track_pt * dpart)/jet_pt;
@@ -689,7 +647,7 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
         if ( counter_part <= jet_n85 )        /// N85
             {
             fH15all_n85->Fill ( dpart, track_pt ); // p_{T} track vs the Distance R from Jet - 80% of particles
-            fH20all_n85->Fill ( dpart );      //  Distribution of R in leading jet
+            fH_jtR_n85->Fill  ( jt,dpart );
 
             // computing components for g and ptD in the jet tracks loop
             g_n85 += (track_pt * dpart)/jet_pt;
@@ -700,7 +658,7 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
         if ( counter_pt <= jet_pt85 )        /// PT85
             {
             fH15all_pt85->Fill ( dpart, track_pt ); //  p_{T} track vs the Distance R from Jet - 80% of pt
-            fH20all_pt85->Fill ( dpart );               //  Distribution of R in leading jet
+            fH_jtR_pt85->Fill  ( jt,dpart );
 
             // computing components for g and ptD in the jet tracks loop
             g_pt85 += (track_pt * dpart)/jet_pt;
@@ -712,7 +670,7 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
         if ( counter_part <= jet_n80 )        /// N80
             {
             fH15all_n80->Fill ( dpart, track_pt ); // p_{T} track vs the Distance R from Jet - 80% of particles
-            fH20all_n80->Fill ( dpart );      //  Distribution of R in leading jet
+            fH_jtR_n80->Fill  ( jt,dpart );
 
             // computing components for g and ptD in the jet tracks loop
             g_n80 += (track_pt * dpart)/jet_pt;
@@ -723,7 +681,7 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
         if ( counter_pt <= jet_pt80 )         /// PT80
             {
             fH15all_pt80->Fill ( dpart, track_pt ); //  p_{T} track vs the Distance R from Jet - 80% of pt
-            fH20all_pt80->Fill ( dpart );               //  Distribution of R in leading jet
+            fH_jtR_pt80->Fill  ( jt,dpart );
 
             // computing components for g and ptD in the jet tracks loop
             g_pt80 += (track_pt * dpart)/jet_pt;
@@ -735,7 +693,7 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
         if ( counter_part <= jet_n75 )        /// N75
             {
             fH15all_n75->Fill ( dpart, track_pt ); // p_{T} track vs the Distance R from Jet - 80% of particles
-            fH20all_n75->Fill ( dpart );      //  Distribution of R in leading jet
+            fH_jtR_n75->Fill  ( jt,dpart );
 
             // computing components for g and ptD in the jet tracks loop
             g_n75 += (track_pt * dpart)/jet_pt;
@@ -746,7 +704,7 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
         if ( counter_pt <= jet_pt75 )         /// PT75
             {
             fH15all_pt75->Fill ( dpart, track_pt ); //  p_{T} track vs the Distance R from Jet - 80% of pt
-            fH20all_pt75->Fill ( dpart );               //  Distribution of R in leading jet
+            fH_jtR_pt75->Fill  ( jt,dpart );
 
             // computing components for g and ptD in the jet tracks loop
             g_pt75 += (track_pt * dpart)/jet_pt;
@@ -758,7 +716,7 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
         if ( counter_part <= jet_n70 )       /// N70
             {
             fH15all_n70->Fill ( dpart, track_pt ); // p_{T} track vs the Distance R from Jet - 80% of particles
-            fH20all_n70->Fill ( dpart );      //  Distribution of R in leading jet
+            fH_jtR_n70->Fill  ( jt,dpart );
 
             // computing components for g and ptD in the jet tracks loop
             g_n70 += (track_pt * dpart)/jet_pt;
@@ -769,7 +727,7 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
         if ( counter_pt <= jet_pt70 )        /// PT70
             {
             fH15all_pt70->Fill ( dpart, track_pt ); //  p_{T} track vs the Distance R from Jet - 80% of pt
-            fH20all_pt70->Fill ( dpart );               //  Distribution of R in leading jet
+            fH_jtR_pt70->Fill  ( jt,dpart );
 
             // computing components for g and ptD in the jet tracks loop
             g_pt70 += (track_pt * dpart)/jet_pt;
@@ -838,7 +796,7 @@ void AliAnalysisTaskEmcalJetCDF::UserCreateOutputObjects()
     for (Int_t cent = 0; cent < fNcentBins; cent++)
       {
       //=====================================================================================
-      Int_t h1_nbin = 200; Double_t h1_binwidth = 1; Double_t h1_low = 0;
+      Int_t h1_nbin = 500; Double_t h1_binwidth = 1; Double_t h1_low = 0;
       Double_t h1_high = h1_low + h1_binwidth * h1_nbin; // 1GeV/bin
       histname = TString::Format("%s/histo1_%d", groupname.Data(), cent);
       histtitle = TString::Format("%s;#it{p}_{T,jet} (GeV/#it{c}) (accepted);Jets", histname.Data()); // Pt distro of jets
@@ -879,16 +837,16 @@ void AliAnalysisTaskEmcalJetCDF::UserCreateOutputObjects()
       //#####################################
 
       //=====================================================================================
-      Int_t h5_nbin = 200; Double_t h5_binwidth = 1; Double_t h5_low = 0;
+      Int_t h5_nbin = 100; Double_t h5_binwidth = 1; Double_t h5_low = 0;
       Double_t h5_high = h5_low + h5_binwidth * h5_nbin;
       histname = TString::Format("%s/histo5_%d", groupname.Data(), cent);
       histtitle = TString::Format("%s;N_{jets};Events", histname.Data()); // Distribution of jets in events
       fHistManager.CreateTH1(histname, histtitle, h5_nbin, h5_low, h5_high);
 
       //=====================================================================================
-      Int_t h7_xnbin = 100; Double_t h7_xbinwidth = 1; Double_t h7_xlow = 0;
+      Int_t h7_xnbin = 500; Double_t h7_xbinwidth = 1; Double_t h7_xlow = 0;
       Double_t h7_xhigh = h7_xlow + h7_xbinwidth * h7_xnbin;
-      Int_t h7_ynbin = 200; Double_t h7_ybinwidth = 1; Double_t h7_ylow = 0;
+      Int_t h7_ynbin = 100; Double_t h7_ybinwidth = 1; Double_t h7_ylow = 0;
       Double_t h7_yhigh = h7_ylow + h7_ybinwidth * h7_ynbin;
 
       histname = TString::Format("%s/histo7_%d", groupname.Data(), cent);
@@ -935,7 +893,7 @@ void AliAnalysisTaskEmcalJetCDF::UserCreateOutputObjects()
       //########################################################
 
       //=====================================================================================
-      Int_t h8xi_nbin = 300; Double_t h8xi_binwidth = 0.05; Double_t h8xi_low = 0;
+      Int_t h8xi_nbin = 140; Double_t h8xi_binwidth = 0.05; Double_t h8xi_low = 0;
       Double_t h8xi_high = h8xi_low + h8xi_binwidth * h8xi_nbin;
       histname = TString::Format("%s/histo8xi_%d", groupname.Data(), cent);
       histtitle = TString::Format("%s - jet1;#xi = ln(1/z);D(#xi) = 1/N_{jet1} dN/d#xi", histname.Data());
@@ -965,9 +923,9 @@ void AliAnalysisTaskEmcalJetCDF::UserCreateOutputObjects()
       //########################################################
 
       //=====================================================================================
-      Int_t h15_xnbin = 100; Double_t h15_xbinwidth = 0.01; Double_t h15_xlow = 0.;
+      Int_t h15_xnbin = 60; Double_t h15_xbinwidth = 0.01; Double_t h15_xlow = 0.;
       Double_t h15_xhigh = h15_xlow + h15_xbinwidth * h15_xnbin;
-      Int_t h15_ynbin = 1000; Double_t h15_ybinwidth = 1.; Double_t h15_ylow = 0.;
+      Int_t h15_ynbin = 200; Double_t h15_ybinwidth = 1.; Double_t h15_ylow = 0.;
       Double_t h15_yhigh = h15_ylow + h15_ybinwidth * h15_ynbin;
 
       //########################################################
@@ -1067,110 +1025,8 @@ void AliAnalysisTaskEmcalJetCDF::UserCreateOutputObjects()
       //########################################################
 
       //=====================================================================================
-      Int_t h20_nbin = 100; Double_t h20_binwidth = 0.01; Double_t h20_low = 0.;
-      Double_t h20_high = h20_low + h20_binwidth * h20_nbin;
-
-      //########################################################
-      histname = TString::Format("%s/histo20_%d", groupname.Data(), cent);
-      histtitle = TString::Format("%s - jet1;R_{tracks};dN/dR", histname.Data());
-      fHistManager.CreateTH1(histname, histtitle, h20_nbin, h20_low, h20_high);
-
-      //########################################################
-      histname = TString::Format("%s/histo20_n70_%d", groupname.Data(), cent);
-      histtitle = TString::Format("%s - jet1;R_{tracks};dN/dR", histname.Data());
-      fHistManager.CreateTH1(histname, histtitle, h20_nbin, h20_low, h20_high);
-
-      histname = TString::Format("%s/histo20_n75_%d", groupname.Data(), cent);
-      histtitle = TString::Format("%s - jet1;R_{tracks};dN/dR", histname.Data());
-      fHistManager.CreateTH1(histname, histtitle, h20_nbin, h20_low, h20_high);
-
-      histname = TString::Format("%s/histo20_n80_%d", groupname.Data(), cent);
-      histtitle = TString::Format("%s - jet1;R_{tracks};dN/dR", histname.Data());
-      fHistManager.CreateTH1(histname, histtitle, h20_nbin, h20_low, h20_high);
-
-      histname = TString::Format("%s/histo20_n85_%d", groupname.Data(), cent);
-      histtitle = TString::Format("%s - jet1;R_{tracks};dN/dR", histname.Data());
-      fHistManager.CreateTH1(histname, histtitle, h20_nbin, h20_low, h20_high);
-
-      histname = TString::Format("%s/histo20_n90_%d", groupname.Data(), cent);
-      histtitle = TString::Format("%s - jet1;R_{tracks};dN/dR", histname.Data());
-      fHistManager.CreateTH1(histname, histtitle, h20_nbin, h20_low, h20_high);
-      //########################################################
-
-      //########################################################
-      histname = TString::Format("%s/histo20_pt70_%d", groupname.Data(), cent);
-      histtitle = TString::Format("%s - jet1;R_{tracks};dN/dR", histname.Data());
-      fHistManager.CreateTH1(histname, histtitle, h20_nbin, h20_low, h20_high);
-
-      histname = TString::Format("%s/histo20_pt75_%d", groupname.Data(), cent);
-      histtitle = TString::Format("%s - jet1;R_{tracks};dN/dR", histname.Data());
-      fHistManager.CreateTH1(histname, histtitle, h20_nbin, h20_low, h20_high);
-
-      histname = TString::Format("%s/histo20_pt80_%d", groupname.Data(), cent);
-      histtitle = TString::Format("%s - jet1;R_{tracks};dN/dR", histname.Data());
-      fHistManager.CreateTH1(histname, histtitle, h20_nbin, h20_low, h20_high);
-
-      histname = TString::Format("%s/histo20_pt85_%d", groupname.Data(), cent);
-      histtitle = TString::Format("%s - jet1;R_{tracks};dN/dR", histname.Data());
-      fHistManager.CreateTH1(histname, histtitle, h20_nbin, h20_low, h20_high);
-
-      histname = TString::Format("%s/histo20_pt90_%d", groupname.Data(), cent);
-      histtitle = TString::Format("%s - jet1;R_{tracks};dN/dR", histname.Data());
-      fHistManager.CreateTH1(histname, histtitle, h20_nbin, h20_low, h20_high);
-      //########################################################
-
-      //########################################################
-      histname = TString::Format("%s/histo20all_%d", groupname.Data(), cent);
-      histtitle = TString::Format("%s - all jets;R_{tracks};dN/dR", histname.Data());
-      fHistManager.CreateTH1(histname, histtitle, h20_nbin, h20_low, h20_high);
-
-      //########################################################
-      histname = TString::Format("%s/histo20all_n70_%d", groupname.Data(), cent);
-      histtitle = TString::Format("%s - all jets;R_{tracks};dN/dR", histname.Data());
-      fHistManager.CreateTH1(histname, histtitle, h20_nbin, h20_low, h20_high);
-
-      histname = TString::Format("%s/histo20all_n75_%d", groupname.Data(), cent);
-      histtitle = TString::Format("%s - all jets;R_{tracks};dN/dR", histname.Data());
-      fHistManager.CreateTH1(histname, histtitle, h20_nbin, h20_low, h20_high);
-
-      histname = TString::Format("%s/histo20all_n80_%d", groupname.Data(), cent);
-      histtitle = TString::Format("%s - all jets;R_{tracks};dN/dR", histname.Data());
-      fHistManager.CreateTH1(histname, histtitle, h20_nbin, h20_low, h20_high);
-
-      histname = TString::Format("%s/histo20all_n85_%d", groupname.Data(), cent);
-      histtitle = TString::Format("%s - all jets;R_{tracks};dN/dR", histname.Data());
-      fHistManager.CreateTH1(histname, histtitle, h20_nbin, h20_low, h20_high);
-
-      histname = TString::Format("%s/histo20all_n90_%d", groupname.Data(), cent);
-      histtitle = TString::Format("%s - all jets;R_{tracks};dN/dR", histname.Data());
-      fHistManager.CreateTH1(histname, histtitle, h20_nbin, h20_low, h20_high);
-      //########################################################
-
-      //########################################################
-      histname = TString::Format("%s/histo20all_pt70_%d", groupname.Data(), cent);
-      histtitle = TString::Format("%s - all jets;R_{tracks};dN/dR", histname.Data());
-      fHistManager.CreateTH1(histname, histtitle, h20_nbin, h20_low, h20_high);
-
-      histname = TString::Format("%s/histo20all_pt75_%d", groupname.Data(), cent);
-      histtitle = TString::Format("%s - all jets;R_{tracks};dN/dR", histname.Data());
-      fHistManager.CreateTH1(histname, histtitle, h20_nbin, h20_low, h20_high);
-
-      histname = TString::Format("%s/histo20all_pt80_%d", groupname.Data(), cent);
-      histtitle = TString::Format("%s - all jets;R_{tracks};dN/dR", histname.Data());
-      fHistManager.CreateTH1(histname, histtitle, h20_nbin, h20_low, h20_high);
-
-      histname = TString::Format("%s/histo20all_pt85_%d", groupname.Data(), cent);
-      histtitle = TString::Format("%s - all jets;R_{tracks};dN/dR", histname.Data());
-      fHistManager.CreateTH1(histname, histtitle, h20_nbin, h20_low, h20_high);
-
-      histname = TString::Format("%s/histo20all_pt90_%d", groupname.Data(), cent);
-      histtitle = TString::Format("%s - all jets;R_{tracks};dN/dR", histname.Data());
-      fHistManager.CreateTH1(histname, histtitle, h20_nbin, h20_low, h20_high);
-      //########################################################
-
-      //=====================================================================================
       // Distribution of girth (radial girth) g = sum_jet_parts ( r_i * ( pt_i/pt_jet ) )
-      Int_t hg_nbin = 1000; Double_t hg_binwidth = 0.01; Double_t hg_low = 0.;
+      Int_t hg_nbin = 50; Double_t hg_binwidth = 0.01; Double_t hg_low = 0.;
       Double_t hg_high = hg_low + hg_binwidth * hg_nbin;
 
       //########################################################
@@ -1225,57 +1081,111 @@ void AliAnalysisTaskEmcalJetCDF::UserCreateOutputObjects()
 
       //=====================================================================================
       // Distribution of dispersion d pt_D = sqrt ( sum (pt_i^2) )/sum (pt_i)
-      Int_t hptd_nbin = 1000; Double_t hptd_binwidth = 0.01; Double_t hptd_low = 0.;
+      Int_t hptd_nbin = 21; Double_t hptd_binwidth = 0.05; Double_t hptd_low = 0.;
       Double_t hptd_high = hptd_low + hptd_binwidth * hptd_nbin;
 
       //########################################################
       histname = TString::Format("%s/histo_ptd_%d", groupname.Data(), cent);
       histtitle = TString::Format("%s - all jets;ptd;1/N_{jets} dN/dp_{T}D", histname.Data());
-      fHistManager.CreateTH1(histname, histtitle, hg_nbin, hg_low, hg_high);
+      fHistManager.CreateTH1(histname, histtitle, hptd_nbin, hptd_low, hptd_high);
       //########################################################
 
       //########################################################
       histname = TString::Format("%s/histo_ptd_n70_%d", groupname.Data(), cent);
       histtitle = TString::Format("%s - all jets;ptd;1/N_{jets} dN/dp_{T}D", histname.Data());
-      fHistManager.CreateTH1(histname, histtitle, hg_nbin, hg_low, hg_high);
+      fHistManager.CreateTH1(histname, histtitle, hptd_nbin, hptd_low, hptd_high);
 
       histname = TString::Format("%s/histo_ptd_n75_%d", groupname.Data(), cent);
       histtitle = TString::Format("%s - all jets;ptd;1/N_{jets} dN/dp_{T}D", histname.Data());
-      fHistManager.CreateTH1(histname, histtitle, hg_nbin, hg_low, hg_high);
+      fHistManager.CreateTH1(histname, histtitle, hptd_nbin, hptd_low, hptd_high);
 
       histname = TString::Format("%s/histo_ptd_n80_%d", groupname.Data(), cent);
       histtitle = TString::Format("%s - all jets;ptd;1/N_{jets} dN/dp_{T}D", histname.Data());
-      fHistManager.CreateTH1(histname, histtitle, hg_nbin, hg_low, hg_high);
+      fHistManager.CreateTH1(histname, histtitle, hptd_nbin, hptd_low, hptd_high);
 
       histname = TString::Format("%s/histo_ptd_n85_%d", groupname.Data(), cent);
       histtitle = TString::Format("%s - all jets;ptd;1/N_{jets} dN/dp_{T}D", histname.Data());
-      fHistManager.CreateTH1(histname, histtitle, hg_nbin, hg_low, hg_high);
+      fHistManager.CreateTH1(histname, histtitle, hptd_nbin, hptd_low, hptd_high);
 
       histname = TString::Format("%s/histo_ptd_n90_%d", groupname.Data(), cent);
       histtitle = TString::Format("%s - all jets;ptd;1/N_{jets} dN/dp_{T}D", histname.Data());
-      fHistManager.CreateTH1(histname, histtitle, hg_nbin, hg_low, hg_high);
+      fHistManager.CreateTH1(histname, histtitle, hptd_nbin, hptd_low, hptd_high);
       //########################################################
 
       //########################################################
       histname = TString::Format("%s/histo_ptd_pt70_%d", groupname.Data(), cent);
       histtitle = TString::Format("%s - all jets;ptd;1/N_{jets} dN/dp_{T}D", histname.Data());
-      fHistManager.CreateTH1(histname, histtitle, hg_nbin, hg_low, hg_high);
+      fHistManager.CreateTH1(histname, histtitle, hptd_nbin, hptd_low, hptd_high);
 
       histname = TString::Format("%s/histo_ptd_pt75_%d", groupname.Data(), cent);
       histtitle = TString::Format("%s - all jets;ptd;1/N_{jets} dN/dp_{T}D", histname.Data());
-      fHistManager.CreateTH1(histname, histtitle, hg_nbin, hg_low, hg_high);
+      fHistManager.CreateTH1(histname, histtitle, hptd_nbin, hptd_low, hptd_high);
 
       histname = TString::Format("%s/histo_ptd_pt80_%d", groupname.Data(), cent);
       histtitle = TString::Format("%s - all jets;ptd;1/N_{jets} dN/dp_{T}D", histname.Data());
-      fHistManager.CreateTH1(histname, histtitle, hg_nbin, hg_low, hg_high);
+      fHistManager.CreateTH1(histname, histtitle, hptd_nbin, hptd_low, hptd_high);
 
       histname = TString::Format("%s/histo_ptd_pt85_%d", groupname.Data(), cent);
       histtitle = TString::Format("%s - all jets;ptd;1/N_{jets} dN/dp_{T}D", histname.Data());
-      fHistManager.CreateTH1(histname, histtitle, hg_nbin, hg_low, hg_high);
+      fHistManager.CreateTH1(histname, histtitle, hptd_nbin, hptd_low, hptd_high);
 
       histname = TString::Format("%s/histo_ptd_pt90_%d", groupname.Data(), cent);
       histtitle = TString::Format("%s - all jets;ptd;1/N_{jets} dN/dp_{T}D", histname.Data());
-      fHistManager.CreateTH1(histname, histtitle, hg_nbin, hg_low, hg_high);
+      fHistManager.CreateTH1(histname, histtitle, hptd_nbin, hptd_low, hptd_high);
+      //########################################################
+
+      //=====================================================================================
+      Int_t h_jtR_xnbin = 400; Double_t h_jtR_xbinwidth = 0.01; Double_t h_jtR_xlow = 0.;
+      Double_t h_jtR_xhigh = h_jtR_xlow + h_jtR_xbinwidth * h_jtR_xnbin;
+      Int_t h_jtR_ynbin = 60; Double_t h_jtR_ybinwidth = 0.01; Double_t h_jtR_ylow = 0.;
+      Double_t h_jtR_yhigh = h_jtR_ylow + h_jtR_ybinwidth * h_jtR_ynbin;
+
+      //########################################################
+      histname = TString::Format("%s/histo_jtR_%d", groupname.Data(), cent);
+      histtitle = TString::Format("%s ;j_{T} (GeV/c);dR", histname.Data()); // dR vs p_T track
+      fHistManager.CreateTH2(histname, histtitle, h_jtR_xnbin, h_jtR_xlow, h_jtR_xhigh, h_jtR_ynbin, h_jtR_ylow, h_jtR_yhigh);
+
+      //########################################################
+      histname = TString::Format("%s/histo_jtR_n70_%d", groupname.Data(), cent);
+      histtitle = TString::Format("%s ;j_{T} (GeV/c);dR", histname.Data()); // dR vs p_T track
+      fHistManager.CreateTH2(histname, histtitle, h_jtR_xnbin, h_jtR_xlow, h_jtR_xhigh, h_jtR_ynbin, h_jtR_ylow, h_jtR_yhigh);
+
+      histname = TString::Format("%s/histo_jtR_n75_%d", groupname.Data(), cent);
+      histtitle = TString::Format("%s ;j_{T} (GeV/c);dR", histname.Data()); // dR vs p_T track
+      fHistManager.CreateTH2(histname, histtitle, h_jtR_xnbin, h_jtR_xlow, h_jtR_xhigh, h_jtR_ynbin, h_jtR_ylow, h_jtR_yhigh);
+
+      histname = TString::Format("%s/histo_jtR_n80_%d", groupname.Data(), cent);
+      histtitle = TString::Format("%s ;j_{T} (GeV/c);dR", histname.Data()); // dR vs p_T track
+      fHistManager.CreateTH2(histname, histtitle, h_jtR_xnbin, h_jtR_xlow, h_jtR_xhigh, h_jtR_ynbin, h_jtR_ylow, h_jtR_yhigh);
+
+      histname = TString::Format("%s/histo_jtR_n85_%d", groupname.Data(), cent);
+      histtitle = TString::Format("%s ;j_{T} (GeV/c);dR", histname.Data()); // dR vs p_T track
+      fHistManager.CreateTH2(histname, histtitle, h_jtR_xnbin, h_jtR_xlow, h_jtR_xhigh, h_jtR_ynbin, h_jtR_ylow, h_jtR_yhigh);
+
+      histname = TString::Format("%s/histo_jtR_n90_%d", groupname.Data(), cent);
+      histtitle = TString::Format("%s ;j_{T} (GeV/c);dR", histname.Data()); // dR vs p_T track
+      fHistManager.CreateTH2(histname, histtitle, h_jtR_xnbin, h_jtR_xlow, h_jtR_xhigh, h_jtR_ynbin, h_jtR_ylow, h_jtR_yhigh);
+
+      //########################################################
+      histname = TString::Format("%s/histo_jtR_pt70_%d", groupname.Data(), cent);
+      histtitle = TString::Format("%s ;j_{T} (GeV/c);dR", histname.Data()); // dR vs p_T track
+      fHistManager.CreateTH2(histname, histtitle, h_jtR_xnbin, h_jtR_xlow, h_jtR_xhigh, h_jtR_ynbin, h_jtR_ylow, h_jtR_yhigh);
+
+      histname = TString::Format("%s/histo_jtR_pt75_%d", groupname.Data(), cent);
+      histtitle = TString::Format("%s ;j_{T} (GeV/c);dR", histname.Data()); // dR vs p_T track
+      fHistManager.CreateTH2(histname, histtitle, h_jtR_xnbin, h_jtR_xlow, h_jtR_xhigh, h_jtR_ynbin, h_jtR_ylow, h_jtR_yhigh);
+
+      histname = TString::Format("%s/histo_jtR_pt80_%d", groupname.Data(), cent);
+      histtitle = TString::Format("%s ;j_{T} (GeV/c);dR", histname.Data()); // dR vs p_T track
+      fHistManager.CreateTH2(histname, histtitle, h_jtR_xnbin, h_jtR_xlow, h_jtR_xhigh, h_jtR_ynbin, h_jtR_ylow, h_jtR_yhigh);
+
+      histname = TString::Format("%s/histo_jtR_pt85_%d", groupname.Data(), cent);
+      histtitle = TString::Format("%s ;j_{T} (GeV/c);dR", histname.Data()); // dR vs p_T track
+      fHistManager.CreateTH2(histname, histtitle, h_jtR_xnbin, h_jtR_xlow, h_jtR_xhigh, h_jtR_ynbin, h_jtR_ylow, h_jtR_yhigh);
+
+      histname = TString::Format("%s/histo_jtR_pt90_%d", groupname.Data(), cent);
+      histtitle = TString::Format("%s ;j_{T} (GeV/c);dR", histname.Data()); // dR vs p_T track
+      fHistManager.CreateTH2(histname, histtitle, h_jtR_xnbin, h_jtR_xlow, h_jtR_xhigh, h_jtR_ynbin, h_jtR_ylow, h_jtR_yhigh);
       //########################################################
 
       }
@@ -1284,15 +1194,10 @@ void AliAnalysisTaskEmcalJetCDF::UserCreateOutputObjects()
     // end of loop over jet containers
 
   // =========== Switch on Sumw2 for all histos ===========
-  for ( Int_t i = 0; i < fOutput->GetEntries(); ++i )
-      {
-      TH1 *h1 = dynamic_cast<TH1 *> ( fOutput->At (i) );
-      if ( h1 ) { h1->Sumw2();continue; }
+  TH1::SetDefaultSumw2(kTRUE);
+  TH2::SetDefaultSumw2(kTRUE);
 
-      TH2 *h2 = dynamic_cast<TH2 *> ( fOutput->At (i) );
-      if ( h2 ) { h2->Sumw2();continue; }
-      }
-
+  // add all fHistManager content to fOutput
   TIter nexthist(fHistManager.GetListOfHistograms());
   TObject* obj = NULL;
   while ((obj = nexthist())) { fOutput->Add(obj); }
@@ -1325,39 +1230,6 @@ TObject* AliAnalysisTaskEmcalJetCDF::GetHistogram ( const char* histName )
 //########################################################################
 //   Namespace AliAnalysisTaskEmcalJetCDF 
 //########################################################################
-
-//________________________________________________________________________
-Double_t NS_AliAnalysisTaskEmcalJetCDF::Z_ptot( const AliEmcalJet* jet, const AliVParticle* trk)
-{
-  if (trk->P() < 1e-6) return 0.;
-  return (trk != 0) ? trk->P()/ jet->P() : 0.;
-}
-
-//________________________________________________________________________
-Double_t NS_AliAnalysisTaskEmcalJetCDF::Z_pt( const AliEmcalJet* jet, const AliVParticle* trk)
-{
-  if (trk->P() < 1e-6) return 0.;
-  return (trk != 0) ? trk->Pt() / jet->Pt() : 0.;
-}
-
-//________________________________________________________________________
-Int_t NS_AliAnalysisTaskEmcalJetCDF::IdxInArray ( Int_t value, TArrayI &array )
-  {
-  for ( Int_t i = 0; i < array.GetSize(); i++ )
-      { if ( value == array[i] ) { return i; } }
-  return -1;
-  }
-
-//________________________________________________________________________
-Double_t NS_AliAnalysisTaskEmcalJetCDF::DeltaR ( const AliVParticle *part1, const AliVParticle *part2 )
-  {
-  // Helper function to calculate the distance between any two jets and/or particle
-  Double_t dPhi = part1->Phi() - part2->Phi();
-  Double_t dEta = part1->Eta() - part2->Eta();
-  dPhi = TVector2::Phi_mpi_pi ( dPhi );
-
-  return TMath::Sqrt ( dPhi * dPhi + dEta * dEta );
-  }
 
 //__________________________________________________________________________________________________
 std::vector<Int_t> NS_AliAnalysisTaskEmcalJetCDF::SortTracksPt ( AliVEvent* event )
@@ -1420,12 +1292,12 @@ std::vector<Int_t> NS_AliAnalysisTaskEmcalJetCDF::SortTracksPt ( AliParticleCont
 
 
 /// Add a AliAnalysisTaskEmcalJetCDF task - detailed signature
-/// \param const char* ntracks : name of tracks collection
-/// \param const char* nclusters : name of clusters collection
-/// \param const char* ncells : name of EMCAL cell collection
-/// \param const char* tag
+/// \param ntracks name of tracks collection
+/// \param nclusters name of clusters collection
+/// \param ncells name of EMCAL cell collection
+/// \param tag tag name of analysis task
 /// \return AliAnalysisTaskEmcalJetCDF* task
-TObject* NS_AliAnalysisTaskEmcalJetCDF::AddTaskEmcalJetCDF ( const char* ntracks, const char* nclusters, const char* ncells, const char* tag)
+AliAnalysisTaskEmcalJetCDF* NS_AliAnalysisTaskEmcalJetCDF::AddTaskEmcalJetCDF ( const char* ntracks, const char* nclusters, const char* ncells, const char* tag)
   {
   // Get the pointer to the existing analysis manager via the static access method.
   //==============================================================================
@@ -1488,11 +1360,15 @@ TObject* NS_AliAnalysisTaskEmcalJetCDF::AddTaskEmcalJetCDF ( const char* ntracks
   cdfTask->SetVzRange(-10,10);
   cdfTask->SetCaloCellsName(cells.Data());
 
-  if ( tracks.EqualTo("mcparticles") )
-    { AliMCParticleContainer* mcpartCont = cdfTask->AddMCParticleContainer ( tracks.Data() ); }
+  if ( tracks.EqualTo("mcparticles") ) { 
+      // AliMCParticleContainer* mcpartCont = 
+      cdfTask->AddMCParticleContainer ( tracks.Data() );
+      }
   else
-  if ( tracks.EqualTo("tracks") || tracks.EqualTo("Tracks") )
-    { AliTrackContainer* trackCont = cdfTask->AddTrackContainer( tracks.Data() ); }
+  if ( tracks.EqualTo("tracks") || tracks.EqualTo("Tracks") ) {
+      // AliTrackContainer* trackCont = 
+      cdfTask->AddTrackContainer( tracks.Data() );
+      }
   else
   if ( !tracks.IsNull())
     { cdfTask->AddParticleContainer(tracks.Data()); }
@@ -1517,33 +1393,7 @@ TObject* NS_AliAnalysisTaskEmcalJetCDF::AddTaskEmcalJetCDF ( const char* ntracks
   return cdfTask;
   }
 
-/// Set parameters of a jet container
-/// \param AliJetContainer* jetCont : jet container pointer
-/// \param Float_t jetptmin : min pt of jets in this container (default = 1.)
-/// \param Float_t jetptmax : max pt of jets in this container (default = 500.)
-/// \param Float_t jetareacutperc : cut jets under percentage of area given by algo radius (default = 0.)
-/// \param Int_t leadhadtype : 0 = charged, 1 = neutral, 2 = both (default = 2)
-/// \param Int_t nLeadJets : how many jets are to be considered the leading jet(s) (default = 1)
-/// \param Float_t mintrackpt : min track constituent pt to accept the jet (default = 0.15)
-/// \param Float_t maxtrackpt : max track constituent pt to accept the jet (default = 1000.)
-/// \return AliJetContainer*
-TObject* NS_AliAnalysisTaskEmcalJetCDF::jetContSetParams (AliJetContainer* jetCont,
-                                      Float_t jetptmin, Float_t jetptmax, Float_t jetareacutperc,
-                                      Int_t leadhadtype, Int_t nLeadJets,
-                                      Float_t mintrackpt, Float_t maxtrackpt
-                                      )
-{
-  if (!jetCont) { return NULL; }
-  jetCont->SetJetPtCut ( jetptmin );
-  jetCont->SetJetPtCutMax ( jetptmax );
-  jetCont->SetPercAreaCut ( jetareacutperc );
-  jetCont->SetLeadingHadronType ( leadhadtype ); // 0 = charged, 1 = neutral, 2 = both
-  jetCont->SetNLeadingJets(nLeadJets);
-  jetCont->SetMinTrackPt(mintrackpt);
-  jetCont->SetMaxTrackPt(maxtrackpt);
 
-  return jetCont;
-}
 
 // kate: indent-mode none; indent-width 2; replace-tabs on;
 
