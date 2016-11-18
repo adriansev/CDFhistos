@@ -182,7 +182,7 @@ namespace NS_AliAnalysisTaskEmcalJetCDF {
   /// \param mintrackpt : min track constituent pt to accept the jet (default = 0.15)
   /// \param maxtrackpt : max track constituent pt to accept the jet (default = 1000.)
   /// \return AliJetContainer*
-  TObject* jetContSetParams (
+  AliJetContainer* jetContSetParams (
                              AliJetContainer* jetCont,
                              Float_t jetptmin = 1.,
                              Float_t jetptmax = 500.,
@@ -202,22 +202,6 @@ namespace NS_AliAnalysisTaskEmcalJetCDF {
     jetCont->SetMaxTrackPt(maxtrackpt);
 
     return jetCont;
-    }
-
-
-  void HistCorrections (TH1D& h, TArrayD& arr)
-    {
-    TH1::SetDefaultSumw2(kTRUE);
-    const Int_t binsx = h.GetNbinsX(); 
-    const Int_t arr_size = arr.GetSize();
-    if (binsx != arr_size) {cout << "Appling histo corrections failed :: nbins != arr.GetSize" << endl;}
-
-    for (Int_t i = 1 ; i<= arr_size ; i++) // first bin in histogram is 1
-      {
-      Double_t bincontent_ini = h.GetBinContent(i);
-      bincontent_ini *= arr.At(i);
-      h.SetBinContent( i, bincontent_ini );
-      }
     }
 
 } // end of NS_AliAnalysisTaskEmcalJetCDF
