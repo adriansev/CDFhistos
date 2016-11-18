@@ -18,6 +18,7 @@
 #include <TClonesArray.h>
 #include <TH1D.h>
 #include <TH2D.h>
+#include <TArrayD.h>
 #include <TString.h>
 
 #include <AliVCluster.h>
@@ -84,6 +85,9 @@ Bool_t AliAnalysisTaskEmcalJetCDF::Run()
 //________________________________________________________________________
 Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
   {
+  TH1::SetDefaultSumw2(kTRUE);
+  TH2::SetDefaultSumw2(kTRUE);
+
   namespace CDF = NS_AliAnalysisTaskEmcalJetCDF;
   TString histname = "", groupname = "", fullgroupname = "";
 
@@ -335,6 +339,39 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
     histname = TString::Format("%s/histo_jtR_pt90_%d", groupname.Data(), fCentBin);
     TH1D* fH_jtR_pt90 = (TH1D*)GetHistogram(histname.Data());
 
+    histname = TString::Format("%s/histo_ptsum_%d", groupname.Data(), fCentBin);
+    TH1D* fH_ptsum = (TH1D*)GetHistogram(histname.Data());
+
+    histname = TString::Format("%s/histo_ptsum_n70_%d", groupname.Data(), fCentBin);
+    TH1D* fH_ptsum_n70 = (TH1D*)GetHistogram(histname.Data());
+
+    histname = TString::Format("%s/histo_ptsum_n75_%d", groupname.Data(), fCentBin);
+    TH1D* fH_ptsum_n75 = (TH1D*)GetHistogram(histname.Data());
+
+    histname = TString::Format("%s/histo_ptsum_n80_%d", groupname.Data(), fCentBin);
+    TH1D* fH_ptsum_n80 = (TH1D*)GetHistogram(histname.Data());
+
+    histname = TString::Format("%s/histo_ptsum_n85_%d", groupname.Data(), fCentBin);
+    TH1D* fH_ptsum_n85 = (TH1D*)GetHistogram(histname.Data());
+
+    histname = TString::Format("%s/histo_ptsum_n90_%d", groupname.Data(), fCentBin);
+    TH1D* fH_ptsum_n90 = (TH1D*)GetHistogram(histname.Data());
+
+    histname = TString::Format("%s/histo_ptsum_pt70_%d", groupname.Data(), fCentBin);
+    TH1D* fH_ptsum_pt70 = (TH1D*)GetHistogram(histname.Data());
+
+    histname = TString::Format("%s/histo_ptsum_pt75_%d", groupname.Data(), fCentBin);
+    TH1D* fH_ptsum_pt75 = (TH1D*)GetHistogram(histname.Data());
+
+    histname = TString::Format("%s/histo_ptsum_pt80_%d", groupname.Data(), fCentBin);
+    TH1D* fH_ptsum_pt80 = (TH1D*)GetHistogram(histname.Data());
+
+    histname = TString::Format("%s/histo_ptsum_pt85_%d", groupname.Data(), fCentBin);
+    TH1D* fH_ptsum_pt85 = (TH1D*)GetHistogram(histname.Data());
+
+    histname = TString::Format("%s/histo_ptsum_pt90_%d", groupname.Data(), fCentBin);
+    TH1D* fH_ptsum_pt90 = (TH1D*)GetHistogram(histname.Data());
+
 //######################################################################################################
 
     // Number of Jets found in event - accepted cuts applied by JetContainer
@@ -534,6 +571,20 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
     // **************************************************************
     Double_t jet_pt = 0. ; UShort_t jet_npart = 0; UShort_t jet_nconst = 0;
 
+    const Int_t ptsum_binsx = fH_ptsum->GetNbinsX(); // all other fH_ptsum have the same size
+    Double_t ptsum_maxvalue = fH_ptsum->GetBinLowEdge (ptsum_binsx) + fH_ptsum->GetBinWidth(ptsum_binsx);
+    TArrayD arr_ptsum      (ptsum_binsx); arr_ptsum.Reset();
+    TArrayD arr_ptsum_n70  (ptsum_binsx); arr_ptsum_n70.Reset();
+    TArrayD arr_ptsum_n75  (ptsum_binsx); arr_ptsum_n75.Reset();
+    TArrayD arr_ptsum_n80  (ptsum_binsx); arr_ptsum_n80.Reset();
+    TArrayD arr_ptsum_n85  (ptsum_binsx); arr_ptsum_n85.Reset();
+    TArrayD arr_ptsum_n90  (ptsum_binsx); arr_ptsum_n90.Reset();
+    TArrayD arr_ptsum_pt70 (ptsum_binsx); arr_ptsum_pt70.Reset();
+    TArrayD arr_ptsum_pt75 (ptsum_binsx); arr_ptsum_pt75.Reset();
+    TArrayD arr_ptsum_pt80 (ptsum_binsx); arr_ptsum_pt80.Reset();
+    TArrayD arr_ptsum_pt85 (ptsum_binsx); arr_ptsum_pt85.Reset();
+    TArrayD arr_ptsum_pt90 (ptsum_binsx); arr_ptsum_pt90.Reset();
+
     // vector of sorted indexes of particles in jet
     std::vector< int > jet_sorted_idxvec ;
 
@@ -590,6 +641,7 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
 
       counter_part = 0; counter_pt = 0.; // reset counters
 
+
       for (std::size_t i = 0; i < jet_npart; i++ )
         {
         track_idx = jet_sorted_idxvec.at (i);
@@ -605,15 +657,21 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
         fH8xi_all->Fill ( jet->GetXi ( track ) );  // Momentum distribution for jets (FF) xi
 
         Double_t z_p = Z_ptot(jet,track);
-        fH8_all_p->Fill   ( z_p );  // Momentum distribution for jets (FF)
+        fH8_all_p->Fill   ( z_p );        // Momentum distribution for jets (FF)
         fH8xi_all_p->Fill ( Xi (z_p)  );  // Momentum distribution for jets (FF) xi
 
         Double_t z_pt = Z_pt(jet,track);
-        fH8_all_pt->Fill   ( z_pt );  // Momentum distribution for jets (FF)
+        fH8_all_pt->Fill   ( z_pt );       // Momentum distribution for jets (FF)
         fH8xi_all_pt->Fill ( Xi (z_pt) );  // Momentum distribution for jets (FF) xi
 
         fH15all->Fill ( dpart, track_pt );         // p_{T} track vs the Distance R from jet
-        fH_jtR->Fill  ( jt,dpart );                // jt track vs dR
+        fH_jtR->Fill  ( jt, dpart );               // jt track vs dR
+
+        if (dpart < ptsum_maxvalue) 
+          {
+          fH_ptsum->Fill(dpart); // to be multiplied with TArrayD content
+          arr_ptsum [ (Int_t) (floor(ptsum_maxvalue/dpart)+1) ] += track_pt; // bins start with 1
+          }
 
         // computing components for g and ptD in the jet tracks loop
         g_tot += (track_pt * dpart)/jet_pt;
@@ -630,6 +688,13 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
             g_n90 += (track_pt * dpart)/jet_pt;
             sum_part_pt_n90 += track_pt;
             sum_part_pt2_n90 += TMath::Power( track_pt, 2 );
+
+            if (dpart < ptsum_maxvalue) 
+              {
+              fH_ptsum_n90->Fill(dpart); // to be multiplied with TArrayD content
+              arr_ptsum_n90 [ (Int_t) (floor(ptsum_maxvalue/dpart)+1) ] += track_pt; 
+              }
+
             }
 
         if ( counter_pt <= jet_pt90 )         /// PT90
@@ -641,6 +706,13 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
             g_pt90 += (track_pt * dpart)/jet_pt;
             sum_part_pt_pt90 += track_pt;
             sum_part_pt2_pt90 += TMath::Power( track_pt, 2 );
+
+            if (dpart < ptsum_maxvalue) 
+              {
+              fH_ptsum_pt90->Fill(dpart); // to be multiplied with TArrayD content
+              arr_ptsum_pt90 [ (Int_t) (floor(ptsum_maxvalue/dpart)+1) ] += track_pt; 
+              }
+
             }
 
   //#############################################################################################
@@ -653,6 +725,13 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
             g_n85 += (track_pt * dpart)/jet_pt;
             sum_part_pt_n85 += track_pt;
             sum_part_pt2_n85 += TMath::Power( track_pt, 2 );
+
+            if (dpart < ptsum_maxvalue) 
+              {
+              fH_ptsum_n85->Fill(dpart); // to be multiplied with TArrayD content
+              arr_ptsum_n85 [ (Int_t) (floor(ptsum_maxvalue/dpart)+1) ] += track_pt; 
+              }
+
             }
 
         if ( counter_pt <= jet_pt85 )        /// PT85
@@ -664,6 +743,13 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
             g_pt85 += (track_pt * dpart)/jet_pt;
             sum_part_pt_pt85 += track_pt;
             sum_part_pt2_pt85 += TMath::Power( track_pt, 2 );
+
+            if (dpart < ptsum_maxvalue) 
+              {
+              fH_ptsum_pt85->Fill(dpart); // to be multiplied with TArrayD content
+              arr_ptsum_pt85 [ (Int_t) (floor(ptsum_maxvalue/dpart)+1) ] += track_pt; 
+              }
+
             }
 
   //#############################################################################################
@@ -676,6 +762,13 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
             g_n80 += (track_pt * dpart)/jet_pt;
             sum_part_pt_n80 += track_pt;
             sum_part_pt2_n80 += TMath::Power( track_pt, 2 );
+
+            if (dpart < ptsum_maxvalue) 
+              {
+              fH_ptsum_n80->Fill(dpart); // to be multiplied with TArrayD content
+              arr_ptsum_n80 [ (Int_t) (floor(ptsum_maxvalue/dpart)+1) ] += track_pt; 
+              }
+
             }
 
         if ( counter_pt <= jet_pt80 )         /// PT80
@@ -687,6 +780,13 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
             g_pt80 += (track_pt * dpart)/jet_pt;
             sum_part_pt_pt80 += track_pt;
             sum_part_pt2_pt80 += TMath::Power( track_pt, 2 );
+
+            if (dpart < ptsum_maxvalue) 
+              {
+              fH_ptsum_pt80->Fill(dpart); // to be multiplied with TArrayD content
+              arr_ptsum_pt80 [ (Int_t) (floor(ptsum_maxvalue/dpart)+1) ] += track_pt; 
+              }
+
             }
 
   //#############################################################################################
@@ -699,6 +799,13 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
             g_n75 += (track_pt * dpart)/jet_pt;
             sum_part_pt_n75 += track_pt;
             sum_part_pt2_n75 += TMath::Power( track_pt, 2 );
+
+            if (dpart < ptsum_maxvalue) 
+              {
+              fH_ptsum_n75->Fill(dpart); // to be multiplied with TArrayD content
+              arr_ptsum_n75 [ (Int_t) (floor(ptsum_maxvalue/dpart)+1) ] += track_pt; 
+              }
+
             }
 
         if ( counter_pt <= jet_pt75 )         /// PT75
@@ -710,6 +817,13 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
             g_pt75 += (track_pt * dpart)/jet_pt;
             sum_part_pt_pt75 += track_pt;
             sum_part_pt2_pt75 += TMath::Power( track_pt, 2 );
+
+            if (dpart < ptsum_maxvalue) 
+              {
+              fH_ptsum_pt75->Fill(dpart); // to be multiplied with TArrayD content
+              arr_ptsum_pt75 [ (Int_t) (floor(ptsum_maxvalue/dpart)+1) ] += track_pt; 
+              }
+
             }
 
   //#############################################################################################
@@ -722,6 +836,13 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
             g_n70 += (track_pt * dpart)/jet_pt;
             sum_part_pt_n70 += track_pt;
             sum_part_pt2_n70 += TMath::Power( track_pt, 2 );
+
+            if (dpart < ptsum_maxvalue) 
+              {
+              fH_ptsum_n70->Fill(dpart); // to be multiplied with TArrayD content
+              arr_ptsum_n70 [ (Int_t) (floor(ptsum_maxvalue/dpart)+1) ] += track_pt; 
+              }
+
             }
 
         if ( counter_pt <= jet_pt70 )        /// PT70
@@ -733,6 +854,13 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
             g_pt70 += (track_pt * dpart)/jet_pt;
             sum_part_pt_pt70 += track_pt;
             sum_part_pt2_pt70 += TMath::Power( track_pt, 2 );
+
+            if (dpart < ptsum_maxvalue) 
+              {
+              fH_ptsum_pt70->Fill(dpart); // to be multiplied with TArrayD content
+              arr_ptsum_pt70 [ (Int_t) (floor(ptsum_maxvalue/dpart)+1) ] += track_pt; 
+              }
+
             }
         ++counter_part; counter_pt += track_pt;
         } // end of loop over jet tracks
@@ -757,6 +885,29 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
       fHptd_pt80->Fill( TMath::Sqrt(sum_part_pt2_pt80)/sum_part_pt_pt80 );
       fHptd_pt85->Fill( TMath::Sqrt(sum_part_pt2_pt85)/sum_part_pt_pt85 );
       fHptd_pt90->Fill( TMath::Sqrt(sum_part_pt2_pt90)/sum_part_pt_pt90 );
+
+      // multiply the bin content of the fH_ptsum histos with pt_sum from arr_ptsum arrays
+
+
+// Function (histo, array)
+
+// for bins 
+//     array[bin]/get bin content //average
+
+
+/// TODO
+
+
+
+
+
+
+
+
+
+
+
+
 
       }
       // end of loopt over all jets
@@ -1187,6 +1338,62 @@ void AliAnalysisTaskEmcalJetCDF::UserCreateOutputObjects()
       histtitle = TString::Format("%s ;j_{T} (GeV/c);dR", histname.Data()); // dR vs p_T track
       fHistManager.CreateTH2(histname, histtitle, h_jtR_xnbin, h_jtR_xlow, h_jtR_xhigh, h_jtR_ynbin, h_jtR_ylow, h_jtR_yhigh);
       //########################################################
+
+      //=====================================================================================
+      // Distribution of pt_sum in dr
+      Int_t h_ptsum_nbin = 60; Double_t h_ptsum_binwidth = 0.01; Double_t h_ptsum_low = 0.;
+      Double_t h_ptsum_high = h_ptsum_low + h_ptsum_binwidth * h_ptsum_nbin;
+
+      //########################################################
+      histname = TString::Format("%s/histo_ptsum_%d", groupname.Data(), cent);
+      histtitle = TString::Format("%s - all jets;dR;1/N_{jets} dp^{sum}_{T}/dR (GeV/c)", histname.Data());
+      fHistManager.CreateTH1(histname, histtitle, h_ptsum_nbin, h_ptsum_low, h_ptsum_high);
+      //########################################################
+
+      //########################################################
+      histname = TString::Format("%s/histo_ptsum_n70_%d", groupname.Data(), cent);
+      histtitle = TString::Format("%s - all jets;dR;1/N_{jets} dp^{sum}_{T}/dR (GeV/c)", histname.Data());
+      fHistManager.CreateTH1(histname, histtitle, h_ptsum_nbin, h_ptsum_low, h_ptsum_high);
+
+      histname = TString::Format("%s/histo_ptsum_n75_%d", groupname.Data(), cent);
+      histtitle = TString::Format("%s - all jets;dR;1/N_{jets} dp^{sum}_{T}/dR (GeV/c)", histname.Data());
+      fHistManager.CreateTH1(histname, histtitle, h_ptsum_nbin, h_ptsum_low, h_ptsum_high);
+
+      histname = TString::Format("%s/histo_ptsum_n80_%d", groupname.Data(), cent);
+      histtitle = TString::Format("%s - all jets;dR;1/N_{jets} dp^{sum}_{T}/dR (GeV/c)", histname.Data());
+      fHistManager.CreateTH1(histname, histtitle, h_ptsum_nbin, h_ptsum_low, h_ptsum_high);
+
+      histname = TString::Format("%s/histo_ptsum_n85_%d", groupname.Data(), cent);
+      histtitle = TString::Format("%s - all jets;dR;1/N_{jets} dp^{sum}_{T}/dR (GeV/c)", histname.Data());
+      fHistManager.CreateTH1(histname, histtitle, h_ptsum_nbin, h_ptsum_low, h_ptsum_high);
+
+      histname = TString::Format("%s/histo_ptsum_n90_%d", groupname.Data(), cent);
+      histtitle = TString::Format("%s - all jets;dR;1/N_{jets} dp^{sum}_{T}/dR (GeV/c)", histname.Data());
+      fHistManager.CreateTH1(histname, histtitle, h_ptsum_nbin, h_ptsum_low, h_ptsum_high);
+      //########################################################
+
+      //########################################################
+      histname = TString::Format("%s/histo_ptsum_pt70_%d", groupname.Data(), cent);
+      histtitle = TString::Format("%s - all jets;dR;1/N_{jets} dp^{sum}_{T}/dR (GeV/c)", histname.Data());
+      fHistManager.CreateTH1(histname, histtitle, h_ptsum_nbin, h_ptsum_low, h_ptsum_high);
+
+      histname = TString::Format("%s/histo_ptsum_pt75_%d", groupname.Data(), cent);
+      histtitle = TString::Format("%s - all jets;dR;1/N_{jets} dp^{sum}_{T}/dR (GeV/c)", histname.Data());
+      fHistManager.CreateTH1(histname, histtitle, h_ptsum_nbin, h_ptsum_low, h_ptsum_high);
+
+      histname = TString::Format("%s/histo_ptsum_pt80_%d", groupname.Data(), cent);
+      histtitle = TString::Format("%s - all jets;dR;1/N_{jets} dp^{sum}_{T}/dR (GeV/c)", histname.Data());
+      fHistManager.CreateTH1(histname, histtitle, h_ptsum_nbin, h_ptsum_low, h_ptsum_high);
+
+      histname = TString::Format("%s/histo_ptsum_pt85_%d", groupname.Data(), cent);
+      histtitle = TString::Format("%s - all jets;dR;1/N_{jets} dp^{sum}_{T}/dR (GeV/c)", histname.Data());
+      fHistManager.CreateTH1(histname, histtitle, h_ptsum_nbin, h_ptsum_low, h_ptsum_high);
+
+      histname = TString::Format("%s/histo_ptsum_pt90_%d", groupname.Data(), cent);
+      histtitle = TString::Format("%s - all jets;dR;1/N_{jets} dp^{sum}_{T}/dR (GeV/c)", histname.Data());
+      fHistManager.CreateTH1(histname, histtitle, h_ptsum_nbin, h_ptsum_low, h_ptsum_high);
+      //########################################################
+
 
       }
       //end of loop over fNcentBins
