@@ -415,14 +415,12 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
     UShort_t jet_n70 = -99 ; Double_t jet_pt70 = -99.99 ;
 
     // variables used to compute g and ptD
-    Double_t g_tot = 0.; Double_t sum_part_pt_tot = 0.; Double_t sum_part_pt2_tot = 0.;
-
-    Double_t g_n90 = 0.; Double_t sum_part_pt_n90 = 0.; Double_t sum_part_pt2_n90 = 0.;
-    Double_t g_n85 = 0.; Double_t sum_part_pt_n85 = 0.; Double_t sum_part_pt2_n85 = 0.;
-    Double_t g_n80 = 0.; Double_t sum_part_pt_n80 = 0.; Double_t sum_part_pt2_n80 = 0.;
-    Double_t g_n75 = 0.; Double_t sum_part_pt_n75 = 0.; Double_t sum_part_pt2_n75 = 0.;
-    Double_t g_n70 = 0.; Double_t sum_part_pt_n70 = 0.; Double_t sum_part_pt2_n70 = 0.;
-
+    Double_t g_tot = 0.;  Double_t sum_part_pt_tot  = 0.; Double_t sum_part_pt2_tot  = 0.;
+    Double_t g_n90 = 0.;  Double_t sum_part_pt_n90  = 0.; Double_t sum_part_pt2_n90  = 0.;
+    Double_t g_n85 = 0.;  Double_t sum_part_pt_n85  = 0.; Double_t sum_part_pt2_n85  = 0.;
+    Double_t g_n80 = 0.;  Double_t sum_part_pt_n80  = 0.; Double_t sum_part_pt2_n80  = 0.;
+    Double_t g_n75 = 0.;  Double_t sum_part_pt_n75  = 0.; Double_t sum_part_pt2_n75  = 0.;
+    Double_t g_n70 = 0.;  Double_t sum_part_pt_n70  = 0.; Double_t sum_part_pt2_n70  = 0.;
     Double_t g_pt90 = 0.; Double_t sum_part_pt_pt90 = 0.; Double_t sum_part_pt2_pt90 = 0.;
     Double_t g_pt85 = 0.; Double_t sum_part_pt_pt85 = 0.; Double_t sum_part_pt2_pt85 = 0.;
     Double_t g_pt80 = 0.; Double_t sum_part_pt_pt80 = 0.; Double_t sum_part_pt2_pt80 = 0.;
@@ -453,8 +451,8 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
 
       Int_t track_idx = -999;            // index variable for tracks
       Double_t jet1_pt = jet1->Pt();
-      UInt_t jet1_npart = jet1->GetNumberOfTracks();
-      UInt_t jet1_nconst = jet1->GetNumberOfConstituents();
+      UShort_t jet1_npart = jet1->GetNumberOfTracks();
+      UShort_t jet1_nconst = jet1->GetNumberOfConstituents();
 
       UShort_t jet1_n90  = ( UShort_t ) ( 0.9 * jet1_npart );
       Double_t jet1_pt90 = 0.9 * jet1_pt;
@@ -473,7 +471,7 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
 
       fH6->Fill  ( jet1_npart );        // Multiplicity of jet1 - charged tracks
       fH6c->Fill ( jet1_nconst );       // Multiplicity of jet1 - all constituents
-      fH7->Fill ( jet1_pt, jet1_nconst ); // N(jet) vs P_{T}(jet1)
+      fH7->Fill  ( jet1_pt, jet1_nconst ); // N(jet) vs P_{T}(jet1)
 
       counter_part = 0; counter_pt = 0.; // reset counters
 
@@ -562,10 +560,6 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
 
 
     track = NULL; jet1 = NULL;
-
-    // post data at every processing
-    PostData ( 1, fOutput ); // Post data for ALL output slots > 0 here.
-
     // **************************************************************
     //                        ALL JETS
     // **************************************************************
@@ -573,6 +567,8 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
 
     const Int_t ptsum_binsx = fH_ptsum->GetNbinsX(); // all other fH_ptsum have the same size
     Double_t ptsum_maxvalue = fH_ptsum->GetBinLowEdge (ptsum_binsx) + fH_ptsum->GetBinWidth(ptsum_binsx);
+
+    // arrays to cummulate track_pt into
     TArrayD arr_ptsum      (ptsum_binsx); arr_ptsum.Reset();
     TArrayD arr_ptsum_n70  (ptsum_binsx); arr_ptsum_n70.Reset();
     TArrayD arr_ptsum_n75  (ptsum_binsx); arr_ptsum_n75.Reset();
@@ -594,6 +590,7 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
       if (!jet) { continue; }
       Int_t track_idx = -999; // index variable for tracks
       jet_pt = 0. ; jet_npart = 0; jet_nconst = 0;
+      counter_part = 0; counter_pt = 0.; // reset counters
 
       // jet : Sorting by p_T jet constituents
       jet_sorted_idxvec.clear();
@@ -603,20 +600,20 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
       jet_npart = jet->GetNumberOfTracks();
       jet_nconst = jet->GetNumberOfConstituents();
 
+      // variables for g and pdt computations
       g_tot = 0.; sum_part_pt_tot = 0.; sum_part_pt2_tot = 0.;
-
       g_n90 = 0.; sum_part_pt_n90 = 0.; sum_part_pt2_n90 = 0.;
       g_n85 = 0.; sum_part_pt_n85 = 0.; sum_part_pt2_n85 = 0.;
       g_n80 = 0.; sum_part_pt_n80 = 0.; sum_part_pt2_n80 = 0.;
       g_n75 = 0.; sum_part_pt_n75 = 0.; sum_part_pt2_n75 = 0.;
       g_n70 = 0.; sum_part_pt_n70 = 0.; sum_part_pt2_n70 = 0.;
-
       g_pt90 = 0.; sum_part_pt_pt90 = 0.; sum_part_pt2_pt90 = 0.;
       g_pt85 = 0.; sum_part_pt_pt85 = 0.; sum_part_pt2_pt85 = 0.;
       g_pt80 = 0.; sum_part_pt_pt80 = 0.; sum_part_pt2_pt80 = 0.;
       g_pt75 = 0.; sum_part_pt_pt75 = 0.; sum_part_pt2_pt75 = 0.;
       g_pt70 = 0.; sum_part_pt_pt70 = 0.; sum_part_pt2_pt70 = 0.;
 
+      // sentinels for the pt tail cuts
       jet_n90  = ( UShort_t ) ( 0.9 * jet_npart );
       jet_pt90 = 0.9 * jet_pt;
 
@@ -639,9 +636,7 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
       fH4c->Fill ( jet_nconst );       // Multiplicity of jets - all constituents
       fH7all->Fill ( jet_pt, jet_nconst ); // N(jet) vs P_{T} - all jets
 
-      counter_part = 0; counter_pt = 0.; // reset counters
-
-
+      // parsing all jet tracks
       for (std::size_t i = 0; i < jet_npart; i++ )
         {
         track_idx = jet_sorted_idxvec.at (i);
@@ -888,26 +883,17 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
 
       // multiply the bin content of the fH_ptsum histos with pt_sum from arr_ptsum arrays
 
-
-// Function (histo, array)
-
-// for bins 
-//     array[bin]/get bin content //average
-
-
-/// TODO
-
-
-
-
-
-
-
-
-
-
-
-
+      HistCorrections(*fH_ptsum,arr_ptsum);
+      HistCorrections(*fH_ptsum_n90,arr_ptsum_n90);
+      HistCorrections(*fH_ptsum_n85,arr_ptsum_n85);
+      HistCorrections(*fH_ptsum_n80,arr_ptsum_n80);
+      HistCorrections(*fH_ptsum_n75,arr_ptsum_n75);
+      HistCorrections(*fH_ptsum_n70,arr_ptsum_n70);
+      HistCorrections(*fH_ptsum_pt90,arr_ptsum_pt90);
+      HistCorrections(*fH_ptsum_pt85,arr_ptsum_pt85);
+      HistCorrections(*fH_ptsum_pt80,arr_ptsum_pt80);
+      HistCorrections(*fH_ptsum_pt75,arr_ptsum_pt75);
+      HistCorrections(*fH_ptsum_pt70,arr_ptsum_pt70);
 
       }
       // end of loopt over all jets

@@ -9,6 +9,9 @@
 /* Copyright(c) 1998-2016, ALICE Experiment at CERN, All rights reserved. *
  * See cxx source for full Copyright notice                               */
 
+#include <TH1D.h>
+#include <TH2D.h>
+#include <TArrayD.h>
 #include <TVector2.h>
 #include "AliAnalysisTaskEmcalJet.h"
 #include <THistManager.h>
@@ -199,6 +202,22 @@ namespace NS_AliAnalysisTaskEmcalJetCDF {
     jetCont->SetMaxTrackPt(maxtrackpt);
 
     return jetCont;
+    }
+
+
+  void HistCorrections (TH1D& h, TArrayD& arr)
+    {
+    TH1::SetDefaultSumw2(kTRUE);
+    const Int_t binsx = h.GetNbinsX(); 
+    const Int_t arr_size = arr.GetSize();
+    if (binsx != arr_size) {cout << "Appling histo corrections failed :: nbins != arr.GetSize" << endl;}
+
+    for (Int_t i = 1 ; i<= arr_size ; i++) // first bin in histogram is 1
+      {
+      Double_t bincontent_ini = h.GetBinContent(i);
+      bincontent_ini *= arr.At(i);
+      h.SetBinContent( i, bincontent_ini );
+      }
     }
 
 } // end of NS_AliAnalysisTaskEmcalJetCDF
