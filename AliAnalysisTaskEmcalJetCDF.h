@@ -181,28 +181,17 @@ namespace NS_AliAnalysisTaskEmcalJetCDF {
   /// \param nLeadJets : how many jets are to be considered the leading jet(s) (default = 1)
   /// \param mintrackpt : min track constituent pt to accept the jet (default = 0.15)
   /// \param maxtrackpt : max track constituent pt to accept the jet (default = 1000.)
-  /// \return AliJetContainer*
-  AliJetContainer* jetContSetParams (
-                             AliJetContainer* jetCont,
-                             Float_t jetptmin = 1.,
-                             Float_t jetptmax = 500.,
-                             Float_t jetareacutperc = 0.,
-                             Int_t leadhadtype = 2,
-                             Int_t nLeadJets = 1,
-                             Float_t mintrackpt = 0.15,
-                             Float_t maxtrackpt = 1000.
-                             ) {
-    if (!jetCont) { return NULL; }
-    jetCont->SetJetPtCut ( jetptmin );
-    jetCont->SetJetPtCutMax ( jetptmax );
-    jetCont->SetPercAreaCut ( jetareacutperc );
-    jetCont->SetLeadingHadronType ( leadhadtype ); // 0 = charged, 1 = neutral, 2 = both
-    jetCont->SetNLeadingJets(nLeadJets);
-    jetCont->SetMinTrackPt(mintrackpt);
-    jetCont->SetMaxTrackPt(maxtrackpt);
-
-    return jetCont;
-    }
+  /// \return
+  void jetContSetParams (
+                          AliJetContainer* jetCont,
+                          Float_t jetptmin = 1.,
+                          Float_t jetptmax = 500.,
+                          Float_t jetareacutperc = 0.,
+                          Int_t leadhadtype = 2,
+                          Int_t nLeadJets = 1,
+                          Float_t mintrackpt = 0.15,
+                          Float_t maxtrackpt = 1000.
+                          );
 
 } // end of NS_AliAnalysisTaskEmcalJetCDF
 

@@ -43,9 +43,6 @@
 ClassImp ( AliAnalysisTaskEmcalJetCDF );
 /// \endcond
 
-// namespace of functions that were not related to the object
-using namespace NS_AliAnalysisTaskEmcalJetCDF;
-
 /**
  * Default constructor. Needed by ROOT I/O
  */
@@ -564,13 +561,13 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
           fH8->Fill   ( jet1->GetZ  ( track ) );  // Momentum distribution for leading jet (FF)
           fH8xi->Fill ( jet1->GetXi ( track ) );  // Momentum distribution for leading jet (FF) xi
 
-          Double_t z_p = Z_ptot(jet1, track);
+          Double_t z_p = CDF::Z_ptot(jet1, track);
           fH8_p->Fill   ( z_p );  // Momentum distribution for jets (FF)
-          fH8xi_p->Fill ( Xi (z_p)  );  // Momentum distribution for jets (FF) xi
+          fH8xi_p->Fill ( CDF::Xi (z_p)  );  // Momentum distribution for jets (FF) xi
 
-          Double_t z_pt = Z_pt(jet1, track);
+          Double_t z_pt = CDF::Z_pt(jet1, track);
           fH8_pt->Fill   ( z_pt );  // Momentum distribution for jets (FF)
-          fH8xi_pt->Fill ( Xi (z_pt) );  // Momentum distribution for jets (FF) xi
+          fH8xi_pt->Fill ( CDF::Xi (z_pt) );  // Momentum distribution for jets (FF) xi
 
           fH15->Fill ( dpart, track_pt, track_pt );      // <p_{T}> track vs the Distance R from Jet1
           fH20->Fill ( dpart );                          // Distribution of R in leading jet
@@ -719,13 +716,13 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
         fH8_all->Fill   ( jet->GetZ  ( track ) );  // Momentum distribution for jets (FF)
         fH8xi_all->Fill ( jet->GetXi ( track ) );  // Momentum distribution for jets (FF) xi
 
-        Double_t z_p = Z_ptot(jet,track);
+        Double_t z_p = CDF::Z_ptot(jet,track);
         fH8_all_p->Fill   ( z_p );        // Momentum distribution for jets (FF)
-        fH8xi_all_p->Fill ( Xi (z_p)  );  // Momentum distribution for jets (FF) xi
+        fH8xi_all_p->Fill ( CDF::Xi (z_p)  );  // Momentum distribution for jets (FF) xi
 
-        Double_t z_pt = Z_pt(jet,track);
+        Double_t z_pt = CDF::Z_pt(jet,track);
         fH8_all_pt->Fill   ( z_pt );       // Momentum distribution for jets (FF)
-        fH8xi_all_pt->Fill ( Xi (z_pt) );  // Momentum distribution for jets (FF) xi
+        fH8xi_all_pt->Fill ( CDF::Xi (z_pt) );  // Momentum distribution for jets (FF) xi
 
         fH15all->Fill ( dpart, track_pt, track_pt );    // p_{T} track vs the Distance R from jet
         fH20all->Fill ( dpart );                        // Distribution of R in leading jet
@@ -744,7 +741,7 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
             fH15all_n90->Fill ( dpart, track_pt );         // p_{T} track vs the Distance R from Jet - 80% of particles
             fH20all_n90->Fill ( dpart );
             fH_Rjt_n90->Fill  ( dpart, jt, jt );
-            fH_jt_n90->Fill  ( jt );                // jt track vs dR 
+            fH_jt_n90->Fill  ( jt );                // jt track vs dR
 
             // computing components for g and ptD in the jet tracks loop
             g_n90 += (track_pt * dpart)/jet_pt;
@@ -757,7 +754,7 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
             fH15all_pt90->Fill ( dpart, track_pt ); //  p_{T} track vs the Distance R from Jet - 80% of pt
             fH20all_pt90->Fill ( dpart );
             fH_Rjt_pt90->Fill  ( dpart, jt, jt );
-            fH_jt_pt90->Fill  ( jt );                // jt track vs dR 
+            fH_jt_pt90->Fill  ( jt );                // jt track vs dR
 
             // computing components for g and ptD in the jet tracks loop
             g_pt90 += (track_pt * dpart)/jet_pt;
@@ -771,7 +768,7 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
             fH15all_n85->Fill ( dpart, track_pt ); // p_{T} track vs the Distance R from Jet - 80% of particles
             fH20all_n85->Fill ( dpart );
             fH_Rjt_n85->Fill  ( dpart, jt, jt );
-            fH_jt_n85->Fill  ( jt );                // jt track vs dR 
+            fH_jt_n85->Fill  ( jt );                // jt track vs dR
 
             // computing components for g and ptD in the jet tracks loop
             g_n85 += (track_pt * dpart)/jet_pt;
@@ -784,7 +781,7 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
             fH15all_pt85->Fill ( dpart, track_pt ); //  p_{T} track vs the Distance R from Jet - 80% of pt
             fH20all_pt85->Fill ( dpart );
             fH_Rjt_pt85->Fill  ( dpart, jt, jt );
-            fH_jt_pt85->Fill  ( jt );                // jt track vs dR 
+            fH_jt_pt85->Fill  ( jt );                // jt track vs dR
 
             // computing components for g and ptD in the jet tracks loop
             g_pt85 += (track_pt * dpart)/jet_pt;
@@ -798,7 +795,7 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
             fH15all_n80->Fill ( dpart, track_pt ); // p_{T} track vs the Distance R from Jet - 80% of particles
             fH20all_n80->Fill ( dpart );
             fH_Rjt_n80->Fill  ( dpart, jt, jt );
-            fH_jt_n80->Fill  ( jt );                // jt track vs dR 
+            fH_jt_n80->Fill  ( jt );                // jt track vs dR
 
             // computing components for g and ptD in the jet tracks loop
             g_n80 += (track_pt * dpart)/jet_pt;
@@ -811,7 +808,7 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
             fH15all_pt80->Fill ( dpart, track_pt ); //  p_{T} track vs the Distance R from Jet - 80% of pt
             fH20all_pt80->Fill ( dpart );
             fH_Rjt_pt80->Fill  ( dpart, jt, jt );
-            fH_jt_pt80->Fill  ( jt );                // jt track vs dR 
+            fH_jt_pt80->Fill  ( jt );                // jt track vs dR
 
             // computing components for g and ptD in the jet tracks loop
             g_pt80 += (track_pt * dpart)/jet_pt;
@@ -825,7 +822,7 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
             fH15all_n75->Fill ( dpart, track_pt ); // p_{T} track vs the Distance R from Jet - 80% of particles
             fH20all_n75->Fill ( dpart );
             fH_Rjt_n75->Fill  ( dpart, jt, jt );
-            fH_jt_n75->Fill  ( jt );                // jt track vs dR 
+            fH_jt_n75->Fill  ( jt );                // jt track vs dR
 
             // computing components for g and ptD in the jet tracks loop
             g_n75 += (track_pt * dpart)/jet_pt;
@@ -838,7 +835,7 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
             fH15all_pt75->Fill ( dpart, track_pt ); //  p_{T} track vs the Distance R from Jet - 80% of pt
             fH20all_pt75->Fill ( dpart );
             fH_Rjt_pt75->Fill  ( dpart, jt, jt );
-            fH_jt_pt75->Fill  ( jt );                // jt track vs dR 
+            fH_jt_pt75->Fill  ( jt );                // jt track vs dR
 
             // computing components for g and ptD in the jet tracks loop
             g_pt75 += (track_pt * dpart)/jet_pt;
@@ -852,7 +849,7 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
             fH15all_n70->Fill ( dpart, track_pt ); // p_{T} track vs the Distance R from Jet - 80% of particles
             fH20all_n70->Fill ( dpart );
             fH_Rjt_n70->Fill  ( dpart, jt, jt );
-            fH_jt_n70->Fill  ( jt );                // jt track vs dR 
+            fH_jt_n70->Fill  ( jt );                // jt track vs dR
 
             // computing components for g and ptD in the jet tracks loop
             g_n70 += (track_pt * dpart)/jet_pt;
@@ -865,7 +862,7 @@ Bool_t AliAnalysisTaskEmcalJetCDF::FillHistograms()
             fH15all_pt70->Fill ( dpart, track_pt ); //  p_{T} track vs the Distance R from Jet - 80% of pt
             fH20all_pt70->Fill ( dpart );
             fH_Rjt_pt70->Fill  ( dpart, jt, jt );
-            fH_jt_pt70->Fill  ( jt );                // jt track vs dR 
+            fH_jt_pt70->Fill  ( jt );                // jt track vs dR
 
             // computing components for g and ptD in the jet tracks loop
             g_pt70 += (track_pt * dpart)/jet_pt;
@@ -1480,10 +1477,6 @@ void AliAnalysisTaskEmcalJetCDF::UserCreateOutputObjects()
       fHistManager.CreateTH2(histname, histtitle, h_jt_xnbin, h_jt_xlow, h_jt_xhigh, h_jt_xnbin, h_jt_xlow, h_jt_xhigh);
       //########################################################
 
-
-
-
-
       }
       //end of loop over fNcentBins
     }
@@ -1524,7 +1517,7 @@ TObject* AliAnalysisTaskEmcalJetCDF::GetHistogram ( const char* histName )
 }
 
 //########################################################################
-//   Namespace AliAnalysisTaskEmcalJetCDF 
+//   Namespace AliAnalysisTaskEmcalJetCDF
 //########################################################################
 
 //__________________________________________________________________________________________________
@@ -1656,13 +1649,13 @@ AliAnalysisTaskEmcalJetCDF* NS_AliAnalysisTaskEmcalJetCDF::AddTaskEmcalJetCDF ( 
   cdfTask->SetVzRange(-10,10);
   cdfTask->SetCaloCellsName(cells.Data());
 
-  if ( tracks.EqualTo("mcparticles") ) { 
-      // AliMCParticleContainer* mcpartCont = 
+  if ( tracks.EqualTo("mcparticles") ) {
+      // AliMCParticleContainer* mcpartCont =
       cdfTask->AddMCParticleContainer ( tracks.Data() );
       }
   else
   if ( tracks.EqualTo("tracks") || tracks.EqualTo("Tracks") ) {
-      // AliTrackContainer* trackCont = 
+      // AliTrackContainer* trackCont =
       cdfTask->AddTrackContainer( tracks.Data() );
       }
   else
@@ -1689,6 +1682,27 @@ AliAnalysisTaskEmcalJetCDF* NS_AliAnalysisTaskEmcalJetCDF::AddTaskEmcalJetCDF ( 
   return cdfTask;
   }
 
+  /// Set parameters of a jet container
+  /// \param jetCont AliJetContainer*
+  /// \param jetptmin : min pt of jets in this container (default = 1.)
+  /// \param jetptmax : max pt of jets in this container (default = 500.)
+  /// \param jetareacutperc : cut jets under percentage of area given by algo radius (default = 0.)
+  /// \param leadhadtype : 0 = charged, 1 = neutral, 2 = both (default = 2)
+  /// \param nLeadJets : how many jets are to be considered the leading jet(s) (default = 1)
+  /// \param mintrackpt : min track constituent pt to accept the jet (default = 0.15)
+  /// \param maxtrackpt : max track constituent pt to accept the jet (default = 1000.)
+  /// \return
+  void NS_AliAnalysisTaskEmcalJetCDF::jetContSetParams ( AliJetContainer* jetCont, Float_t jetptmin,  Float_t jetptmax, Float_t jetareacutperc, Int_t leadhadtype, Int_t nLeadJets, Float_t mintrackpt, Float_t maxtrackpt)
+    {
+    if (!jetCont) { return; }
+    jetCont->SetJetPtCut ( jetptmin );
+    jetCont->SetJetPtCutMax ( jetptmax );
+    jetCont->SetPercAreaCut ( jetareacutperc );
+    jetCont->SetLeadingHadronType ( leadhadtype ); // 0 = charged, 1 = neutral, 2 = both
+    jetCont->SetNLeadingJets(nLeadJets);
+    jetCont->SetMinTrackPt(mintrackpt);
+    jetCont->SetMaxTrackPt(maxtrackpt);
+    }
 
 
 // kate: indent-mode none; indent-width 2; replace-tabs on;
